@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.views import View
 
-# Create your views here.
+class SessionView(View):
+    def get(self, request):
+        session = self.request.session.session_key
+        return HttpResponse(session)
