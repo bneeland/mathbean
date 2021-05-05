@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    {% if blocks %}
+      {% for block in blocks %}
+        <p>{{ block.type }}</p>
+      {% endfor %}
+    {% else %}
+      <p>Nothing in document</p>
+    {% endif %}
+  </body>
+</html>
