@@ -12,7 +12,7 @@
         headers: {
           'X-CSRFToken' : document.cookie['csrftoken']
         }
-      })
+      });
       fetch('/api/documents/').then((resp) => {
         resp.json().then((data) => {
           resultsDiv = document.getElementById('results')
@@ -20,7 +20,7 @@
             resultsDiv.append(r.name + ' ')
           }
         })
-      })
+      });
     </script>
   </body>
 </html>

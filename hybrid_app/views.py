@@ -28,3 +28,17 @@ class DocumentViewSet(viewsets.ModelViewSet):
         }
 
         serializer.save(**kwargs)
+
+
+
+from django.views.generic.list import ListView
+from django.contrib.auth.models import User
+from . import models
+
+class DocumentListView(ListView):
+    model = models.Document
+    template_name = "hybrid_app/document_list_view.html"
+    context_object_name = "documents"
+
+    def get_queryset(self):
+        return models.Document.objects.filter(user=self.request.user.id)
