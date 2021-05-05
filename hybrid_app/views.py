@@ -33,9 +33,12 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import models
 
-class DocumentListView(ListView):
+class DocumentListView(LoginRequiredMixin, ListView):
+    login_url = 'account_login'
+
     model = models.Document
     template_name = "hybrid_app/document_list_view.html"
     context_object_name = "documents"
@@ -43,8 +46,13 @@ class DocumentListView(ListView):
     def get_queryset(self):
         return models.Document.objects.filter(user=self.request.user.id)
 
-class DocumentEditView(TemplateView):
+class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    login_url = 'account_login'
+
     template_name = "hybrid_app/document_edit_view.html"
+
+    def test_func(self):
+        return models.Document.objects.filter(pk=self.kwargs['pk'])[0].user == self.request.user
 
     def get_context_data(self, **kwargs):
         context = super(DocumentEditView, self).get_context_data(**kwargs)

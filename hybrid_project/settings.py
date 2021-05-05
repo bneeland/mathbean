@@ -39,7 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hybrid_app',
     'rest_framework',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -130,3 +136,21 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_USERNAME_REQUIRED=False
+ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_AUTHENTICATION_METHOD='email'
+ACCOUNT_LOGOUT_ON_GET=True
+ACCOUNT_UNIQUE_EMAIL=True
+ACCOUNT_LOGIN_ON_PASSWORD_RESET=True
+ACCOUNT_SESSION_REMEMBER=True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE=False
+ACCOUNT_EMAIL_VERIFICATION='none'
+
+LOGIN_REDIRECT_URL = 'hybrid_app:document_list_view'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
