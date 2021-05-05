@@ -32,7 +32,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
 
 from django.views.generic.list import ListView
-from django.contrib.auth.models import User
+from django.views.generic.base import TemplateView
 from . import models
 
 class DocumentListView(ListView):
@@ -42,3 +42,12 @@ class DocumentListView(ListView):
 
     def get_queryset(self):
         return models.Document.objects.filter(user=self.request.user.id)
+
+class DocumentEditorView(TemplateView):
+    template_name = "hybrid_app/document_editor_view.html"
+    # context_object_name = "blocks"
+
+    def get_context_data(self, **kwargs):
+        context = super(DocumentEditorView, self).get_context_data(**kwargs)
+        context["blocks"] = models.Block.objects.filter(document_id=self.kwargs['pk'])
+        return context
