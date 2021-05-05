@@ -8,5 +8,6 @@ router.register('documents', views.DocumentViewSet, 'documents')
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('', views.SessionView.as_view(), name="SessionView"),
+    path('session', views.SessionView.as_view(), name='session_view'),
+    path('editor', views.EditorView.as_view(), name='editor_view'),
 ]
