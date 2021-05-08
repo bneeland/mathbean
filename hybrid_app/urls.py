@@ -11,9 +11,7 @@ app_name = 'hybrid_app'
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/document/<int:pk>', views.BlockViewSet2.as_view()),
+    path('api/block-list/<int:pk>', views.BlockListAPI.as_view()),
     path('', views.DocumentListView.as_view(), name='document_list_view'),
     path('<int:pk>', views.DocumentEditView.as_view(), name='document_edit_view'),
-    path('session', views.SessionView.as_view(), name='session_view'),
-    path('editor', views.EditorView.as_view(), name='editor_view'),
 ]

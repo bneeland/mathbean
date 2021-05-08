@@ -1,22 +1,11 @@
-from django.http import HttpResponse
-from django.views import View
-from django.views.generic.base import TemplateView
-
-
-class SessionView(View):
-    def get(self, request):
-        session = str(self.request.session.session_key)
-        cookie = str(request.COOKIES.get('csrftoken'))
-        return HttpResponse('<b>Session: </b>' + session + ' <br />' + '<b>Cookie: </b>' + cookie)
-
-class EditorView(TemplateView):
-    template_name = "hybrid_app/editor_view.html"
-
-from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework import generics
-from . import serializers
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.views.generic.list import ListView
+from django.views.generic.base import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import models
+from . import serializers
 
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.DocumentSerializer
@@ -38,28 +27,11 @@ class BlockViewSet(viewsets.ModelViewSet):
         kwargs = {'user': self.request.user}
         serializer.save(**kwargs)
 
-# class BlockAPIView(generics.RetrieveUpdateDestroyAPIView):
-#     serializer_class = serializers.BlockSerializer
-#
-#     def get_queryset(self):
-#         return models.Block.objects.filter(document_pk=self.kwargs['pk'])
-
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
-class BlockViewSet2(APIView):
+class BlockListAPI(APIView):
     def get(self, request, pk, format=None):
         blocks = models.Block.objects.filter(document__id=self.kwargs['pk'])
         serializer = serializers.BlockSerializer(blocks, many=True)
         return Response(serializer.data)
-
-
-from django.views.generic.list import ListView
-from django.views.generic.base import TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from . import models
 
 class DocumentListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'

@@ -7,7 +7,7 @@
   <body>
     <div id="results"></div>
     <script>
-      fetch('../api/document/' + {{ pk }}).then((resp) => {
+      fetch('../api/block-list/' + {{ pk }}).then((resp) => {
         resp.json().then((data) => {
           resultsDiv = document.getElementById('results')
           for (r of data) {
