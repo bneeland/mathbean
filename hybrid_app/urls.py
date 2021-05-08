@@ -14,7 +14,6 @@ urlpatterns = [
     path('api/document/<int:pk>', views.BlockViewSet2.as_view()),
     path('', views.DocumentListView.as_view(), name='document_list_view'),
     path('<int:pk>', views.DocumentEditView.as_view(), name='document_edit_view'),
-    path('document/<int:pk>', views.DocumentEditView2.as_view(), name='document_edit_view2'),
     path('session', views.SessionView.as_view(), name='session_view'),
     path('editor', views.EditorView.as_view(), name='editor_view'),
 ]

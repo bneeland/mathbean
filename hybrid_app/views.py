@@ -78,11 +78,3 @@ class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
     def test_func(self):
         return models.Document.objects.filter(pk=self.kwargs['pk'])[0].user == self.request.user
-
-    def get_context_data(self, **kwargs):
-        context = super(DocumentEditView, self).get_context_data(**kwargs)
-        context["blocks"] = models.Block.objects.filter(document__id=self.kwargs['pk'])
-        return context
-
-class DocumentEditView2(TemplateView):
-    template_name = "hybrid_app/document_edit_view.html"

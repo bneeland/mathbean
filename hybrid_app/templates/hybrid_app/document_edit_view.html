@@ -5,13 +5,6 @@
     <title></title>
   </head>
   <body>
-    {% comment %}{% if blocks %}
-      {% for block in blocks %}
-        <p>{{ block.type }}</p>
-      {% endfor %}
-    {% else %}
-      <p>Nothing in document</p>
-    {% endif %}{% endcomment %}
     <div id="results"></div>
     <script>
       fetch('../api/document/' + {{ pk }}).then((resp) => {
