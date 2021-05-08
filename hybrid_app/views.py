@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic.base import TemplateView
 
+
 class SessionView(View):
     def get(self, request):
         session = str(self.request.session.session_key)
@@ -13,6 +14,7 @@ class EditorView(TemplateView):
 
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework import generics
 from . import serializers
 from . import models
 
@@ -23,12 +25,35 @@ class DocumentViewSet(viewsets.ModelViewSet):
         return self.request.user.documents.all()
 
     def perform_create(self, serializer):
-        kwargs = {
-          'user': self.request.user
-        }
-
+        kwargs = {'user': self.request.user}
         serializer.save(**kwargs)
 
+class BlockViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.BlockSerializer
+
+    def get_queryset(self):
+        return self.request.user.blocks.all()
+
+    def perform_create(self, serializer):
+        kwargs = {'user': self.request.user}
+        serializer.save(**kwargs)
+
+# class BlockAPIView(generics.RetrieveUpdateDestroyAPIView):
+#     serializer_class = serializers.BlockSerializer
+#
+#     def get_queryset(self):
+#         return models.Block.objects.filter(document_pk=self.kwargs['pk'])
+
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+class BlockViewSet2(APIView):
+    def get(self, request, pk, format=None):
+        blocks = models.Block.objects.filter(document__id=self.kwargs['pk'])
+        serializer = serializers.BlockSerializer(blocks, many=True)
+        return Response(serializer.data)
 
 
 from django.views.generic.list import ListView
@@ -56,5 +81,8 @@ class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentEditView, self).get_context_data(**kwargs)
-        context["blocks"] = models.Block.objects.filter(document_id=self.kwargs['pk'])
+        context["blocks"] = models.Block.objects.filter(document__id=self.kwargs['pk'])
         return context
+
+class DocumentEditView2(TemplateView):
+    template_name = "hybrid_app/document_edit_view.html"

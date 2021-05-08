@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Document(models.Model):
     name = models.CharField(max_length=100)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='documents', null=True, blank=True, )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='documents', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -15,5 +15,6 @@ class Block(models.Model):
     type = models.CharField(max_length=100)
     order = models.IntegerField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blocks', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     modified_at = models.DateTimeField(auto_now=True, null=True)

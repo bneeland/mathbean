@@ -5,12 +5,23 @@
     <title></title>
   </head>
   <body>
-    {% if blocks %}
+    {% comment %}{% if blocks %}
       {% for block in blocks %}
         <p>{{ block.type }}</p>
       {% endfor %}
     {% else %}
       <p>Nothing in document</p>
-    {% endif %}
+    {% endif %}{% endcomment %}
+    <div id="results"></div>
+    <script>
+      fetch('../api/document/' + {{ pk }}).then((resp) => {
+        resp.json().then((data) => {
+          resultsDiv = document.getElementById('results')
+          for (r of data) {
+            resultsDiv.append(r.type + ' ')
+          }
+        })
+      });
+    </script>
   </body>
 </html>
