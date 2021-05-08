@@ -2,19 +2,49 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title></title>
   </head>
   <body>
-    <div id="results"></div>
+
+    <div id="app">
+      <section v-if="errored">
+        <p>Error retrieving data</p>
+      </section>
+      <section v-else>
+        <div v-if="loading">Loading...</div>
+          <p v-for="block in blocks">
+            [[ block.type ]]
+          </p>
+      </section>
+    </div>
+    
     <script>
-      fetch('../api/block-list/' + {{ pk }}).then((resp) => {
-        resp.json().then((data) => {
-          resultsDiv = document.getElementById('results')
-          for (r of data) {
-            resultsDiv.append(r.type + ' ')
+      var app = new Vue({
+        delimiters: ["[[", "]]"],
+        el: '#app',
+        data () {
+          return {
+            blocks: null,
+            loading: true,
+            errored: false
           }
-        })
-      });
+        },
+        mounted () {
+          axios
+            .get('../api/block-list/' + {{ pk }})
+            .then(response => (
+              this.blocks = response.data
+          ))
+          .catch(error => {
+            console.log(error)
+            this.errored = true
+          })
+          .finally(() => this.loading = false)
+        }
+      })
     </script>
+
   </body>
 </html>
