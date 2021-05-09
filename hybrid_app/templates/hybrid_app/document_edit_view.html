@@ -1,46 +1,39 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <script src="https://unpkg.com/vue@next"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <title></title>
-  </head>
-  <body>
+{% extends "hybrid_app/base.html" %}
 
-    <div id="app">
-      <block-item
-        v-for="item in blocks"
-        v-bind:block="item"
-        v-bind:key="item.id"
-      >
-      </block-item>
-    </div>
+{% block content %}
 
-    <script>
-      const app = Vue.createApp({
-        data() {
-          return {
-            blocks: null
-          }
-        },
-        mounted() {
-          axios
-            .get('../api/block-list/' + {{ pk }})
-            .then(response => {
-              this.blocks = response.data
-            })
+  <div id="app">
+    <block-item
+      v-for="item in blocks"
+      v-bind:block="item"
+      v-bind:key="item.id"
+    >
+    </block-item>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          blocks: null
         }
-      })
+      },
+      mounted() {
+        axios
+          .get('../api/block-list/' + {{ pk }})
+          .then(response => {
+            this.blocks = response.data
+          })
+      }
+    })
 
-      app.component('block-item', {
-        delimiters: ["[[", "]]"],
-        props: ['block'],
-        template: '<p>[[ block.type ]]</p>'
-      })
+    app.component('block-item', {
+      delimiters: ["[[", "]]"],
+      props: ['block'],
+      template: '<p>[[ block.type ]]</p>'
+    })
 
-      app.mount('#app')
-    </script>
+    app.mount('#app')
+  </script>
 
-  </body>
-</html>
+{% endblock %}

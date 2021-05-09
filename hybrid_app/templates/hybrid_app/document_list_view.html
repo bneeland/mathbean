@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    {% for document in documents %}
-      <p><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}">{{ document.name }}</a></p>
-    {% endfor %}
-  </body>
-</html>
+{% extends "hybrid_app/base.html" %}
+
+{% block content %}
+
+  {% for document in documents %}
+    <p><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}">{{ document.name }}</a></p>
+  {% endfor %}
+
+{% endblock %}
