@@ -33,6 +33,7 @@
       },
       methods: {
         onAddBlock(block) {
+          this.blocks.push(block);
           axios
             .post('../api/block-edit/' + {{ pk }},
               {
@@ -46,9 +47,6 @@
                 }
               }
             )
-            .then(function (response) {
-              console.log(response);
-            });
         }
       }
     })
