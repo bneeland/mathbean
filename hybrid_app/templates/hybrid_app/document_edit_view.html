@@ -24,6 +24,7 @@
         }
       },
       mounted() {
+        var vm = this;
         axios
           .get('../api/block-edit/' + {{ pk }})
           .then(response => {
@@ -32,24 +33,22 @@
       },
       methods: {
         onAddBlock(block) {
-            // this.blocks.push(block)
-            console.log(block)
-            axios
-              .post('../api/block-edit/' + {{ pk }},
-            {
-              // body: this.block
-              type: block.type
-            },
-            {
-              headers: {
-                // 'X-CSRFToken' : document.cookie['csrftoken']
-                'X-CSRFToken' : "hdP9Al38HWwo9oTG1vjo3fFifgjmEI8aMuu7RRuzcrikeZSX1830rAboxLVZ0LEf"
+          axios
+            .post('../api/block-edit/' + {{ pk }},
+              {
+                // body: this.block
+                type: block.type
+              },
+              {
+                headers: {
+                  'X-CSRFToken' : document.cookie.split('=')[1]
+                  // 'X-CSRFToken' : "hdP9Al38HWwo9oTG1vjo3fFifgjmEI8aMuu7RRuzcrikeZSX1830rAboxLVZ0LEf"
+                }
               }
-            }
-          )
+            )
             .then(function (response) {
               console.log(response);
-            })
+            });
         }
       }
     })
