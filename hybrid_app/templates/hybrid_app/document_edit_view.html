@@ -9,54 +9,34 @@
   <body>
 
     <div id="app">
-      <section v-if="errored">
-        <p>Error retrieving data</p>
-      </section>
-      <section v-else>
-        <div v-if="loading">Loading...</div>
-        <p v-for="block in blocks">
-          [[ block.type ]]
-        </p>
-        <!-- <block-item
-          v-for="item in blocks"
-          v-bind:block="item"
-          v-bind:key="item.id"
-        >
-        </block-item> -->
-      </section>
+      <block-item
+        v-for="item in blocks"
+        v-bind:block="item"
+        v-bind:key="item.id"
+      >
+      </block-item>
     </div>
 
     <script>
       const Blocks = {
         delimiters: ["[[", "]]"],
-        el: '#app',
-        data () {
+        data() {
           return {
-            blocks: null,
-            loading: true,
-            errored: false
+            blocks: [
+              { id: 1, type: 'Graph' },
+              { id: 2, type: 'Equation' },
+            ]
           }
-        },
-        mounted () {
-          axios
-            .get('../api/block-list/' + {{ pk }})
-            .then(response => (
-              this.blocks = response.data
-          ))
-          .catch(error => {
-            console.log(error)
-            this.errored = true
-          })
-          .finally(() => this.loading = false)
         }
       }
 
       const app = Vue.createApp(Blocks)
 
-      // app.component('block-item', {
-      //   props: ['block'],
-      //   template: '<p>[[ block.type ]]</p>'
-      // })
+      app.component('block-item', {
+        delimiters: ["[[", "]]"],
+        props: ['block'],
+        template: '<p>[[ block.type ]]</p>'
+      })
 
       app.mount('#app')
     </script>
