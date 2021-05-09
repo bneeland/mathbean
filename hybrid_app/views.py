@@ -36,9 +36,14 @@ class BlockEditAPI(APIView):
     def post(self, request, pk, format=None):
         serializer = serializers.BlockSerializer(data=request.data)
         if serializer.is_valid():
-            instance = serializer.save(commit=False)
-            instance.document_id = self.kwargs['pk']
-            instance.save()
+            serializer.save(document=models.Document.objects.get(pk=self.kwargs['pk']))
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # if serializer.is_valid():
+        #     instance = serializer.save(commit=False)
+        #     instance.document = self.kwargs['pk']
+        #     instance.save()
 
 class DocumentListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'

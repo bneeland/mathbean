@@ -25,7 +25,7 @@
       },
       mounted() {
         axios
-          .get('../api/block-list/' + {{ pk }})
+          .get('../api/block-edit/' + {{ pk }})
           .then(response => {
             this.blocks = response.data
           })
@@ -35,7 +35,7 @@
             // this.blocks.push(block)
             console.log(block)
             axios
-              .post('../api/blocks/',
+              .post('../api/block-edit/' + {{ pk }},
             {
               // body: this.block
               type: block.type
