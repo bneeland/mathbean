@@ -18,19 +18,20 @@
     </div>
 
     <script>
-      const Blocks = {
-        delimiters: ["[[", "]]"],
+      const app = Vue.createApp({
         data() {
           return {
-            blocks: [
-              { id: 1, type: 'Graph' },
-              { id: 2, type: 'Equation' },
-            ]
+            blocks: null
           }
+        },
+        mounted() {
+          axios
+            .get('../api/block-list/' + {{ pk }})
+            .then(response => {
+              this.blocks = response.data
+            })
         }
-      }
-
-      const app = Vue.createApp(Blocks)
+      })
 
       app.component('block-item', {
         delimiters: ["[[", "]]"],
