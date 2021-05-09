@@ -27,11 +27,18 @@ class BlockViewSet(viewsets.ModelViewSet):
         kwargs = {'user': self.request.user}
         serializer.save(**kwargs)
 
-class BlockListAPI(APIView):
+class BlockEditAPI(APIView):
     def get(self, request, pk, format=None):
         blocks = models.Block.objects.filter(document__id=self.kwargs['pk'])
         serializer = serializers.BlockSerializer(blocks, many=True)
         return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        serializer = serializers.BlockSerializer(data=request.data)
+        if serializer.is_valid():
+            instance = serializer.save(commit=False)
+            instance.document_id = self.kwargs['pk']
+            instance.save()
 
 class DocumentListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'

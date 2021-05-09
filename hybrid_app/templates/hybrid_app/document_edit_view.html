@@ -32,13 +32,13 @@
       },
       methods: {
         onAddBlock(block) {
-          // this.blocks.push(block)
-          console.log(block)
-          axios
-            .post('../api/blocks/',
+            // this.blocks.push(block)
+            console.log(block)
+            axios
+              .post('../api/blocks/',
             {
               // body: this.block
-              type: 'Test_type'
+              type: block.type
             },
             {
               headers: {
