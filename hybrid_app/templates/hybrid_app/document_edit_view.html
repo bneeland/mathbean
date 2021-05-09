@@ -3,7 +3,7 @@
 {% block content %}
   <div id="app">
     <div id="tools">
-      <block-form @block-added="addBlock"></block-form>
+      <block-form @block-added="onAddBlock"></block-form>
     </div>
     <hr />
     <div id="blocks">
@@ -31,8 +31,25 @@
           })
       },
       methods: {
-        addBlock(block) {
-          this.blocks.push(block)
+        onAddBlock(block) {
+          // this.blocks.push(block)
+          console.log(block)
+          axios
+            .post('../api/blocks/',
+            {
+              // body: this.block
+              type: 'Test_type'
+            },
+            {
+              headers: {
+                // 'X-CSRFToken' : document.cookie['csrftoken']
+                'X-CSRFToken' : "hdP9Al38HWwo9oTG1vjo3fFifgjmEI8aMuu7RRuzcrikeZSX1830rAboxLVZ0LEf"
+              }
+            }
+          )
+            .then(function (response) {
+              console.log(response);
+            })
         }
       }
     })

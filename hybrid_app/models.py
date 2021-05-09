@@ -11,7 +11,7 @@ class Document(models.Model):
         return str(self.name)
 
 class Block(models.Model):
-    document = models.ForeignKey('Document', on_delete=models.CASCADE)
+    document = models.ForeignKey('Document', on_delete=models.CASCADE, null=True)
     type = models.CharField(max_length=100)
     order = models.IntegerField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
