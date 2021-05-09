@@ -1,14 +1,19 @@
 {% extends "hybrid_app/base.html" %}
 
 {% block content %}
-
   <div id="app">
-    <block-item
-      v-for="item in blocks"
-      v-bind:block="item"
-      v-bind:key="item.id"
-    >
-    </block-item>
+    <div id="tools">
+      <block-form></block-form>
+    </div>
+    <hr />
+    <div id="blocks">
+      <block-item
+        v-for="item in blocks"
+        v-bind:block="item"
+        v-bind:key="item.id"
+      >
+      </block-item>
+    </div>
   </div>
 
   <script>
@@ -31,6 +36,36 @@
       delimiters: ["[[", "]]"],
       props: ['block'],
       template: '<p>[[ block.type ]]</p>'
+    })
+
+    app.component('block-form', {
+      delimiters: ["[[", "]]"],
+      template:
+      `<form class="block-form" @submit.prevent="onSubmit">
+        <h3>Add block</h3>
+        <label for="type">Type</label>
+        <select id="type" v-model="type">
+          <option>Graph</option>
+          <option>Equation</option>
+          <option>Text</option>
+          <option>Image</option>
+        </select>
+        <input class="button" type="submit" value="Add">
+      </form>`,
+      data() {
+        return {
+          type: ''
+        }
+      },
+      methods: {
+        onSubmit() {
+          let newBlock = {
+            type: this.type
+          }
+          this.$emit('block-added', newBlock)
+          this.type = ''
+        }
+      }
     })
 
     app.mount('#app')
