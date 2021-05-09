@@ -3,7 +3,7 @@
 {% block content %}
   <div id="app">
     <div id="tools">
-      <block-form></block-form>
+      <block-form @block-added="addBlock"></block-form>
     </div>
     <hr />
     <div id="blocks">
@@ -29,6 +29,11 @@
           .then(response => {
             this.blocks = response.data
           })
+      },
+      methods: {
+        addBlock(block) {
+          this.blocks.push(block)
+        }
       }
     })
 
