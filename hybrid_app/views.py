@@ -3,7 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
+from django.views.generic.base import RedirectView
+from django.urls import reverse_lazy
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 from . import models
 from . import serializers
 
@@ -40,10 +44,6 @@ class BlockEditAPI(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # if serializer.is_valid():
-        #     instance = serializer.save(commit=False)
-        #     instance.document = self.kwargs['pk']
-        #     instance.save()
 
 class DocumentListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
@@ -55,10 +55,22 @@ class DocumentListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.Document.objects.filter(user=self.request.user.id)
 
+class CreateDocumentView(LoginRequiredMixin, RedirectView):
+    login_url = 'account_login'
+
+    def get_redirect_url(self, *args, **kwargs):
+        document = models.Document.objects.create(name="Untitled document waiting to be named", user=self.request.user)
+        return reverse_lazy("hybrid_app:document_edit_view", args=[document.pk])
+
 class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     login_url = 'account_login'
 
     template_name = "hybrid_app/document_edit_view.html"
 
     def test_func(self):
-        return models.Document.objects.filter(pk=self.kwargs['pk'])[0].user == self.request.user
+        return models.Document.objects.get(pk=self.kwargs['pk']).user == self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['document'] = models.Document.objects.get(pk=self.kwargs['pk'])
+        return context

@@ -13,5 +13,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/block-edit/<int:pk>', views.BlockEditAPI.as_view()),
     path('', views.DocumentListView.as_view(), name='document_list_view'),
+    path('create-document', views.CreateDocumentView.as_view(), name='create_document_view'),
     path('<int:pk>', views.DocumentEditView.as_view(), name='document_edit_view'),
 ]

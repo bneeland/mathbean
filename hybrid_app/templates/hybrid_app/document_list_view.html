@@ -2,8 +2,14 @@
 
 {% block content %}
 
+<div id="tools">
+  <a href="{% url 'hybrid_app:create_document_view' %}">New document</a>
+</div>
+<hr />
+<div id="documents">
   {% for document in documents %}
-    <p><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}">{{ document.name }}</a></p>
+    <p><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}">{{ document.name }}</a> &middot; {{ document.created_at }}</p>
   {% endfor %}
+</div>
 
 {% endblock %}
