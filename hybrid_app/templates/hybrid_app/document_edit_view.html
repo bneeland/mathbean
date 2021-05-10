@@ -63,8 +63,8 @@
         <input
           v-if="block.edit"
           v-model="block.content"
-          @blur="block.edit=false; updateContent();"
-          @keyup.enter="block.edit=false; updateContent();"
+          @blur="block.edit=false; updateContent(block.id, block.content);"
+          @keyup.enter="block.edit=false; updateContent(block.id, block.content);"
         >
         <div v-else>
           <p @click="block.edit=true;">
@@ -73,17 +73,18 @@
         </div>
       `,
       methods: {
-        updateContent: function () {
+        updateContent: function (id, content) {
           console.log("updateContent function ran");
-          // axios
-          //   .patch('../api/blocks/' + {{ pk }},
-          //     {
-          //       content: "Updated content"
-          //     },
-          //     {
-          //       headers: {'X-CSRFToken' : document.cookie.split('=')[1]}
-          //     }
-          //   )
+          console.log(id + " " + content);
+          axios
+            .patch('../api/blocks/' + id + "/",
+              {
+                content: content
+              },
+              {
+                headers: {'X-CSRFToken' : document.cookie.split('=')[1]}
+              }
+            );
         }
       }
     })
