@@ -59,7 +59,7 @@ class CreateDocumentView(LoginRequiredMixin, RedirectView):
     login_url = 'account_login'
 
     def get_redirect_url(self, *args, **kwargs):
-        document = models.Document.objects.create(name="Untitled document waiting to be named", user=self.request.user)
+        document = models.Document.objects.create(name="Untitled document", user=self.request.user)
         return reverse_lazy("hybrid_app:document_edit_view", args=[document.pk])
 
 class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):

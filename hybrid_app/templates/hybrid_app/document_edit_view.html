@@ -19,6 +19,7 @@
   </div>
 
   <script>
+    var defaultContent = "Empty"
     const app = Vue.createApp({
       data() {
         return {
@@ -39,13 +40,12 @@
           axios
             .post('../api/block-edit/' + {{ pk }},
               {
-                // body: this.block
-                type: block.type
+                type: block.type,
+                content: defaultContent
               },
               {
                 headers: {
                   'X-CSRFToken' : document.cookie.split('=')[1]
-                  // 'X-CSRFToken' : "hdP9Al38HWwo9oTG1vjo3fFifgjmEI8aMuu7RRuzcrikeZSX1830rAboxLVZ0LEf"
                 }
               }
             )
@@ -56,32 +56,37 @@
     app.component('block-item', {
       delimiters: ["[[", "]]"],
       props: ['block'],
-      template: '<p>[[ block.type ]]</p>'
+      template: `
+        <h4>[[ block.type ]]</h4>
+        <p>[[ block.content ]]</p>
+      `
     })
 
     app.component('block-form', {
       delimiters: ["[[", "]]"],
-      template:
-      `<form class="block-form" @submit.prevent="onSubmit">
-        <h3>Add block</h3>
-        <label for="type">Type</label>
-        <select id="type" v-model="type">
-          <option>Graph</option>
-          <option>Equation</option>
-          <option>Text</option>
-          <option>Image</option>
-        </select>
-        <input class="button" type="submit" value="Add">
-      </form>`,
+      template: `
+        <form class="block-form" @submit.prevent="onAddBlock">
+          <h3>Add block</h3>
+          <label for="type">Type</label>
+          <select id="type" v-model="type">
+            <option>Graph</option>
+            <option>Equation</option>
+            <option>Text</option>
+            <option>Image</option>
+          </select>
+          <input class="button" type="submit" value="Add">
+        </form>
+      `,
       data() {
         return {
           type: ''
         }
       },
       methods: {
-        onSubmit() {
+        onAddBlock() {
           let newBlock = {
-            type: this.type
+            type: this.type,
+            content: defaultContent
           }
           this.$emit('block-added', newBlock)
           this.type = ''
