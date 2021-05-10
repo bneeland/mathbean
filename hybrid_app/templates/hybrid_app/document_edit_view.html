@@ -23,7 +23,8 @@
     const app = Vue.createApp({
       data() {
         return {
-          blocks: null
+          blocks: null,
+          // editedBlock: null
         }
       },
       mounted() {
@@ -44,12 +45,13 @@
                 content: defaultContent
               },
               {
-                headers: {
-                  'X-CSRFToken' : document.cookie.split('=')[1]
-                }
+                headers: {'X-CSRFToken' : document.cookie.split('=')[1]}
               }
             )
-        }
+        },
+        // editBlock: function(content) {
+        //   this.editedBlock = content;
+        // }
       }
     })
 
@@ -58,8 +60,32 @@
       props: ['block'],
       template: `
         <h4>[[ block.type ]]</h4>
-        <p>[[ block.content ]]</p>
-      `
+        <input
+          v-if="block.edit"
+          v-model="block.content"
+          @blur="block.edit=false; updateContent();"
+          @keyup.enter="block.edit=false; updateContent();"
+        >
+        <div v-else>
+          <p @click="block.edit=true;">
+            [[ block.content ]]
+          </p>
+        </div>
+      `,
+      methods: {
+        updateContent: function () {
+          console.log("updateContent function ran");
+          // axios
+          //   .patch('../api/blocks/' + {{ pk }},
+          //     {
+          //       content: "Updated content"
+          //     },
+          //     {
+          //       headers: {'X-CSRFToken' : document.cookie.split('=')[1]}
+          //     }
+          //   )
+        }
+      }
     })
 
     app.component('block-form', {
