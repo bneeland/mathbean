@@ -28,8 +28,7 @@ class BlockViewSet(viewsets.ModelViewSet):
         return self.request.user.blocks.all()
 
     def perform_create(self, serializer):
-        kwargs = {'user': self.request.user}
-        serializer.save(**kwargs)
+        serializer.save(user=self.request.user)
 
 class BlockEditAPI(APIView):
     def get(self, request, pk, format=None):
@@ -40,7 +39,10 @@ class BlockEditAPI(APIView):
     def post(self, request, pk, format=None):
         serializer = serializers.BlockSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(document=models.Document.objects.get(pk=self.kwargs['pk']))
+            serializer.save(
+                document=models.Document.objects.get(pk=self.kwargs['pk']),
+                user=self.request.user,
+            )
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -24,7 +24,6 @@
       data() {
         return {
           blocks: null,
-          // editedBlock: null
         }
       },
       mounted() {
@@ -45,13 +44,10 @@
                 content: defaultContent
               },
               {
-                headers: {'X-CSRFToken' : document.cookie.split('=')[1]}
+                headers: {'X-CSRFToken' : getCookie('csrftoken')}
               }
             )
         },
-        // editBlock: function(content) {
-        //   this.editedBlock = content;
-        // }
       }
     })
 
@@ -74,15 +70,15 @@
       `,
       methods: {
         updateContent: function (id, content) {
-          console.log("updateContent function ran");
-          console.log(id + " " + content);
+          console.log("id: " + id + " | content: " + content);
+          console.log("CSRF token: " + getCookie('csrftoken'));
           axios
             .patch('../api/blocks/' + id + "/",
               {
                 content: content
               },
               {
-                headers: {'X-CSRFToken' : document.cookie.split('=')[1]}
+                headers: {'X-CSRFToken' : getCookie('csrftoken')}
               }
             );
         }
