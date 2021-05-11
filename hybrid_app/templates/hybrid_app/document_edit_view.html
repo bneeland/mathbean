@@ -47,6 +47,9 @@
                 headers: {'X-CSRFToken' : getCookie('csrftoken')}
               }
             )
+            .then(response => {
+              this.block = response.data.id
+            })
         },
       }
     })
