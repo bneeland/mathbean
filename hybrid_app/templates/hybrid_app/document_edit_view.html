@@ -18,6 +18,11 @@
     </div>
   </div>
 
+  <div id="paintApp">
+   <h2>{{ message }}</h2>
+   <canvas @mousedown="startPainting" @mouseup="finishedPainting" @mousemove="draw"  id="canvas"></canvas>
+  </div>
+
   <script>
     var defaultContent = "Empty"
     const app = Vue.createApp({
@@ -118,6 +123,54 @@
     })
 
     app.mount('#app')
+  </script>
+
+  <script>
+    const paintApp = Vue.createApp({
+      data() {
+        return {
+          message: 'Hello Vue!',
+          vueCanvas:null,
+          painting:false,
+          canvas:null,
+          ctx:null
+        }
+      },
+      methods: {
+        startPainting(e) {
+          this.painting = true;
+          this.draw(e)
+        },
+        finishedPainting() {
+          this.painting = false;
+          this.ctx.beginPath()
+        },
+        draw(e) {
+          if(!this.painting) return
+
+          this.ctx.lineWidth = 3;
+          this.ctx.lineCap ="round"
+
+         this.ctx.lineTo(e.clientX,e.clientY)
+         this.ctx.stroke()
+
+         this.ctx.beginPath()
+         this.ctx.moveTo(e.clientX,e.clientY)
+
+
+        }
+      },
+       mounted() {
+        this.canvas = document.getElementById("canvas");
+        this.ctx = canvas.getContext("2d");
+
+        // Resize canvas
+        this.canvas.height = window.innerHeight;
+        this.canvas.width = window.innerWidth;
+      }
+    })
+
+    paintApp.mount('#paintApp')
   </script>
 
 {% endblock %}
