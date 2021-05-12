@@ -19,7 +19,6 @@
   </div>
 
   <div id="paintApp">
-   <h2>{{ message }}</h2>
    <canvas @mousedown="startPainting" @mouseup="finishedPainting" @mousemove="draw"  id="canvas"></canvas>
   </div>
 
@@ -126,14 +125,16 @@
   </script>
 
   <script>
+    var height = 400;
+    var width = 600;
+
     const paintApp = Vue.createApp({
       data() {
         return {
-          message: 'Hello Vue!',
-          vueCanvas:null,
-          painting:false,
-          canvas:null,
-          ctx:null
+          vueCanvas: null,
+          painting: false,
+          canvas: null,
+          ctx: null
         }
       },
       methods: {
@@ -151,22 +152,19 @@
           this.ctx.lineWidth = 3;
           this.ctx.lineCap ="round"
 
-         this.ctx.lineTo(e.clientX,e.clientY)
-         this.ctx.stroke()
+          this.ctx.lineTo(e.clientX - (canvas.offsetLeft - window.pageXOffset),e.clientY - (canvas.offsetTop - window.pageYOffset))
+          this.ctx.stroke()
 
-         this.ctx.beginPath()
-         this.ctx.moveTo(e.clientX,e.clientY)
-
-
+          this.ctx.beginPath()
+          this.ctx.moveTo(e.clientX - (canvas.offsetLeft - window.pageXOffset),e.clientY - (canvas.offsetTop - window.pageYOffset))
         }
       },
-       mounted() {
+      mounted() {
         this.canvas = document.getElementById("canvas");
         this.ctx = canvas.getContext("2d");
-
-        // Resize canvas
-        this.canvas.height = window.innerHeight;
-        this.canvas.width = window.innerWidth;
+        this.canvas.height = height;
+        this.canvas.width = width;
+        this.canvas.style.border = '1px solid black';
       }
     })
 
