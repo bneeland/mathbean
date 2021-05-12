@@ -62,17 +62,19 @@
       props: ['block'],
       template: `
         <h4>[[ block.type ]]</h4>
-        <textarea
-          v-if="block.edit"
-          v-model="block.content"
-          @blur="block.edit=false; updateContent(block.id, block.content);"
-        >
-        </textarea>
-        <div v-else>
-          <p @click="block.edit=true;">
-            [[ block.content ]]
-          </p>
-        </div>
+        <template v-if="block.type=='Text'">
+          <textarea
+            v-if="block.edit"
+            v-model="block.content"
+            @blur="block.edit=false; updateContent(block.id, block.content);"
+          >
+          </textarea>
+          <div v-else>
+            <p @click="block.edit=true;">
+              [[ block.content ]]
+            </p>
+          </div>
+        </template>
       `,
       methods: {
         updateContent: function (id, content) {
