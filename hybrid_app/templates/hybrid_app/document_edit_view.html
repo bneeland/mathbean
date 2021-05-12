@@ -48,7 +48,7 @@
               }
             )
             .then(response => {
-              this.block = response.data.id
+              this.blocks.push(response.data)
             })
         },
       }
