@@ -36,7 +36,6 @@
       },
       methods: {
         onAddBlock(block) {
-          this.blocks.push(block);
           axios
             .post('../api/block-edit/' + {{ pk }},
               {
@@ -59,12 +58,12 @@
       props: ['block'],
       template: `
         <h4>[[ block.type ]]</h4>
-        <input
+        <textarea
           v-if="block.edit"
           v-model="block.content"
           @blur="block.edit=false; updateContent(block.id, block.content);"
-          @keyup.enter="block.edit=false; updateContent(block.id, block.content);"
         >
+        </textarea>
         <div v-else>
           <p @click="block.edit=true;">
             [[ block.content ]]
@@ -73,8 +72,6 @@
       `,
       methods: {
         updateContent: function (id, content) {
-          console.log("id: " + id + " | content: " + content);
-          console.log("CSRF token: " + getCookie('csrftoken'));
           axios
             .patch('../api/blocks/' + id + "/",
               {
