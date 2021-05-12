@@ -18,8 +18,8 @@
     </div>
   </div>
 
-  <div id="paintApp">
-   <canvas @mousedown="startPainting" @mouseup="finishedPainting" @mousemove="draw"  id="canvas"></canvas>
+  <div id="paintApp" b-bind:style="{cursor: paintCursor}">
+     <canvas @mousedown="startPainting" @mouseup="finishedPainting" @mousemove="draw"  id="canvas" v-bind:style="{cursor: paintCursor}"></canvas>
   </div>
 
   <script>
@@ -134,7 +134,8 @@
           vueCanvas: null,
           painting: false,
           canvas: null,
-          ctx: null
+          ctx: null,
+          paintCursor: 'crosshair'
         }
       },
       methods: {
