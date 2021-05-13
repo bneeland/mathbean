@@ -75,6 +75,19 @@
             </p>
           </div>
         </template>
+        <template v-if="block.type=='Graph'">
+          <div
+            v-if="block.edit"
+            @click="block.edit=false; updateContent(block.id, block.content);"
+          >
+            <code>[[ block.content ]]</code>
+          </div>
+          <div v-else>
+            <p @click="block.edit=true;">
+              [[ block.content ]]
+            </p>
+          </div>
+        </template>
       `,
       methods: {
         updateContent: function (id, content) {
