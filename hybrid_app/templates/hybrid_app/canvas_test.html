@@ -13,7 +13,8 @@ ctx.fillRect(10, 10, 50, 50);
 
 function copy() {
   var imgData = ctx.getImageData(10, 10, 50, 50);
-  console.log(JSON.stringify(imgData));
+  console.log(stringify = JSON.stringify(imgData));
+  console.log(parse = JSON.parse(stringify));
   ctx.putImageData(imgData, 10, 70);
 }
 </script>

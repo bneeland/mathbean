@@ -111,8 +111,10 @@
           console.log(c);
           var c = this.$refs.graph;
           console.log(c);
-          // var ctx = c.getContext('2d');
-          // console.log(ctx);
+          var ctx = c.getContext('2d');
+          console.log(ctx);
+          contentJSON = JSON.parse(this.block.content);
+          console.log(contentJSON);
         }
       }
     })
