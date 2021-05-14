@@ -87,7 +87,7 @@
             v-else
             @click="block.edit=true;"
           >
-            <canvas :ref="graph"></canvas>
+            <canvas ref="graph"></canvas>
           </div>
         </template>
       `,
@@ -112,6 +112,7 @@
           var c = this.$refs.graph;
           console.log(c);
           // var ctx = c.getContext('2d');
+          // console.log(ctx);
         }
       }
     })
