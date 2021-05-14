@@ -76,12 +76,15 @@
           </div>
         </template>
         <template v-if="block.type=='Graph'">
-          <div
+
+            <canvas
+            :id="block.id"
             v-if="block.edit"
             @click="block.edit=false; updateContent(block.id, block.content);"
-          >
-            <code>[[ block.content ]]</code>
-          </div>
+            >
+              [[ block.content ]]
+            </canvas>
+
           <div v-else>
             <p @click="block.edit=true;">
               [[ block.content ]]

@@ -76,3 +76,6 @@ class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['document'] = models.Document.objects.get(pk=self.kwargs['pk'])
         return context
+
+class CanvasTest(TemplateView):
+    template_name = "hybrid_app/canvas_test.html"
