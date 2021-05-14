@@ -82,7 +82,6 @@
             v-if="block.edit"
             @click="block.edit=false; updateContent(block.id, block.content);"
             >
-              [[ block.content ]]
             </canvas>
 
           <div v-else>
@@ -103,6 +102,11 @@
                 headers: {'X-CSRFToken' : getCookie('csrftoken')}
               }
             );
+        }
+      },
+      mounted() {
+        if (this.block.type=='Graph') {
+          console.log('Mounted a graph');
         }
       }
     })
