@@ -78,7 +78,7 @@
         <template v-if="block.type=='Graph'">
 
             <canvas
-            :id="block.id"
+            :id="'graph-'+block.id"
             v-if="block.edit"
             @click="block.edit=false; updateContent(block.id, block.content);"
             >
@@ -106,7 +106,9 @@
       },
       mounted() {
         if (this.block.type=='Graph') {
-          console.log('Mounted a graph');
+          // console.log('Mounted a graph');
+          // var c = document.getElementById(this.block.id);
+
         }
       }
     })
