@@ -59,7 +59,7 @@
 
     app.component('block-item', {
       delimiters: ["[[", "]]"],
-      props: ['block'],
+      props: ['block', 'graph'],
       template: `
         <h4>[[ block.type ]]</h4>
         <template v-if="block.type=='Text'">
@@ -76,18 +76,18 @@
           </div>
         </template>
         <template v-if="block.type=='Graph'">
-
-            <canvas
-            :id="'graph-'+block.id"
+          <div
             v-if="block.edit"
             @click="block.edit=false; updateContent(block.id, block.content);"
-            >
-            </canvas>
+          >
+            [[ block.content ]]
+          </div>
 
-          <div v-else>
-            <p @click="block.edit=true;">
-              [[ block.content ]]
-            </p>
+          <div
+            v-else
+            @click="block.edit=true;"
+          >
+            <canvas :ref="graph"></canvas>
           </div>
         </template>
       `,
@@ -106,9 +106,12 @@
       },
       mounted() {
         if (this.block.type=='Graph') {
-          // console.log('Mounted a graph');
-          // var c = document.getElementById(this.block.id);
-
+          console.log(this.block.id);
+          var c = this.$el;
+          console.log(c);
+          var c = this.$refs.graph;
+          console.log(c);
+          // var ctx = c.getContext('2d');
         }
       }
     })
