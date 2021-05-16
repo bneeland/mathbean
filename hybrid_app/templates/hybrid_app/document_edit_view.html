@@ -87,7 +87,7 @@
             v-else
             @click="block.edit=true;"
           >
-            <canvas ref="graph"></canvas>
+            <canvas id="graph" ref="graph"></canvas>
           </div>
         </template>
       `,
@@ -113,13 +113,14 @@
           console.log(c);
           var ctx = c.getContext('2d');
           console.log(ctx);
-          ctx.fillStyle = "black";
-          ctx.fillRect(10, 10, 50, 50);
 
-          // content = this.block.content;
-          // console.log(content);
-          contentJSON = JSON.parse(this.block.content);
-          console.log(contentJSON);
+          // ctx.fillStyle = "black";
+          // ctx.fillRect(10, 10, 50, 50);
+
+          console.log(this.block.content);
+
+          var canvas = new fabric.Canvas("graph");
+          canvas.loadFromJSON('{"objects":[{"type":"rect","left":50,"top":50,"width":20,"height":20,"fill":"green","overlayFill":null,"stroke":null,"strokeWidth":1,"strokeDashArray":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"selectable":true,"hasControls":true,"hasBorders":true,"hasRotatingPoint":false,"transparentCorners":true,"perPixelTargetFind":false,"rx":0,"ry":0},{"type":"circle","left":100,"top":100,"width":100,"height":100,"fill":"red","overlayFill":null,"stroke":null,"strokeWidth":1,"strokeDashArray":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"selectable":true,"hasControls":true,"hasBorders":true,"hasRotatingPoint":false,"transparentCorners":true,"perPixelTargetFind":false,"radius":50}],"background":"rgba(0, 0, 0, 0)"}');
         }
       }
     })
