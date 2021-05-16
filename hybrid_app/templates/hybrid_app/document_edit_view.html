@@ -113,6 +113,11 @@
           console.log(c);
           var ctx = c.getContext('2d');
           console.log(ctx);
+          ctx.fillStyle = "black";
+          ctx.fillRect(10, 10, 50, 50);
+
+          // content = this.block.content;
+          // console.log(content);
           contentJSON = JSON.parse(this.block.content);
           console.log(contentJSON);
         }
