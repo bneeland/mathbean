@@ -18,9 +18,9 @@
     </div>
   </div>
 
-  <div id="paintApp" b-bind:style="{cursor: paintCursor}">
+  <!-- <div id="paintApp" b-bind:style="{cursor: paintCursor}">
      <canvas @mousedown="startPainting" @mouseup="finishedPainting" @mousemove="draw"  id="canvas" v-bind:style="{cursor: paintCursor}"></canvas>
-  </div>
+  </div> -->
 
   <script>
     var defaultContent = "Empty"
@@ -76,8 +76,8 @@
           </div>
         </template>
         <template v-if="block.type=='Graph'">
-          <div @mouseout="mouseOutFunction();">
-            <canvas :id="'graph-' + block.id" ref="graph"></canvas>
+          <div @mouseout="updateContent(block.id, updateContentGraph(block.id));">
+            <canvas :id="'graph-'+block.id" ref="graph"></canvas>
           </div>
         </template>
       `,
@@ -93,24 +93,25 @@
               }
             );
         },
-        mouseOutFunction: function () {
-          console.log("Mouse out");
+        updateContentGraph: function (id) {
+          var canvas = document.getElementById("graph-" + id).fabric;
+          console.log(canvas);
+          canvasJSON = JSON.stringify(canvas);
+          return canvasJSON;
         }
       },
       mounted() {
         if (this.block.type=='Graph') {
-          console.log(this.block.id);
           var c = this.$el;
-          console.log(c);
           var c = this.$refs.graph;
-          console.log(c);
           var ctx = c.getContext('2d');
-          console.log(ctx);
-
-          console.log(this.block.content);
 
           var canvas = new fabric.Canvas(String('graph-' + this.block.id));
-          canvas.loadFromJSON(this.block.content);
+          document.getElementById("graph-" + this.block.id).fabric = canvas;
+          if (this.block.content != "Empty") {
+            canvas.loadFromJSON(this.block.content);
+          }
+          console.log(canvas);
         }
       }
     })
@@ -150,7 +151,7 @@
     app.mount('#app')
   </script>
 
-  <script>
+  <!-- <script>
     var height = 400;
     var width = 600;
 
@@ -196,6 +197,6 @@
     })
 
     paintApp.mount('#paintApp')
-  </script>
+  </script> -->
 
 {% endblock %}
