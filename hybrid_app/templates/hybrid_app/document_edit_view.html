@@ -87,7 +87,7 @@
             v-else
             @click="block.edit=true;"
           >
-            <canvas id="graph" ref="graph"></canvas>
+            <canvas :id="'graph-' + block.id" ref="graph"></canvas>
           </div>
         </template>
       `,
@@ -114,13 +114,10 @@
           var ctx = c.getContext('2d');
           console.log(ctx);
 
-          // ctx.fillStyle = "black";
-          // ctx.fillRect(10, 10, 50, 50);
-
           console.log(this.block.content);
 
-          var canvas = new fabric.Canvas("graph");
-          canvas.loadFromJSON(String(this.block.content));
+          var canvas = new fabric.Canvas(String('graph-' + this.block.id));
+          canvas.loadFromJSON(this.block.content);
         }
       }
     })
