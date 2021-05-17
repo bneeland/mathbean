@@ -61,25 +61,28 @@
       delimiters: ["[[", "]]"],
       props: ['block', 'graph'],
       template: `
-        <h4>[[ block.type ]]</h4>
-        <template v-if="block.type=='Text'">
-          <textarea
-            v-if="block.edit"
-            v-model="block.content"
-            @blur="block.edit=false; updateContent(block.id, block.content);"
-          >
-          </textarea>
-          <div v-else>
-            <p @click="block.edit=true;">
-              [[ block.content ]]
-            </p>
-          </div>
-        </template>
-        <template v-if="block.type=='Graph'">
-          <div @mouseout="updateContent(block.id, updateContentGraph(block.id));">
-            <canvas :id="'graph-'+block.id" ref="graph"></canvas>
-          </div>
-        </template>
+        <div class="block" style="border: 1px solid grey; margin-bottom: 20px;">
+          <h4>[[ block.type ]]</h4>
+          <template v-if="block.type=='Text'">
+            <textarea
+              v-if="block.edit"
+              v-model="block.content"
+              @blur="block.edit=false; updateContent(block.id, block.content);"
+              @mouseout="updateContent(block.id, block.content);"
+            >
+            </textarea>
+            <div v-else>
+              <p @click="block.edit=true;">
+                [[ block.content ]]
+              </p>
+            </div>
+          </template>
+          <template v-if="block.type=='Graph'">
+            <div @mouseout="updateContent(block.id, updateContentGraph(block.id));">
+              <canvas :id="'graph-'+block.id" ref="graph" style="border: 1px solid grey"></canvas>
+            </div>
+          </template>
+        </div>
       `,
       methods: {
         updateContent: function (id, content) {
@@ -95,7 +98,6 @@
         },
         updateContentGraph: function (id) {
           var canvas = document.getElementById("graph-" + id).fabric;
-          console.log(canvas);
           canvasJSON = JSON.stringify(canvas);
           return canvasJSON;
         }
@@ -107,11 +109,11 @@
           var ctx = c.getContext('2d');
 
           var canvas = new fabric.Canvas(String('graph-' + this.block.id));
+          canvas.setDimensions({width:600, height:400});
           document.getElementById("graph-" + this.block.id).fabric = canvas;
           if (this.block.content != "Empty") {
             canvas.loadFromJSON(this.block.content);
           }
-          console.log(canvas);
         }
       }
     })
