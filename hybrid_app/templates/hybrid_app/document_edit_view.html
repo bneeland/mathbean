@@ -76,17 +76,7 @@
           </div>
         </template>
         <template v-if="block.type=='Graph'">
-          <div
-            v-if="block.edit"
-            @click="block.edit=false; updateContent(block.id, block.content);"
-          >
-            [[ block.content ]]
-          </div>
-
-          <div
-            v-else
-            @click="block.edit=true;"
-          >
+          <div @mouseout="mouseOutFunction();">
             <canvas :id="'graph-' + block.id" ref="graph"></canvas>
           </div>
         </template>
@@ -102,6 +92,9 @@
                 headers: {'X-CSRFToken' : getCookie('csrftoken')}
               }
             );
+        },
+        mouseOutFunction: function () {
+          console.log("Mouse out");
         }
       },
       mounted() {
