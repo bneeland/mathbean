@@ -61,14 +61,15 @@
           <h4>[[ block.type ]]</h4>
           <template v-if="block.type=='Text'">
             <textarea
-              v-if="block.edit"
+              ref="textarea"
+              v-if="editingMode"
               v-model="block.content"
-              @blur="block.edit=false; updateContent(block.id, block.content);"
+              @blur="editingMode=false; updateContent(block.id, block.content);"
               @mouseout="updateContent(block.id, block.content);"
             >
             </textarea>
             <div v-else>
-              <p @click="block.edit=true;">
+              <p @click="switchToEditingMode();">
                 [[ block.content ]]
               </p>
             </div>
@@ -83,10 +84,20 @@
       `,
       data() {
         return {
+          editingMode: false,
           drawingMode: false
         }
       },
       methods: {
+        switchToEditingMode: function () {
+          this.editingMode = true;
+          this.$nextTick(() => {
+            this.focusOnTextarea();
+          })
+        },
+        focusOnTextarea: function () {
+          this.$refs.textarea.focus();
+        },
         updateContent: function (id, content) {
           axios
             .patch('../api/blocks/' + id + "/",
