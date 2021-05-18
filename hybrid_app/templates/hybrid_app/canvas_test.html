@@ -10,7 +10,8 @@
 
 <canvas id="canvas"></canvas>
 
-<button onClick="togglePan()">Pan</button>
+<button onClick="toggleMode(modes.pan)">Pan</button>
+<button onClick="toggleMode(modes.drawing)">Drawing</button>
 
 <script>
   // const canvas = new fabric.Canvas("canvas", {
@@ -29,12 +30,50 @@
     });
   }
 
-  const togglePan = () => {
-    if (currentMode === modes.pan) {
-      currentMode = '';
-    } else {
-      currentMode = modes.pan;
+  const toggleMode = (mode) => {
+    if (mode === modes.pan) {
+      if (currentMode === modes.pan) {
+        currentMode = '';
+        canvas.setCursor('default')
+        canvas.renderAll()
+      } else {
+        currentMode = modes.pan;
+      }
+    } else if (mode === modes.drawing) {
+      if (currentMode === modes.drawing) {
+        currentMode = '';
+        canvas.isDrawingMode = false;
+        canvas.renderAll;
+      } else {
+        currentMode = modes.drawing;
+      }
     }
+    console.log(mode);
+  }
+
+  const setPanEvents = (canvas) => {
+    canvas.on('mouse:move', (event) => {
+      if (currentMode === modes.pan) {
+        canvas.setCursor('grab')
+        canvas.renderAll()
+      }
+      if (mousePressed && currentMode === modes.pan) {
+        const mEvent = event.e;
+        const delta = new fabric.Point(mEvent.movementX, mEvent.movementY)
+        canvas.relativePan(delta);
+      } else if (mousePressed && currentMode === modes.drawing) {
+        canvas.isDrawingMode = true;
+        canvas.renderAll;
+      }
+    })
+
+    canvas.on('mouse:down', (event) => {
+      mousePressed = true;
+    })
+
+    canvas.on('mouse:up', (event) => {
+      mousePressed = false;
+    })
   }
 
   const canvas = initCanvas('canvas');
@@ -43,7 +82,8 @@
 
   let currentMode;
   const modes = {
-    pan: 'pan'
+    pan: 'pan',
+    drawing: 'drawing'
   }
 
   var rectangle = new fabric.Rect({
@@ -56,23 +96,7 @@
 
   canvas.add(rectangle);
 
-  canvas.on('mouse:move', (event) => {
-    if (mousePressed && currentMode === modes.pan) {
-      const mEvent = event.e;
-      const delta = new fabric.Point(mEvent.movementX, mEvent.movementY)
-      canvas.relativePan(delta);
-      canvas.setCursor('grab')
-      canvas.renderAll()
-    }
-  })
-
-  canvas.on('mouse:down', (event) => {
-    mousePressed = true;
-  })
-
-  canvas.on('mouse:up', (event) => {
-    mousePressed = false;
-  })
+  setPanEvents(canvas);
 </script>
 
 </body>
