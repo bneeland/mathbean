@@ -10,6 +10,8 @@
 
 <canvas id="canvas"></canvas>
 
+<button onClick="togglePan()">Pan</button>
+
 <script>
   // const canvas = new fabric.Canvas("canvas", {
   //   width: 500,
@@ -27,9 +29,22 @@
     });
   }
 
+  const togglePan = () => {
+    if (currentMode === modes.pan) {
+      currentMode = '';
+    } else {
+      currentMode = modes.pan;
+    }
+  }
+
   const canvas = initCanvas('canvas');
 
   let mousePressed = false;
+
+  let currentMode;
+  const modes = {
+    pan: 'pan'
+  }
 
   var rectangle = new fabric.Rect({
     width: 200,
@@ -42,7 +57,7 @@
   canvas.add(rectangle);
 
   canvas.on('mouse:move', (event) => {
-    if (mousePressed) {
+    if (mousePressed && currentMode === modes.pan) {
       const mEvent = event.e;
       const delta = new fabric.Point(mEvent.movementX, mEvent.movementY)
       canvas.relativePan(delta);
@@ -53,14 +68,10 @@
 
   canvas.on('mouse:down', (event) => {
     mousePressed = true;
-    // canvas.setCursor('grab')
-    // canvas.renderAll()
   })
 
   canvas.on('mouse:up', (event) => {
     mousePressed = false;
-    // canvas.setCursor('default')
-    // canvas.renderAll()
   })
 </script>
 
