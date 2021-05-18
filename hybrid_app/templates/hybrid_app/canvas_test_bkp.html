@@ -26,7 +26,7 @@
       width: 500,
       height: 500,
       backgroundColor: 'lightsteelblue',
-      // selection: false,
+      selection: false,
     });
   }
 
@@ -36,19 +36,16 @@
         currentMode = '';
         canvas.setCursor('default')
         canvas.renderAll()
-        canvas.selection = true;
       } else {
         currentMode = modes.pan;
         canvas.isDrawingMode = false;
         canvas.renderAll();
-        canvas.selection = false;
       }
     } else if (mode === modes.drawing) {
       if (currentMode === modes.drawing) {
         currentMode = '';
         canvas.isDrawingMode = false;
         canvas.renderAll();
-        canvas.selection = true;
       } else {
         currentMode = modes.drawing;
         canvas.isDrawingMode = true;
