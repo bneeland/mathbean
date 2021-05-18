@@ -18,10 +18,6 @@
     </div>
   </div>
 
-  <!-- <div id="paintApp" b-bind:style="{cursor: paintCursor}">
-     <canvas @mousedown="startPainting" @mouseup="finishedPainting" @mousemove="draw"  id="canvas" v-bind:style="{cursor: paintCursor}"></canvas>
-  </div> -->
-
   <script>
     var defaultContent = "Empty"
     const app = Vue.createApp({
@@ -61,7 +57,7 @@
       delimiters: ["[[", "]]"],
       props: ['block', 'graph'],
       template: `
-        <div class="block" style="border: 1px solid grey; margin-bottom: 20px;">
+        <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
           <h4>[[ block.type ]]</h4>
           <template v-if="block.type=='Text'">
             <textarea
@@ -152,53 +148,5 @@
 
     app.mount('#app')
   </script>
-
-  <!-- <script>
-    var height = 400;
-    var width = 600;
-
-    const paintApp = Vue.createApp({
-      data() {
-        return {
-          vueCanvas: null,
-          painting: false,
-          canvas: null,
-          ctx: null,
-          paintCursor: 'crosshair'
-        }
-      },
-      methods: {
-        startPainting(e) {
-          this.painting = true;
-          this.draw(e)
-        },
-        finishedPainting() {
-          this.painting = false;
-          this.ctx.beginPath()
-        },
-        draw(e) {
-          if(!this.painting) return
-
-          this.ctx.lineWidth = 3;
-          this.ctx.lineCap ="round"
-
-          this.ctx.lineTo(e.clientX - (canvas.offsetLeft - window.pageXOffset),e.clientY - (canvas.offsetTop - window.pageYOffset))
-          this.ctx.stroke()
-
-          this.ctx.beginPath()
-          this.ctx.moveTo(e.clientX - (canvas.offsetLeft - window.pageXOffset),e.clientY - (canvas.offsetTop - window.pageYOffset))
-        }
-      },
-      mounted() {
-        this.canvas = document.getElementById("canvas");
-        this.ctx = canvas.getContext("2d");
-        this.canvas.height = height;
-        this.canvas.width = width;
-        this.canvas.style.border = '1px solid black';
-      }
-    })
-
-    paintApp.mount('#paintApp')
-  </script> -->
 
 {% endblock %}
