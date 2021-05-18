@@ -75,11 +75,17 @@
           </template>
           <template v-if="block.type=='Graph'">
             <div @mouseout="updateContent(block.id, updateContentGraph(block.id));">
+              <button @click="toggleDrawing(block.id)">Drawing: [[ drawingMode ]]</button>
               <canvas :id="'graph-'+block.id" ref="graph" style="border: 1px solid grey"></canvas>
             </div>
           </template>
         </div>
       `,
+      data() {
+        return {
+          drawingMode: false
+        }
+      },
       methods: {
         updateContent: function (id, content) {
           axios
@@ -96,6 +102,16 @@
           var canvas = document.getElementById("graph-" + id).fabric;
           canvasJSON = JSON.stringify(canvas);
           return canvasJSON;
+        },
+        toggleDrawing: function (id) {
+          var canvas = document.getElementById("graph-" + id).fabric;
+          if (canvas.isDrawingMode === false) {
+            canvas.isDrawingMode = true;
+            this.drawingMode = true;
+          } else {
+            canvas.isDrawingMode = false;
+            this.drawingMode = false;
+          }
         }
       },
       mounted() {
