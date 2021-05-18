@@ -143,18 +143,20 @@
 
     app.component('block-form', {
       delimiters: ["[[", "]]"],
+      emits: ['block-added'],
       template: `
-        <form class="block-form" @submit.prevent="onAddBlock">
+        <!--<form class="block-form" @submit.prevent="onAddBlock">-->
           <h3>Add block</h3>
           <label for="type">Type</label>
-          <select id="type" v-model="type">
+          <select id="type" v-model="type" @change="onAddBlock">
+            <option></option>
             <option>Graph</option>
             <option>Equation</option>
             <option>Text</option>
             <option>Image</option>
           </select>
-          <input class="button" type="submit" value="Add">
-        </form>
+          <!--<input class="button" type="submit" value="Add">
+        </form>-->
       `,
       data() {
         return {
