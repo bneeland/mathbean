@@ -182,14 +182,25 @@
             stroke: 'black',
             lockMovementX: true,
             lockMovementY: true,
+            evented: false,
+            hasControls: false,
+            hasBorders: false,
+            lockMovementX: true,
+            lockMovementY: true,
           }));
-          canvas.add(new fabric.Line([300, 0, 300, 400], {
+          var line = new fabric.Line([300, 0, 300, 400], {
             left: 300,
             top: 0,
             stroke: 'black',
             lockMovementX: true,
             lockMovementY: true,
-          }));
+            evented: false,
+            hasControls: false,
+            hasBorders: false,
+            lockMovementX: true,
+            lockMovementY: true,
+          })
+          canvas.add(line);
           document.getElementById("graph-" + this.block.id).fabric = canvas;
           if (this.block.content != "Empty") {
             canvas.loadFromJSON(this.block.content);
