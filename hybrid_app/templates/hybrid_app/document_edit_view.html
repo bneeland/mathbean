@@ -5,15 +5,18 @@
     <div id="tools">
       <p><a href="{% url 'hybrid_app:document_list_view' %}">&larr; Documents</a></p>
       {%comment%}<p>{{ document.name }}</p>{%endcomment%}
-      <input
-        ref="input"
+      <div
         v-if="editingMode"
-        v-model="document.name"
-        @blur="editingMode=false; updateContent(document.id, document.name);"
-      />
+      >
+        <input
+          ref="input"
+          v-model="document.name"
+          @blur="editingMode=false; updateContent(document.id, document.name);"
+          @keyup.enter="editingMode=false; updateContent(document.id, document.name);"
+        />
+      </div>
       <div v-else>
         <h1
-          v-else
           @click="switchToEditingMode();" style="cursor: pointer"
         >
           [[ document.name ]]
@@ -74,13 +77,13 @@
         },
         switchToEditingMode: function () {
           this.editingMode = true;
-          // this.$nextTick(() => {
-          //   this.focusOnInput();
-          // })
+          this.$nextTick(() => {
+            this.focusOnInput();
+          })
         },
-        // focusOnInput: function () {
-        //   this.$refs.input.focus();
-        // },
+        focusOnInput: function () {
+          this.$refs.input.focus();
+        },
         updateContent: function (id, name) {
           axios
             .patch('../api/documents/' + id + "/",
