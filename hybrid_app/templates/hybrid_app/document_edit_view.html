@@ -4,7 +4,21 @@
   <div id="app">
     <div id="tools">
       <p><a href="{% url 'hybrid_app:document_list_view' %}">&larr; Documents</a></p>
-      <p>{{ document.name }}</p>
+      {%comment%}<p>{{ document.name }}</p>{%endcomment%}
+      <input
+        ref="input"
+        v-if="editingMode"
+        v-model="document.name"
+        @blur="editingMode=false; updateContent(document.id, document.name);"
+      />
+      <div v-else>
+        <h1
+          v-else
+          @click="switchToEditingMode();" style="cursor: pointer"
+        >
+          [[ document.name ]]
+        </h1>
+      </div>
       <block-form @block-added="onAddBlock"></block-form>
     </div>
     <hr />
@@ -21,9 +35,12 @@
   <script>
     var defaultContent = "Empty"
     const app = Vue.createApp({
+      delimiters: ["[[", "]]"],
       data() {
         return {
           blocks: null,
+          document: "",
+          editingMode: false,
         }
       },
       mounted() {
@@ -32,7 +49,12 @@
           .get('../api/block-edit/' + {{ pk }})
           .then(response => {
             this.blocks = response.data
-          })
+          });
+        axios
+          .get('../api/documents/' + {{ pk }})
+          .then(response => {
+            this.document = response.data
+          });
       },
       methods: {
         onAddBlock(block) {
@@ -50,8 +72,84 @@
               this.blocks.push(response.data)
             })
         },
+        switchToEditingMode: function () {
+          this.editingMode = true;
+          // this.$nextTick(() => {
+          //   this.focusOnInput();
+          // })
+        },
+        // focusOnInput: function () {
+        //   this.$refs.input.focus();
+        // },
+        updateContent: function (id, name) {
+          axios
+            .patch('../api/documents/' + id + "/",
+              {
+                name: name
+              },
+              {
+                headers: {'X-CSRFToken' : getCookie('csrftoken')}
+              }
+            );
+        },
       }
     })
+
+    // app.component('document-title', {
+    //   delimiters: ["[[", "]]"],
+    //   props: ['document'],
+    //   template: `
+        // <input
+        //   ref="input"
+        //   v-if="editingMode"
+        //   v-model="document.name"
+        //   @blur="editinMode=false; updateContent(document.id, document.name);"
+        // />
+        // <div v-else>
+        //   <h1
+        //     v-else
+        //     @click="switchToEditingMode();" style="cursor: pointer"
+        //   >
+        //     [[ document.name ]]
+        //   </h1>
+        // </div>
+    //   `,
+    //   data() {
+    //     return {
+    //       editingMode: false,
+    //       document: null,
+    //     }
+    //   },
+    //   methods: {
+    //     switchToEditingMode: function () {
+    //       this.editingMode = true;
+    //       this.$nextTick(() => {
+    //         this.focusOnInput();
+    //       })
+    //     },
+    //     focusOnInput: function () {
+    //       this.$refs.input.focus();
+    //     },
+    //     updateContent: function (id, name) {
+    //       axios
+    //         .patch('../api/documents/' + id + "/",
+    //           {
+    //             name: name
+    //           },
+    //           {
+    //             headers: {'X-CSRFToken' : getCookie('csrftoken')}
+    //           }
+    //         );
+    //     },
+    //   },
+    //   mounted() {
+    //     axios
+    //       .get('../api/documents/' + {{ pk }})
+    //       .then(response => {
+    //         this.document = response.data
+    //       })
+    //   }
+    // })
 
     app.component('block-item', {
       delimiters: ["[[", "]]"],
@@ -145,18 +243,15 @@
       delimiters: ["[[", "]]"],
       emits: ['block-added'],
       template: `
-        <!--<form class="block-form" @submit.prevent="onAddBlock">-->
-          <h3>Add block</h3>
-          <label for="type">Type</label>
-          <select id="type" v-model="type" @change="onAddBlock">
-            <option></option>
-            <option>Graph</option>
-            <option>Equation</option>
-            <option>Text</option>
-            <option>Image</option>
-          </select>
-          <!--<input class="button" type="submit" value="Add">
-        </form>-->
+        <h3>Add block</h3>
+        <label for="type">Type</label>
+        <select id="type" v-model="type" @change="onAddBlock">
+          <option></option>
+          <option>Graph</option>
+          <option>Equation</option>
+          <option>Text</option>
+          <option>Image</option>
+        </select>
       `,
       data() {
         return {
