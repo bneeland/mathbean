@@ -163,7 +163,6 @@
               v-if="editingMode"
               v-model="block.content"
               @blur="editingMode=false; updateContent(block.id, block.content);"
-              @mouseout="updateContent(block.id, block.content);"
             >
             </textarea>
             <div v-else>
