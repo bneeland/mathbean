@@ -185,10 +185,9 @@
             evented: false,
             hasControls: false,
             hasBorders: false,
-            lockMovementX: true,
-            lockMovementY: true,
+            selectable: false,
           }));
-          var line = new fabric.Line([300, 0, 300, 400], {
+          canvas.add(new fabric.Line([300, 0, 300, 400], {
             left: 300,
             top: 0,
             stroke: 'black',
@@ -197,10 +196,9 @@
             evented: false,
             hasControls: false,
             hasBorders: false,
-            lockMovementX: true,
-            lockMovementY: true,
-          })
-          canvas.add(line);
+            selectable: false,
+          }));
+
           document.getElementById("graph-" + this.block.id).fabric = canvas;
           if (this.block.content != "Empty") {
             canvas.loadFromJSON(this.block.content);
