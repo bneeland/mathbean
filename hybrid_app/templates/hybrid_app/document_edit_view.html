@@ -4,7 +4,6 @@
   <div id="app">
     <div id="tools">
       <p><a href="{% url 'hybrid_app:document_list_view' %}">&larr; Documents</a></p>
-      {%comment%}<p>{{ document.name }}</p>{%endcomment%}
       <div
         v-if="editingMode"
       >
@@ -98,62 +97,6 @@
       }
     })
 
-    // app.component('document-title', {
-    //   delimiters: ["[[", "]]"],
-    //   props: ['document'],
-    //   template: `
-        // <input
-        //   ref="input"
-        //   v-if="editingMode"
-        //   v-model="document.name"
-        //   @blur="editinMode=false; updateContent(document.id, document.name);"
-        // />
-        // <div v-else>
-        //   <h1
-        //     v-else
-        //     @click="switchToEditingMode();" style="cursor: pointer"
-        //   >
-        //     [[ document.name ]]
-        //   </h1>
-        // </div>
-    //   `,
-    //   data() {
-    //     return {
-    //       editingMode: false,
-    //       document: null,
-    //     }
-    //   },
-    //   methods: {
-    //     switchToEditingMode: function () {
-    //       this.editingMode = true;
-    //       this.$nextTick(() => {
-    //         this.focusOnInput();
-    //       })
-    //     },
-    //     focusOnInput: function () {
-    //       this.$refs.input.focus();
-    //     },
-    //     updateContent: function (id, name) {
-    //       axios
-    //         .patch('../api/documents/' + id + "/",
-    //           {
-    //             name: name
-    //           },
-    //           {
-    //             headers: {'X-CSRFToken' : getCookie('csrftoken')}
-    //           }
-    //         );
-    //     },
-    //   },
-    //   mounted() {
-    //     axios
-    //       .get('../api/documents/' + {{ pk }})
-    //       .then(response => {
-    //         this.document = response.data
-    //       })
-    //   }
-    // })
-
     app.component('block-item', {
       delimiters: ["[[", "]]"],
       props: ['block', 'graph'],
@@ -233,6 +176,20 @@
 
           var canvas = new fabric.Canvas(String('graph-' + this.block.id));
           canvas.setDimensions({width:600, height:400});
+          canvas.add(new fabric.Line([0, 200, 600, 200], {
+            left: 0,
+            top: 200,
+            stroke: 'black',
+            lockMovementX: true,
+            lockMovementY: true,
+          }));
+          canvas.add(new fabric.Line([300, 0, 300, 400], {
+            left: 300,
+            top: 0,
+            stroke: 'black',
+            lockMovementX: true,
+            lockMovementY: true,
+          }));
           document.getElementById("graph-" + this.block.id).fabric = canvas;
           if (this.block.content != "Empty") {
             canvas.loadFromJSON(this.block.content);
