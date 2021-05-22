@@ -173,15 +173,25 @@
           }
         },
         onFileSelected(event) {
+          console.log("event");
+          console.log(event);
           this.selectedFile = event.target.files[0];
+          console.log("selectedFile-initial");
+          console.log(event.target.files[0]);
         },
         onUpload: function (id) {
-          const fd = new FormData();
-          fd.append('image', this.selectedFile, 'this.selectedFile.name')
+          const formData = new FormData();
+          console.log("formData");
+          console.log(formData);
+          console.log("selectedFile");
+          console.log(this.selectedFile);
+          formData.append('image', this.selectedFile, this.selectedFile.name);
+          console.log("formData-appended");
+          console.log(formData);
           axios
             .patch('../api/blocks/' + id + "/",
               {
-                image: fd
+                image: formData
               },
               {
                 headers: {'X-CSRFToken' : getCookie('csrftoken')}
