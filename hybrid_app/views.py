@@ -77,3 +77,11 @@ class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['document'] = models.Document.objects.get(pk=self.kwargs['pk'])
         return context
+
+from django.views.generic.edit import CreateView
+
+class BlockCreateView(CreateView):
+    model = models.Block
+    fields = "__all__"
+    template_name = "hybrid_app/block_create_view.html"
+    success_url = reverse_lazy("hybrid_app:block_create_view")

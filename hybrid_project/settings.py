@@ -154,3 +154,6 @@ ACCOUNT_EMAIL_VERIFICATION='none'
 
 LOGIN_REDIRECT_URL = 'hybrid_app:document_list_view'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
