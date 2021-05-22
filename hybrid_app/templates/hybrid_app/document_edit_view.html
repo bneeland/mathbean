@@ -123,12 +123,17 @@
               <canvas :id="'graph-'+block.id" ref="graph" style="border: 1px solid grey"></canvas>
             </div>
           </template>
+          <template v-if="block.type=='Image'">
+            <input type="file" @change="onFileSelected">
+            <button @click="onUpload(block.id);">Upload</button>
+          </template>
         </div>
       `,
       data() {
         return {
           editingMode: false,
-          drawingMode: false
+          drawingMode: false,
+          selectedFile: null,
         }
       },
       methods: {
@@ -166,7 +171,26 @@
             canvas.isDrawingMode = false;
             this.drawingMode = false;
           }
-        }
+        },
+        onFileSelected(event) {
+          this.selectedFile = event.target.files[0];
+        },
+        onUpload: function (id) {
+          const fd = new FormData();
+          fd.append('image', this.selectedFile, 'this.selectedFile.name')
+          axios
+            .patch('../api/blocks/' + id + "/",
+              {
+                image: fd
+              },
+              {
+                headers: {'X-CSRFToken' : getCookie('csrftoken')}
+              }
+            )
+            .then(res => {
+              console.log(res)
+            });
+        },
       },
       mounted() {
         if (this.block.type=='Graph') {
