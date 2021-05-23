@@ -185,7 +185,7 @@
           console.log(formData);
           console.log("selectedFile");
           console.log(this.selectedFile);
-          formData.append('image', this.selectedFile, this.selectedFile.name);
+          formData.append('image', this.selectedFile);
           console.log("formData-appended");
           console.log(formData);
           axios
