@@ -124,6 +124,9 @@
             </div>
           </template>
           <template v-if="block.type=='Image'">
+            <p>[[ block.id ]]</p>
+            <p>[[ block.image ]]</p>
+            <img :src="block.image">
             <input type="file" @change="onFileSelected">
             <button @click="onUpload(block.id);">Upload</button>
           </template>
@@ -182,24 +185,36 @@
         onUpload: function (id) {
           const formData = new FormData();
           console.log("formData");
-          console.log(formData);
+          console.log(...formData);
           console.log("selectedFile");
           console.log(this.selectedFile);
-          formData.append('image', this.selectedFile);
+          formData.append('image', this.selectedFile, 'bear.png');
           console.log("formData-appended");
-          console.log(formData);
-          axios
-            .patch('../api/blocks/' + id + "/",
-              {
-                image: formData
-              },
-              {
-                headers: {'X-CSRFToken' : getCookie('csrftoken')}
-              }
-            )
-            .then(res => {
-              console.log(res)
-            });
+          console.log(...formData);
+          // axios
+          //   .patch('../api/blocks/' + id + "/",
+          //     {
+          //       image: formData
+          //     },
+          //     {
+          //       headers: {
+          //         'X-CSRFToken': getCookie('csrftoken'),
+          //         'Content-Type': 'multipart/form-data'
+          //       }
+          //     }
+          //   )
+          //   .then(response => {
+          //     console.log(response)
+          //   });
+          axios({
+            method: 'patch',
+            url: '../api/blocks/' + id + "/",
+            headers: {
+              'X-CSRFToken': getCookie('csrftoken'),
+              'Content-Type': 'multipart/form-data'
+            },
+            data: formData
+          });
         },
       },
       mounted() {

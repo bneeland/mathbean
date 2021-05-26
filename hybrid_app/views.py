@@ -31,6 +31,10 @@ class BlockViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    # def update(self, request, *args, **kwargs):
+    #     kwargs['partial'] = True
+    #     return super().update(request, *args, **kwargs)
+
 class BlockEditAPI(APIView):
     def get(self, request, pk, format=None):
         blocks = models.Block.objects.filter(document__id=self.kwargs['pk'])
