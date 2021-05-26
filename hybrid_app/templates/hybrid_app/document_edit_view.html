@@ -36,6 +36,7 @@
 
   <script>
     var defaultContent = "Empty"
+
     const app = Vue.createApp({
       delimiters: ["[[", "]]"],
       data() {
@@ -184,28 +185,7 @@
         },
         onUpload: function (id) {
           const formData = new FormData();
-          console.log("formData");
-          console.log(...formData);
-          console.log("selectedFile");
-          console.log(this.selectedFile);
           formData.append('image', this.selectedFile, 'bear.png');
-          console.log("formData-appended");
-          console.log(...formData);
-          // axios
-          //   .patch('../api/blocks/' + id + "/",
-          //     {
-          //       image: formData
-          //     },
-          //     {
-          //       headers: {
-          //         'X-CSRFToken': getCookie('csrftoken'),
-          //         'Content-Type': 'multipart/form-data'
-          //       }
-          //     }
-          //   )
-          //   .then(response => {
-          //     console.log(response)
-          //   });
           axios({
             method: 'patch',
             url: '../api/blocks/' + id + "/",
@@ -214,7 +194,11 @@
               'Content-Type': 'multipart/form-data'
             },
             data: formData
-          });
+          })
+          .then(response => {
+            console.log(response.data);
+            this.block.image = response.data.image;
+          })
         },
       },
       mounted() {
