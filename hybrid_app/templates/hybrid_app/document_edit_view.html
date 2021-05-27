@@ -125,11 +125,13 @@
             </div>
           </template>
           <template v-if="block.type=='Image'">
-            <p>[[ block.id ]]</p>
-            <p>[[ block.image ]]</p>
-            <img :src="block.image">
-            <input type="file" @change="onFileSelected">
-            <button @click="onUpload(block.id);">Upload</button>
+            <template v-if="block.image">
+              <img :src="block.image" style="display: inline-block; max-width:500px;">
+            </template>
+            <template v-else>
+              <input type="file" @change="onFileSelected">
+              <button @click="onUpload(block.id);">Upload</button>
+            </template>
           </template>
         </div>
       `,
@@ -177,11 +179,7 @@
           }
         },
         onFileSelected(event) {
-          console.log("event");
-          console.log(event);
           this.selectedFile = event.target.files[0];
-          console.log("selectedFile-initial");
-          console.log(event.target.files[0]);
         },
         onUpload: function (id) {
           const formData = new FormData();
