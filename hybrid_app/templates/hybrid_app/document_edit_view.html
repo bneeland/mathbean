@@ -35,7 +35,7 @@
   </div>
 
   <script>
-    var defaultContent = "Empty"
+    var defaultContent = "New block"
 
     const app = Vue.createApp({
       delimiters: ["[[", "]]"],
@@ -126,13 +126,13 @@
             </div>
           </template>
           <template v-if="block.type=='Image'">
-            <template v-if="block.image">
+            <div>
               <img :src="block.image" style="display: inline-block; max-width:500px;">
-            </template>
-            <template v-else>
+            </div>
+            <div>
               <input type="file" @change="onFileSelected">
               <button @click="onUpload(block.id);">Upload</button>
-            </template>
+            </div>
           </template>
         </div>
       `,
@@ -201,7 +201,6 @@
             data: formData
           })
           .then(response => {
-            console.log(response.data);
             this.block.image = response.data.image;
           })
         },
