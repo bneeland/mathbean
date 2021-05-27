@@ -121,6 +121,7 @@
           <template v-if="block.type=='Graph'">
             <div @mouseout="updateContent(block.id, updateContentGraph(block.id));">
               <button @click="toggleDrawing(block.id)">Drawing: [[ drawingMode ]]</button>
+              <button @click="deleteSelected(block.id)">Delete</button>
               <canvas :id="'graph-'+block.id" ref="graph" style="border: 1px solid grey"></canvas>
             </div>
           </template>
@@ -177,6 +178,12 @@
             canvas.isDrawingMode = false;
             this.drawingMode = false;
           }
+        },
+        deleteSelected: function (id) {
+          var canvas = document.getElementById("graph-" + id).fabric;
+          canvas.getActiveObjects().forEach((obj) => {
+            canvas.remove(obj)
+          });
         },
         onFileSelected(event) {
           this.selectedFile = event.target.files[0];
