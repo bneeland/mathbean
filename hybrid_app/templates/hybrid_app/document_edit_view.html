@@ -104,6 +104,7 @@
       template: `
         <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
           <h4>[[ block.type ]]</h4>
+          <div><button @click="deleteBlock(block.id)">Delete block</button></div>
           <template v-if="block.type=='Text'">
             <textarea
               ref="textarea"
@@ -203,6 +204,17 @@
           .then(response => {
             this.block.image = response.data.image;
           })
+        },
+        deleteBlock: function (id) {
+          axios
+            .delete('../api/blocks/' + id + '/',
+              {
+                headers: {'X-CSRFToken' : getCookie('csrftoken')}
+              }
+            )
+            .then(response => {
+              console.log('This should make block removed from blocks array')
+            });
         },
       },
       mounted() {
