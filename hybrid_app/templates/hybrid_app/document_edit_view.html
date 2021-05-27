@@ -67,6 +67,8 @@
         onAddBlock(block) {
           if (block.type == 'Text') {
             defaultContent = 'This is placeholder text. Click to edit it.';
+          } else if (block.type == 'Equation'){
+            defaultContent = '`y=ax+b`'
           }
           axios
             .post('../api/block-edit/' + {{ pk }},
@@ -151,6 +153,20 @@
             <div>
               <input type="file" @change="onFileSelected">
               <button @click="onUpload(block.id);">Upload</button>
+            </div>
+          </template>
+          <template v-if="block.type=='Equation'">
+            <textarea
+              ref="textarea"
+              v-if="editingMode"
+              v-model="block.content"
+              @blur="editingMode=false; updateContent(block.id, block.content);"
+            >
+            </textarea>
+            <div v-else>
+              <p @click="switchToEditingMode();" style="cursor: pointer">
+                [[ block.content ]]
+              </p>
             </div>
           </template>
         </div>
