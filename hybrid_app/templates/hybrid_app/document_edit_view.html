@@ -36,7 +36,7 @@
   </div>
 
   <script>
-    var defaultContent = "New block (placeholder content)"
+    var defaultContent;
 
     const app = Vue.createApp({
       delimiters: ["[[", "]]"],
@@ -62,6 +62,9 @@
       },
       methods: {
         onAddBlock(block) {
+          if (block.type == 'Text') {
+            defaultContent = 'This is placeholder text. Click to edit it.';
+          }
           axios
             .post('../api/block-edit/' + {{ pk }},
               {
