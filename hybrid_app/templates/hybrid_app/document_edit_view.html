@@ -163,7 +163,7 @@
             </textarea>
             <div v-else>
               <p @click="switchToEditingMode();" style="cursor: pointer">
-                \`[[ block.content ]]\`
+                [[ block.content ]]
               </p>
             </div>
           </template>
@@ -249,6 +249,7 @@
             )
             .then(response => {
               this.block.content = response.data.content;
+              MathJax.typeset();
             });
         },
       },
@@ -292,6 +293,9 @@
           if (this.block.content != "Empty") {
             canvas.loadFromJSON(this.block.content);
           }
+        }
+        if (this.block.type=='Equation') {
+          MathJax.typeset();
         }
       }
     })
