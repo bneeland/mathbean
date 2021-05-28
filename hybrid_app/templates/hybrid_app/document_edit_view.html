@@ -1,9 +1,6 @@
 {% extends "hybrid_app/base.html" %}
 
 {% block content %}
-  <div>
-    `x=(x+2)/(x-8)`
-  </div>
   <div id="app">
     <div id="tools">
       <p><a href="{% url 'hybrid_app:document_list_view' %}">&larr; Documents</a></p>
@@ -68,7 +65,8 @@
           if (block.type == 'Text') {
             defaultContent = 'This is placeholder text. Click to edit it.';
           } else if (block.type == 'Equation'){
-            defaultContent = '`y=ax+b`'
+            // defaultContent = '`y=ax+b`'
+            defaultContent = 'y=ax+b'
           }
           axios
             .post('../api/block-edit/' + {{ pk }},
@@ -160,12 +158,12 @@
               ref="textarea"
               v-if="editingMode"
               v-model="block.content"
-              @blur="editingMode=false; updateContent(block.id, block.content);"
+              @blur="editingMode=false; updateContentEquation(block.id, block.content);"
             >
             </textarea>
             <div v-else>
               <p @click="switchToEditingMode();" style="cursor: pointer">
-                [[ block.content ]]
+                \`[[ block.content ]]\`
               </p>
             </div>
           </template>
@@ -238,7 +236,21 @@
           .then(response => {
             this.block.image = response.data.image;
           })
-        }
+        },
+        updateContentEquation: function (id, content) {
+          axios
+            .patch('../api/blocks/' + id + "/",
+              {
+                content: content
+              },
+              {
+                headers: {'X-CSRFToken' : getCookie('csrftoken')}
+              }
+            )
+            .then(response => {
+              this.block.content = response.data.content;
+            });
+        },
       },
       mounted() {
         if (this.block.type=='Graph') {
