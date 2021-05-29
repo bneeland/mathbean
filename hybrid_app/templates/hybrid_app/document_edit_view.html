@@ -298,6 +298,8 @@
             )
             .then(response => {
               this.block.equation_latex = response.data.equation_latex;
+            })
+            .then(function(result) {
               MathJax.typeset();
             });
         },
@@ -345,6 +347,7 @@
         }
         if (this.block.type=='Equation') {
           MathJax.typeset();
+          console.log('Mount: Attempted to typeset on block id ' + this.block.id)
         }
       }
     })
