@@ -65,8 +65,12 @@
           if (block.type == 'Text') {
             defaultContent = 'This is placeholder text. Click to edit it.';
           } else if (block.type == 'Equation'){
-            // defaultContent = '`y=ax+b`'
-            defaultContent = 'y=ax+b'
+            defaultContentString = 'y=ax+b';
+            defaultContentObject = {
+              asciimath: defaultContentString,
+              latex: AMTparseAMtoTeX(defaultContentString)
+            };
+            defaultContent = JSON.stringify(defaultContentObject);
           }
           axios
             .post('../api/block-edit/' + {{ pk }},
@@ -163,7 +167,7 @@
             </textarea>
             <div v-else>
               <p @click="switchToEditingMode();" style="cursor: pointer">
-                &#92;([[ block.content ]]&#92;)
+                &bsol;([[ JSON.parse(block.content).latex ]]&bsol;)
               </p>
             </div>
           </template>
