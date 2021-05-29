@@ -36,7 +36,7 @@
   </div>
 
   <script>
-    var defaultContent;
+    // var defaultContent;
 
     const app = Vue.createApp({
       delimiters: ["[[", "]]"],
@@ -63,28 +63,72 @@
       methods: {
         onAddBlock(block) {
           if (block.type == 'Text') {
-            defaultContent = 'This is placeholder text. Click to edit it.';
+            axios
+              .post('../api/block-edit/' + {{ pk }},
+                {
+                  type: block.type,
+                  content: 'This is placeholder text. Click to edit it.'
+                },
+                {
+                  headers: {'X-CSRFToken' : getCookie('csrftoken')}
+                }
+              )
+              .then(response => {
+                this.blocks.push(response.data)
+              });
           } else if (block.type == 'Equation'){
-            defaultContentString = 'y=ax+b';
-            defaultContentObject = {
-              asciimath: defaultContentString,
-              latex: AMTparseAMtoTeX(defaultContentString)
-            };
-            defaultContent = JSON.stringify(defaultContentObject);
+            defaultEquation = 'y=ax+b';
+            axios
+              .post('../api/block-edit/' + {{ pk }},
+                {
+                  type: block.type,
+                  equation_ascii: defaultEquation,
+                  equation_latex: AMTparseAMtoTeX(defaultEquation)
+                },
+                {
+                  headers: {'X-CSRFToken' : getCookie('csrftoken')}
+                }
+              )
+              .then(response => {
+                this.blocks.push(response.data)
+              });
+          } else {
+            axios
+              .post('../api/block-edit/' + {{ pk }},
+                {
+                  type: block.type,
+                },
+                {
+                  headers: {'X-CSRFToken' : getCookie('csrftoken')}
+                }
+              )
+              .then(response => {
+                this.blocks.push(response.data)
+              });
           }
-          axios
-            .post('../api/block-edit/' + {{ pk }},
-              {
-                type: block.type,
-                content: defaultContent
-              },
-              {
-                headers: {'X-CSRFToken' : getCookie('csrftoken')}
-              }
-            )
-            .then(response => {
-              this.blocks.push(response.data)
-            })
+          // if (block.type == 'Text') {
+          //   defaultContent = 'This is placeholder text. Click to edit it.';
+          // } else if (block.type == 'Equation'){
+          //   defaultContentString = 'y=ax+b';
+          //   defaultContentObject = {
+          //     asciimath: defaultContentString,
+          //     latex: AMTparseAMtoTeX(defaultContentString)
+          //   };
+          //   defaultContent = JSON.stringify(defaultContentObject);
+          // }
+          // axios
+          //   .post('../api/block-edit/' + {{ pk }},
+          //     {
+          //       type: block.type,
+          //       content: defaultContent
+          //     },
+          //     {
+          //       headers: {'X-CSRFToken' : getCookie('csrftoken')}
+          //     }
+          //   )
+          //   .then(response => {
+          //     this.blocks.push(response.data)
+          //   })
         },
         switchToEditingMode: function () {
           this.editingMode = true;
@@ -161,13 +205,13 @@
             <textarea
               ref="textarea"
               v-if="editingMode"
-              v-model="block.content"
+              v-model="block.equation_ascii"
               @blur="editingMode=false; updateContentEquation(block.id, block.content);"
             >
             </textarea>
             <div v-else>
               <p @click="switchToEditingMode();" style="cursor: pointer">
-                &bsol;([[ JSON.parse(block.content).latex ]]&bsol;)
+                &bsol;([[ block.equation_latex ]]&bsol;)
               </p>
             </div>
           </template>
@@ -326,8 +370,7 @@
       methods: {
         onAddBlock() {
           let newBlock = {
-            type: this.type,
-            content: defaultContent
+            type: this.type
           }
           this.$emit('block-added', newBlock)
           this.type = ''
