@@ -77,13 +77,13 @@
                 this.blocks.push(response.data)
               });
           } else if (block.type == 'Equation'){
-            defaultEquation = 'y=ax+b';
+            equation_ascii = 'y=ax+b';
             axios
               .post('../api/block-edit/' + {{ pk }},
                 {
                   type: block.type,
-                  equation_ascii: defaultEquation,
-                  equation_latex: AMTparseAMtoTeX(defaultEquation)
+                  equation_ascii: equation_ascii,
+                  equation_latex: AMTparseAMtoTeX(equation_ascii)
                 },
                 {
                   headers: {'X-CSRFToken' : getCookie('csrftoken')}
@@ -206,7 +206,7 @@
               ref="textarea"
               v-if="editingMode"
               v-model="block.equation_ascii"
-              @blur="editingMode=false; updateContentEquation(block.id, block.content);"
+              @blur="editingMode=false; updateContentEquation(block.id, block.equation_ascii);"
             >
             </textarea>
             <div v-else>
@@ -285,18 +285,19 @@
             this.block.image = response.data.image;
           })
         },
-        updateContentEquation: function (id, content) {
+        updateContentEquation: function (id, equation_ascii) {
           axios
             .patch('../api/blocks/' + id + "/",
               {
-                content: content
+                equation_ascii: equation_ascii,
+                equation_latex: AMTparseAMtoTeX(equation_ascii)
               },
               {
                 headers: {'X-CSRFToken' : getCookie('csrftoken')}
               }
             )
             .then(response => {
-              this.block.content = response.data.content;
+              this.block.equation_latex = response.data.equation_latex;
               MathJax.typeset();
             });
         },
