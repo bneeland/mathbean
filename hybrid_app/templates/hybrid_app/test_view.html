@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <body>
+    <math-field virtual-keyboard-mode="onfocus" id="mathfield" style="width: 500px;">
+      \int^{\infty}_0(ax+b)\differentialD x
+    </math-field>
+    <script src="https://unpkg.com/mathlive/dist/mathlive.min.js"></script>
+    <script>
+      // MathLive.makeMathField(document.getElementById('mathfield'),  {
+      //   virtualKeyboardMode: "onfocus"
+      // });
+      document.getElementById('mathfield').addEventListener('blur',(ev) => {
+        console.log(ev.target.getValue('latex'));
+        console.log(ev.target.getValue('spoken-text'));
+        console.log(ev.target.getValue('ascii-math'));
+      });
+    </script>
+  </body>
+</html>

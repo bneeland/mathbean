@@ -158,7 +158,6 @@
               }
             )
             .then(response => {
-              // this.blocks.pop(id);
               for (var i=0; i<this.blocks.length; i++) {
                 if (this.blocks[i].id === id) {
                   this.blocks.splice(i, 1);
@@ -175,8 +174,7 @@
       template: `
         <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
           <h4>[[ block.type ]]</h4>
-          <p>ID: [[ block.id ]]</p>
-          <div><button @click="$emit('delete-block')">Delete block [[ block.id ]]</button></div>
+          <div><button @click="$emit('delete-block')">Delete block</button></div>
           <template v-if="block.type=='Text'">
             <textarea
               ref="textarea"

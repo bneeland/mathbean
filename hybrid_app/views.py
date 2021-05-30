@@ -89,3 +89,10 @@ class BlockCreateView(CreateView):
     fields = "__all__"
     template_name = "hybrid_app/block_create_view.html"
     success_url = reverse_lazy("hybrid_app:block_create_view")
+
+
+
+
+
+class TestView(TemplateView):
+    template_name = "hybrid_app/test_view.html"
