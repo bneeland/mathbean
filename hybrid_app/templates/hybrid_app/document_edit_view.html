@@ -158,7 +158,12 @@
               }
             )
             .then(response => {
-              this.blocks.pop(id);
+              // this.blocks.pop(id);
+              for (var i=0; i<this.blocks.length; i++) {
+                if (this.blocks[i].id === id) {
+                  this.blocks.splice(i, 1);
+                }
+              }
             });
         },
       }
@@ -170,7 +175,8 @@
       template: `
         <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
           <h4>[[ block.type ]]</h4>
-          <div><button @click="$emit('delete-block')">Delete block</button></div>
+          <p>ID: [[ block.id ]]</p>
+          <div><button @click="$emit('delete-block')">Delete block [[ block.id ]]</button></div>
           <template v-if="block.type=='Text'">
             <textarea
               ref="textarea"
@@ -345,9 +351,8 @@
             canvas.loadFromJSON(this.block.content);
           }
         }
-        if (this.block.type=='Equation') {
+        else if (this.block.type=='Equation') {
           MathJax.typeset();
-          console.log('Mount: Attempted to typeset on block id ' + this.block.id)
         }
       }
     })
