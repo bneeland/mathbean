@@ -170,6 +170,10 @@
       }
     })
 
+    app.component('math-live', {
+      template: '#math-live-template'
+    })
+
     app.component('block-item', {
       delimiters: ["[[", "]]"],
       props: ['block', 'graph'],
@@ -208,22 +212,13 @@
             </div>
           </template>
           <template v-if="block.type=='Equation'">
-            <textarea
-              ref="textarea"
-              v-if="editingMode"
-              v-model="block.equation_ascii"
-              @blur="editingMode=false; updateContentEquation(block.id, block.equation_ascii);"
-            >
-            </textarea>
-            <div v-else>
-              <p @click="switchToEditingMode();" style="cursor: pointer">
-                &bsol;([[ block.equation_latex ]]&bsol;)
-              </p>
-            </div>
+            <br>
             <math-field
+              :id="'equation-'+block.id"
               virtual-keyboard-mode="onfocus"
               style="width: 500px;"
               v-model="block.equation_latex"
+              @blur="updateContentEquation2(block.id);"
             >
               [[ block.equation_latex ]]
             </math-field>
@@ -316,6 +311,21 @@
               MathJax.typeset();
             });
         },
+        updateContentEquation2: function (id) {
+          var equation = document.getElementById("equation-" + id);
+          equation.addEventListener('blur',(ev) => {
+            equation_latex = ev.target.getValue('latex')
+            axios
+              .patch('../api/blocks/' + id + "/",
+                {
+                  equation_latex: equation_latex
+                },
+                {
+                  headers: {'X-CSRFToken' : getCookie('csrftoken')}
+                }
+              )
+          });
+        },
       },
       mounted() {
         if (this.block.type=='Graph') {
@@ -392,10 +402,6 @@
           this.type = ''
         }
       }
-    })
-
-    app.component('math-live', {
-      template: '#math-live-template'
     })
 
     app.mount('#app')
