@@ -1,6 +1,9 @@
 {% extends "hybrid_app/base.html" %}
 
 {% block content %}
+<math-field virtual-keyboard-mode="onfocus" id="mathfield" style="width: 500px;">
+  \int^{\infty}_0(ax+b)\differentialD x
+</math-field>
   <div id="app">
     <div id="tools">
       <p><a href="{% url 'hybrid_app:document_list_view' %}">&larr; Documents</a></p>
