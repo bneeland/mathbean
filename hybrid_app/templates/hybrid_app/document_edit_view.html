@@ -1,9 +1,6 @@
 {% extends "hybrid_app/base.html" %}
 
 {% block content %}
-<math-field virtual-keyboard-mode="onfocus" id="mathfield" style="width: 500px;">
-  \int^{\infty}_0(ax+b)\differentialD x
-</math-field>
   <div id="app">
     <div id="tools">
       <p><a href="{% url 'hybrid_app:document_list_view' %}">&larr; Documents</a></p>
@@ -36,6 +33,8 @@
       >
       </block-item>
     </div>
+    <hr />
+    <div style="margin-bottom: 300px;" />
   </div>
 
   <script>
@@ -221,6 +220,13 @@
                 &bsol;([[ block.equation_latex ]]&bsol;)
               </p>
             </div>
+            <math-field
+              virtual-keyboard-mode="onfocus"
+              style="width: 500px;"
+              v-model="block.equation_latex"
+            >
+              [[ block.equation_latex ]]
+            </math-field>
           </template>
         </div>
       `,
@@ -386,6 +392,10 @@
           this.type = ''
         }
       }
+    })
+
+    app.component('math-live', {
+      template: '#math-live-template'
     })
 
     app.mount('#app')

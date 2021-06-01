@@ -18,21 +18,17 @@
       }
     </script>
     <script src="https://unpkg.com/mathlive/dist/mathlive.min.js"></script>
+    <script type="text/x-template" id="math-live-template">
+      <select>
+        <slot></slot>
+      </select>
+    </script>
     <script src="{% static 'hybrid_app/asciimath-to-latex.js' %}"></script>
     <script src="{% static 'hybrid_app/cookies.js' %}"></script>
     <title></title>
   </head>
   <body>
     {% block content %}{% endblock %}
-    <script>
-      // MathLive.makeMathField(document.getElementById('mathfield'),  {
-      //   virtualKeyboardMode: "onfocus"
-      // });
-      document.getElementById('mathfield').addEventListener('blur',(ev) => {
-        console.log(ev.target.getValue('latex'));
-        console.log(ev.target.getValue('spoken-text'));
-        console.log(ev.target.getValue('ascii-math'));
-      });
-    </script>
+
   </body>
 </html>
