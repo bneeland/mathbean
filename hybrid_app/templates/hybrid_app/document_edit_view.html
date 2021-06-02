@@ -79,13 +79,12 @@
                 this.blocks.push(response.data)
               });
           } else if (block.type == 'Equation'){
-            equation_ascii = 'y=ax+b';
+            equation = 'y=ax+b';
             axios
               .post('../api/block-edit/' + {{ pk }},
                 {
                   type: block.type,
-                  equation_ascii: equation_ascii,
-                  equation_latex: AMTparseAMtoTeX(equation_ascii)
+                  equation: equation
                 },
                 {
                   headers: {'X-CSRFToken' : getCookie('csrftoken')}
@@ -217,10 +216,10 @@
               :id="'equation-'+block.id"
               virtual-keyboard-mode="onfocus"
               style="width: 500px;"
-              v-model="block.equation_latex"
-              @blur="updateContentEquation2(block.id);"
+              v-model="block.equation"
+              @blur="updateContentEquation(block.id);"
             >
-              [[ block.equation_latex ]]
+              [[ block.equation ]]
             </math-field>
           </template>
         </div>
@@ -293,32 +292,14 @@
             this.block.image = response.data.image;
           })
         },
-        updateContentEquation: function (id, equation_ascii) {
-          axios
-            .patch('../api/blocks/' + id + "/",
-              {
-                equation_ascii: equation_ascii,
-                equation_latex: AMTparseAMtoTeX(equation_ascii)
-              },
-              {
-                headers: {'X-CSRFToken' : getCookie('csrftoken')}
-              }
-            )
-            .then(response => {
-              this.block.equation_latex = response.data.equation_latex;
-            })
-            .then(function(result) {
-              MathJax.typeset();
-            });
-        },
-        updateContentEquation2: function (id) {
+        updateContentEquation: function (id) {
           var equation = document.getElementById("equation-" + id);
           equation.addEventListener('blur',(ev) => {
-            equation_latex = ev.target.getValue('latex')
+            equation = ev.target.getValue('latex')
             axios
               .patch('../api/blocks/' + id + "/",
                 {
-                  equation_latex: equation_latex
+                  equation: equation
                 },
                 {
                   headers: {'X-CSRFToken' : getCookie('csrftoken')}
