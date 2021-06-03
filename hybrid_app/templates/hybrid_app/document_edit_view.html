@@ -198,6 +198,7 @@
             <div @mouseout="updateContent(block.id, updateContentGraph(block.id));">
               <button @click="toggleDrawing(block.id)">Drawing: [[ drawingMode ]]</button>
               <button @click="deleteSelected(block.id)">Delete</button>
+              <button @click="toggleLine(block.id)">Line</button>
               <canvas :id="'graph-'+block.id" ref="graph" style="border: 1px solid grey"></canvas>
             </div>
           </template>
@@ -273,12 +274,20 @@
             canvas.remove(obj)
           });
         },
+        toggleLine: function (id) {
+          var canvas = document.getElementById("graph-" + id).fabric;
+          canvas.add(new fabric.Line([50, 100, 200, 200], {
+              left: 170,
+              top: 150,
+              stroke: 'red'
+          }));
+        },
         onFileSelected(event) {
           this.selectedFile = event.target.files[0];
         },
         onUpload: function (id) {
           const formData = new FormData();
-          formData.append('image', this.selectedFile, 'bear.png');
+          formData.append('image', this.selectedFile);
           axios({
             method: 'patch',
             url: '../api/blocks/' + id + "/",
