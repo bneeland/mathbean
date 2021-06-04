@@ -196,9 +196,9 @@
           </template>
           <template v-if="block.type=='Graph'">
             <div @mouseout="updateContent(block.id, updateContentGraph(block.id));">
-              <button @click="toggleDrawing(block.id)">Drawing: [[ drawingMode ]]</button>
+              <button @click="toggleDrawing(block.id)">Draw: [[ drawingMode ]]</button>
               <button @click="deleteSelected(block.id)">Delete</button>
-              <button @click="toggleLine(block.id)">Line</button>
+              <button @click="toggleLine(block.id)">Line: [[ lineMode ]]</button>
               <canvas :id="'graph-'+block.id" ref="graph" style="border: 1px solid grey"></canvas>
             </div>
           </template>
@@ -230,6 +230,7 @@
           editingMode: false,
           drawingMode: false,
           selectedFile: null,
+          lineMode: false,
         }
       },
       methods: {
@@ -276,11 +277,42 @@
         },
         toggleLine: function (id) {
           var canvas = document.getElementById("graph-" + id).fabric;
-          canvas.add(new fabric.Line([50, 100, 200, 200], {
-              left: 170,
-              top: 150,
-              stroke: 'red'
-          }));
+          if (this.lineMode === false) {
+            this.lineMode = true;
+            console.log(this.lineMode);
+          } else {
+            this.lineMode = false;
+            console.log(this.lineMode);
+          }
+          console.log("lineMode toggle: ", this.lineMode);
+          this.$nextTick(() => {
+            this.drawLines(canvas, this.lineMode);
+          })
+          // canvas.add(new fabric.Line([options.e.clientX, options.e.clientY, options.e.clientX, options.e.clientY]));
+          // canvas.add(new fabric.Line([50, 100, 200, 200], {
+          //   left: 170,
+          //   top: 150,
+          //   stroke: 'red'
+          // }));
+        },
+        drawLines: function (canvas, lineMode) {
+          console.log('lineMode before: ', lineMode);
+          if (lineMode) {
+            canvas.on('mouse:down', function(options) {
+              console.log("mouse down");
+              console.log('lineMode down: ', lineMode);
+              // var line = canvas.add(new fabric.Line(
+              //   [options.e.clientX, options.e.clientY, 200, 200],
+              //   {stroke: 'black'},
+              // ));
+            });
+            canvas.on('mouse:up', function(options) {
+              console.log("mouse up");
+              console.log('lineMode up: ', lineMode);
+            });
+          } else {
+            console.log("no line");
+          }
         },
         onFileSelected(event) {
           this.selectedFile = event.target.files[0];
