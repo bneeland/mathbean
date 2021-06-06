@@ -183,7 +183,7 @@
           <p>
             <button
               v-model="block.order"
-              @click="moveUp()"
+              @click="moveBlock('up')"
             >
               Move up &uarr;
             </button>
@@ -365,26 +365,29 @@
               )
           });
         },
-        moveUp: function () {
+        moveBlock: function (direction) {
           // id_current = this.block.id;
           // order_current = this.block.order;
           // order_next = order_current - 1;
           // block_next = document.getElementById("block-order" + order_next);
           // console.log('block_next: ' + block_next.ref);
 
-          direction = 'up'
-          axios
-            .patch('../api/move-block/' + direction + '/' + this.block.id,
-              {
-                order: this.block.order+10
-              },
-              {
-                headers: {'X-CSRFToken' : getCookie('csrftoken')}
-              }
-            )
-            .then(response => {
-              this.block.order = response.data.order;
-            })
+          if (direction == 'up' && this.block.order==0) {
+            console.log("Can't move block up; it's already the first one (order 0)")
+          } else {
+            axios
+              .patch('../api/move-block/' + direction + '/' + this.block.id,
+                {
+                  // order: this.block.order+10
+                },
+                {
+                  headers: {'X-CSRFToken' : getCookie('csrftoken')}
+                }
+              )
+              .then(response => {
+                this.block.order = response.data.order;
+              })
+          }
         },
       },
       mounted() {
