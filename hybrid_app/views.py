@@ -68,9 +68,7 @@ class MoveBlockAPI(UpdateAPIView):
 
         serializer = serializers.BlockSerializer(block_object, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save(
-                order=new_order,
-            )
+            serializer.save()
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
