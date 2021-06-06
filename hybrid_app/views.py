@@ -61,15 +61,13 @@ class MoveBlockAPI(UpdateAPIView):
     def patch(self, request, direction, pk, format=None):
         print("direction: ", self.kwargs['direction'])
         print("pk: ", self.kwargs['pk'])
-        # print("request.data['order']: ", request.data['order'])
-        # new_order = request.data['order']
 
         block_a = self.get_object(pk)
         order_a_old = block_a.order
 
         if direction == "up":
             order_b_old = order_a_old - 1
-        else:
+        elif direction == "down":
             order_b_old = order_a_old + 1
         block_b = models.Block.objects.get(order=order_b_old)
         order_a_new = order_b_old
@@ -77,12 +75,19 @@ class MoveBlockAPI(UpdateAPIView):
         # block_a.order = order_a_new
         # block_b.order = order_b_new
 
-        serializer = serializers.BlockSerializer(block_a, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save(
+        serializer_a = serializers.BlockSerializer(block_a, data={}, partial=True)
+        serializer_b = serializers.BlockSerializer(block_b, data={}, partial=True)
+
+        if serializer_a.is_valid() and serializer_b.is_valid():
+            serializer_a.save(
                 order=order_a_new,
             )
-            return Response(serializer.data)
+            serializer_b.save(
+                order=order_b_new,
+            )
+            print("serializer_a.data:", serializer_a.data)
+            print("serializer_b.data:", serializer_b.data)
+            return Response(serializer_a.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
