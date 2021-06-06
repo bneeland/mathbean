@@ -30,6 +30,7 @@
         v-bind:block="block"
         v-bind:key="block.id"
         v-on:delete-block="deleteBlock(block.id)"
+        :id="'block-order-'+block.order"
       >
       </block-item>
     </div>
@@ -178,7 +179,23 @@
       props: ['block', 'graph'],
       template: `
         <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
-          <h4>[[ block.type ]]</h4>
+          <h4>[[ block.type ]] &middot; ID [[ block.id ]] &middot; Order [[ block.order ]]</h4>
+          <p>
+            <button
+              v-model="block.order"
+              @click="moveUp()"
+            >
+              Move up &uarr;
+            </button>
+          </p>
+          <p>
+            <button
+              v-model="block.order"
+              @click="moveDown()"
+            >
+              Move up &darr;
+            </button>
+          </p>
           <div><button @click="$emit('delete-block')">Delete block</button></div>
           <template v-if="block.type=='Text'">
             <textarea
@@ -347,6 +364,27 @@
                 }
               )
           });
+        },
+        moveUp: function () {
+          // id_current = this.block.id;
+          // order_current = this.block.order;
+          // order_next = order_current - 1;
+          // block_next = document.getElementById("block-order" + order_next);
+          // console.log('block_next: ' + block_next.ref);
+
+          direction = 'up'
+          axios
+            .patch('../api/move-block/' + direction + '/' + this.block.id,
+              {
+                order: this.block.order+10
+              },
+              {
+                headers: {'X-CSRFToken' : getCookie('csrftoken')}
+              }
+            )
+            .then(response => {
+              this.block.order = response.data.order;
+            })
         },
       },
       mounted() {

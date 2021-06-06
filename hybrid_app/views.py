@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import UpdateAPIView
 from rest_framework import status
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
@@ -37,7 +38,7 @@ class BlockViewSet(viewsets.ModelViewSet):
 
 class BlockEditAPI(APIView):
     def get(self, request, pk, format=None):
-        blocks = models.Block.objects.filter(document__id=self.kwargs['pk'])
+        blocks = models.Block.objects.filter(document__id=self.kwargs['pk']).order_by('order', 'id')
         serializer = serializers.BlockSerializer(blocks, many=True)
         return Response(serializer.data)
 
@@ -47,6 +48,28 @@ class BlockEditAPI(APIView):
             serializer.save(
                 document=models.Document.objects.get(pk=self.kwargs['pk']),
                 user=self.request.user,
+                order=99,
+            )
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MoveBlockAPI(UpdateAPIView):
+    def get_object(self, pk):
+        return models.Block.objects.get(pk=pk)
+
+    def patch(self, request, direction, pk, format=None):
+        print("direction: ", self.kwargs['direction'])
+        print("pk: ", self.kwargs['pk'])
+        print("request.data['order']: ", request.data['order'])
+        new_order = request.data['order']
+
+        block_object = self.get_object(pk)
+
+        serializer = serializers.BlockSerializer(block_object, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save(
+                order=new_order,
             )
             return Response(serializer.data)
         else:
