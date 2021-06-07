@@ -179,7 +179,7 @@
       props: ['block', 'graph'],
       template: `
         <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
-          <h4>[[ block.type ]] &middot; ID [[ block.id ]] &middot; Order [[ block.order ]]</h4>
+          <h4>[[ block.type ]] &middot; ID [[ block.id ]] &middot; Order [[ block.order ]] &middot; next_block_pk: [[ block.next_block_pk ]] </h4>
           <p>
             <button
               v-model="block.order"
@@ -386,7 +386,8 @@
               )
               .then(response => {
                 this.block.order = response.data.order;
-              })
+              });
+            
           }
         },
       },

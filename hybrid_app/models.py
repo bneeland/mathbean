@@ -14,6 +14,7 @@ class Block(models.Model):
     document = models.ForeignKey('Document', on_delete=models.CASCADE, null=True)
     type = models.CharField(max_length=100)
     order = models.IntegerField(blank=True, null=True)
+    next_block_pk = models.IntegerField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
     equation = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='images/%Y/%m/%d', blank=True, null=True)

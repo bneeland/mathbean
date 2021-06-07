@@ -81,12 +81,12 @@ class MoveBlockAPI(UpdateAPIView):
         if serializer_a.is_valid() and serializer_b.is_valid():
             serializer_a.save(
                 order=order_a_new,
+                next_block_pk=block_b.pk,
             )
             serializer_b.save(
                 order=order_b_new,
             )
-            print("serializer_a.data:", serializer_a.data)
-            print("serializer_b.data:", serializer_b.data)
+            print("serializer_a:", serializer_a.data)
             return Response(serializer_a.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
