@@ -7,6 +7,7 @@ from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.base import RedirectView
 from django.urls import reverse_lazy
+from django.db.models import Max
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -48,7 +49,7 @@ class BlockEditAPI(APIView):
             serializer.save(
                 document=models.Document.objects.get(pk=self.kwargs['pk']),
                 user=self.request.user,
-                order=99,
+                order=models.Block.objects.filter(document__id=self.kwargs['pk']).aggregate(Max('order'))['order__max']+1,
             )
             return Response(serializer.data)
         else:
