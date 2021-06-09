@@ -28,9 +28,11 @@
       <block-item
         v-for="block in blocks"
         v-bind:block="block"
-        v-bind:key="block.id"
+        v-bind:key="'block-' + block.id"
         v-on:delete-block="deleteBlock(block.id)"
-        :id="'block-order-'+block.order"
+        v-bind:id="'block-order-'+block.order"
+        :ref="block.id"
+        @reorder_next_block="reorder_next_block"
       >
       </block-item>
     </div>
@@ -166,6 +168,11 @@
                 }
               }
             });
+        },
+        reorder_next_block: function(next_block_pk) {
+          console.log('reordered next block')
+          // console.log(this.blocks['block-' + next_block_pk])
+          this.blocks[2].order=9
         },
       }
     })
@@ -366,12 +373,7 @@
           });
         },
         moveBlock: function (direction) {
-          // id_current = this.block.id;
-          // order_current = this.block.order;
-          // order_next = order_current - 1;
-          // block_next = document.getElementById("block-order" + order_next);
-          // console.log('block_next: ' + block_next.ref);
-
+          block_a_order = this.block.order;
           if (direction == 'up' && this.block.order==0) {
             console.log("Can't move block up; it's already the first one (order 0)")
           } else {
@@ -386,8 +388,10 @@
               )
               .then(response => {
                 this.block.order = response.data.order;
+                next_block_pk = response.data.next_block_pk
+                console.log("next_block_pk: " + next_block_pk);
+                this.$emit('reorder_next_block', next_block_pk);
               });
-            
           }
         },
       },
