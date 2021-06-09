@@ -197,6 +197,7 @@
             <button
               v-model="block"
               @click="moveBlock('up')"
+              v-if="block.order != 0"
             >
               Move up &uarr;
             </button>
