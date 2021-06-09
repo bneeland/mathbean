@@ -172,7 +172,7 @@
         reorder_next_block: function(next_block_pk) {
           console.log('reordered next block')
           // console.log(this.blocks['block-' + next_block_pk])
-          this.blocks[2].order=9
+          this.blocks[2].order=999
         },
       }
     })
@@ -184,6 +184,7 @@
     app.component('block-item', {
       delimiters: ["[[", "]]"],
       props: ['block', 'graph'],
+      emits: ['reorder_next_block'],
       template: `
         <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
           <h4>[[ block.type ]] &middot; ID [[ block.id ]] &middot; Order [[ block.order ]] &middot; next_block_pk: [[ block.next_block_pk ]] </h4>
