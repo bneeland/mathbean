@@ -169,10 +169,9 @@
               }
             });
         },
-        reorder_next_block: function(next_block_pk) {
-          console.log('reordered next block')
-          // console.log(this.blocks['block-' + next_block_pk])
-          this.blocks[2].order=999
+        reorder_next_block: function(next_block_pk, block_a_order) {
+          next_block = this.blocks.find(e => e.id === next_block_pk)
+          next_block.order = block_a_order
         },
       }
     })
@@ -389,9 +388,10 @@
               )
               .then(response => {
                 this.block.order = response.data.order;
+                console.log("block_a_order" + block_a_order)
                 next_block_pk = response.data.next_block_pk
                 console.log("next_block_pk: " + next_block_pk);
-                this.$emit('reorder_next_block', next_block_pk);
+                this.$emit('reorder_next_block', next_block_pk, block_a_order);
               });
           }
         },
