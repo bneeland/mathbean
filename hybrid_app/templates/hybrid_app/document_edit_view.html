@@ -28,7 +28,7 @@
       <block-item
         v-for="block in blocks"
         v-bind:block="block"
-        v-bind:key="'block-' + block.id"
+        v-bind:key="block.id"
         v-on:delete-block="deleteBlock(block.id)"
         v-bind:id="'block-order-'+block.order"
         :ref="block.id"
@@ -186,10 +186,12 @@
       emits: ['reorder_next_block'],
       template: `
         <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
-          <h4>[[ block.type ]] &middot; ID [[ block.id ]] &middot; Order [[ block.order ]] &middot; next_block_pk: [[ block.next_block_pk ]] </h4>
+          <h4>[[ block.type ]]</h4>
+          <code>Order [[ block.order ]]</code>
           <p>
             <button
-              v-model="block.order"
+              v-model="block"
+              v-bind:key="block.id"
               @click="moveBlock('up')"
             >
               Move up &uarr;
@@ -198,7 +200,7 @@
           <p>
             <button
               v-model="block.order"
-              @click="moveDown()"
+              @click="moveBlock('down')"
             >
               Move down &darr;
             </button>
@@ -374,7 +376,7 @@
         },
         moveBlock: function (direction) {
           block_a_order = this.block.order;
-          if (direction == 'up' && this.block.order==0) {
+          if ((direction == 'up' && this.block.order==0)) {
             console.log("Can't move block up; it's already the first one (order 0)")
           } else {
             axios
@@ -388,9 +390,7 @@
               )
               .then(response => {
                 this.block.order = response.data.order;
-                console.log("block_a_order" + block_a_order)
                 next_block_pk = response.data.next_block_pk
-                console.log("next_block_pk: " + next_block_pk);
                 this.$emit('reorder_next_block', next_block_pk, block_a_order);
               });
           }
