@@ -17,9 +17,11 @@
       <div v-else>
         <h1
           @click="switchToEditingMode();" style="cursor: pointer"
+          :key="document.id"
         >
           [[ document.name ]]
         </h1>
+        <code>Max block order: [[ document.max_block_order ]] &middot; {{ document.max_block_order }}</code>
       </div>
       <block-form @block-added="onAddBlock"></block-form>
     </div>
@@ -145,7 +147,7 @@
         },
         updateContent: function (id, name) {
           axios
-            .patch('../api/documents/' + id + "/",
+            .patch('../api/documents/' + id,
               {
                 name: name
               },
@@ -156,7 +158,7 @@
         },
         deleteBlock: function (id) {
           axios
-            .delete('../api/blocks/' + id + '/',
+            .delete('../api/delete-block/' + {{ pk }}  + '/' + id,
               {
                 headers: {'X-CSRFToken' : getCookie('csrftoken')}
               }
@@ -192,7 +194,7 @@
       template: `
         <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
           <h4>[[ block.type ]]</h4>
-          <code>Order [[ block.order ]]</code>
+          <code>ID [[ block.id ]] &middot; Order [[ block.order ]]</code>
           <p>
             <button
               v-model="block"
@@ -206,6 +208,7 @@
             <button
               v-model="block.order"
               @click="moveBlock('down')"
+              v-if="block.order != {{ document.max_block_order }}"
             >
               Move down &darr;
             </button>
@@ -276,7 +279,7 @@
         },
         updateContent: function (id, content) {
           axios
-            .patch('../api/blocks/' + id + "/",
+            .patch('../api/blocks/' + id,
               {
                 content: content
               },
@@ -353,7 +356,7 @@
           formData.append('image', this.selectedFile);
           axios({
             method: 'patch',
-            url: '../api/blocks/' + id + "/",
+            url: '../api/blocks/' + id,
             headers: {
               'X-CSRFToken': getCookie('csrftoken'),
               'Content-Type': 'multipart/form-data'
@@ -369,7 +372,7 @@
           equation.addEventListener('blur',(ev) => {
             equation = ev.target.getValue('latex')
             axios
-              .patch('../api/blocks/' + id + "/",
+              .patch('../api/blocks/' + id,
                 {
                   equation: equation
                 },

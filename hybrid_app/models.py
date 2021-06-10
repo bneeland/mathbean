@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Document(models.Model):
     name = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='documents', null=True, blank=True)
+    max_block_order = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 

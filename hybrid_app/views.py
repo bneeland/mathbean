@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import UpdateAPIView
+from rest_framework.generics import UpdateAPIView, DestroyAPIView
 from rest_framework import status
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
@@ -33,10 +33,6 @@ class BlockViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    # def update(self, request, *args, **kwargs):
-    #     kwargs['partial'] = True
-    #     return super().update(request, *args, **kwargs)
-
 class BlockEditAPI(APIView):
     def get(self, request, pk, format=None):
         blocks = models.Block.objects.filter(document__id=self.kwargs['pk']).order_by('order', 'id')
@@ -44,13 +40,19 @@ class BlockEditAPI(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
+        max_block_order = models.Block.objects.filter(document__id=self.kwargs['pk']).aggregate(Max('order'))['order__max']+1
         serializer = serializers.BlockSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(
                 document=models.Document.objects.get(pk=self.kwargs['pk']),
                 user=self.request.user,
-                order=models.Block.objects.filter(document__id=self.kwargs['pk']).aggregate(Max('order'))['order__max']+1,
+                order=max_block_order,
             )
+
+            document=models.Document.objects.get(pk=self.kwargs['pk'])
+            document.max_block_order = max_block_order
+            document.save()
+
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -86,6 +88,18 @@ class MoveBlockAPI(UpdateAPIView):
             return Response(serializer_a.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteBlockAPI(DestroyAPIView):
+    def get_object(self):
+        return models.Block.objects.get(pk=self.kwargs['pk'])
+
+    def destroy(self, request, document_pk, pk, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        max_block_order = models.Block.objects.filter(document__id=self.kwargs['document_pk']).aggregate(Max('order'))['order__max']
+        print("max_block_order:")
+        print(max_block_order)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class DocumentListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
