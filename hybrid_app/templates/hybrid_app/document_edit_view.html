@@ -175,7 +175,6 @@
           next_block = this.blocks.find(e => e.id === next_block_pk)
           next_block.order = block_a_order
           this.sortBy('order')
-          // this.$forceUpdate();
         },
         sortBy(parameter) {
           this.blocks.sort((a, b) => a[parameter] < b[parameter] ? -1 : 1);
@@ -384,25 +383,18 @@
         },
         moveBlock: function (direction) {
           block_a_order = this.block.order;
-          if ((direction == 'up' && this.block.order==0)) {
-            console.log("Can't move block up; it's already the first one (order 0)")
-          } else {
-            axios
-              .patch('../api/move-block/' + direction + '/' + {{ pk }}  + '/' + this.block.id,
-                {
-                  // order: this.block.order+10
-                },
-                {
-                  headers: {'X-CSRFToken' : getCookie('csrftoken')}
-                }
-              )
-              .then(response => {
-                this.block.order = response.data.order;
-                next_block_pk = response.data.next_block_pk
-                this.$emit('reorder_next_block', next_block_pk, block_a_order);
-              });
-          }
-          // this.$forceUpdate();
+          axios
+            .patch('../api/move-block/' + direction + '/' + {{ pk }}  + '/' + this.block.id,
+              {},
+              {
+                headers: {'X-CSRFToken' : getCookie('csrftoken')}
+              }
+            )
+            .then(response => {
+              this.block.order = response.data.order;
+              next_block_pk = response.data.next_block_pk
+              this.$emit('reorder_next_block', next_block_pk, block_a_order);
+            });
         },
       },
       mounted() {

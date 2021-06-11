@@ -107,8 +107,6 @@ class DeleteBlockAPI(DestroyAPIView):
         self.perform_destroy(instance)
 
         max_block_order = models.Block.objects.filter(document__id=self.kwargs['document_pk']).aggregate(Max('order'))['order__max']
-        print("max_block_order:")
-        print(max_block_order)
         document=models.Document.objects.get(pk=document_pk)
         document.max_block_order = max_block_order
         document.save()
