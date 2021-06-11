@@ -61,14 +61,63 @@ class MoveBlockAPI(UpdateAPIView):
     def get_object(self, pk):
         return models.Block.objects.get(pk=pk)
 
-    def patch(self, request, direction, pk, format=None):
+    def patch(self, request, direction, document_pk, pk, format=None):
         block_a = self.get_object(pk)
         order_a_old = block_a.order
-
+        print("order_a_old")
+        print(order_a_old)
+        """
+        NEED TO CHANGE THE WAY TO GET order_b_old TO DEAL WITH GAPS IN ORDERS
+        """
         if direction == "up":
-            order_b_old = order_a_old - 1
+            document_blocks = models.Block.objects.filter(document__id=self.kwargs['document_pk'])
+            # print("document_blocks")
+            # print(document_blocks)
+            greater_than_old_a_block_order = document_blocks.filter(order__lt=order_a_old)
+            # print("greater_than_old_a_block_order")
+            # print(greater_than_old_a_block_order)
+            ordered_by_order = greater_than_old_a_block_order.order_by('order')
+            # print("ordered_by_order")
+            # print(ordered_by_order)
+            just_one = ordered_by_order.last()
+            print("just_one")
+            print(just_one)
+            just_the_order_value = just_one.order
+            print("just_the_order_value")
+            print(just_the_order_value)
+            order_b_old = models.Block.objects.filter(document__id=self.kwargs['document_pk']).filter(order__lt=order_a_old).order_by('order').last().order
         elif direction == "down":
-            order_b_old = order_a_old + 1
+            document_blocks = models.Block.objects.filter(document__id=self.kwargs['document_pk'])
+            # print("document_blocks")
+            # print(document_blocks)
+            greater_than_old_a_block_order = document_blocks.filter(order__gt=order_a_old)
+            # print("greater_than_old_a_block_order")
+            # print(greater_than_old_a_block_order)
+            ordered_by_order = greater_than_old_a_block_order.order_by('order')
+            # print("ordered_by_order")
+            # print(ordered_by_order)
+            just_one = ordered_by_order.first()
+            print("just_one")
+            print(just_one)
+            just_the_order_value = just_one.order
+            print("just_the_order_value")
+            print(just_the_order_value)
+            order_b_old = models.Block.objects.filter(document__id=self.kwargs['document_pk']).filter(order__gt=order_a_old).order_by('order').first().order
+        # if direction == "up":
+        #     order_b_old = models.Block.objects.filter(
+        #         document__id=self.kwargs['document_pk']
+        #     ).filter(
+        #         order__lt=order_a_old
+        #     ).order_by('order').last().order
+        # elif direction == "down":
+        #     order_b_old = models.Block.objects.filter(
+        #         document__id=self.kwargs['document_pk']
+        #     ).filter(
+        #         order__gt=order_a_old
+        #     ).order_by('order').first().order
+        """
+        SEE COMMENT ABOVE ^^^
+        """
         block_b = models.Block.objects.get(order=order_b_old)
         order_a_new = order_b_old
         order_b_new = order_a_old

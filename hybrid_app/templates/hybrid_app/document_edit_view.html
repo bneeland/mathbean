@@ -388,7 +388,7 @@
             console.log("Can't move block up; it's already the first one (order 0)")
           } else {
             axios
-              .patch('../api/move-block/' + direction + '/' + this.block.id,
+              .patch('../api/move-block/' + direction + '/' + {{ pk }}  + '/' + this.block.id,
                 {
                   // order: this.block.order+10
                 },
