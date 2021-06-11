@@ -7,7 +7,7 @@ from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.base import RedirectView
 from django.urls import reverse_lazy
-from django.db.models import Max
+from django.db.models import Min, Max
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -40,13 +40,14 @@ class BlockEditAPI(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk, format=None):
-        max_block_order = models.Block.objects.filter(document__id=self.kwargs['pk']).aggregate(Max('order'))['order__max']+1
         serializer = serializers.BlockSerializer(data=request.data)
         if serializer.is_valid():
+            max_block_order = models.Block.objects.filter(document__id=self.kwargs['pk']).aggregate(Max('order'))['order__max'] + 1
             serializer.save(
                 document=models.Document.objects.get(pk=self.kwargs['pk']),
                 user=self.request.user,
                 order=max_block_order,
+                max_block_order=max_block_order,
             )
 
             document=models.Document.objects.get(pk=self.kwargs['pk'])
@@ -106,12 +107,19 @@ class DeleteBlockAPI(DestroyAPIView):
         instance = self.get_object()
         self.perform_destroy(instance)
 
+        min_block_order = models.Block.objects.filter(document__id=self.kwargs['document_pk']).aggregate(Min('order'))['order__min']
         max_block_order = models.Block.objects.filter(document__id=self.kwargs['document_pk']).aggregate(Max('order'))['order__max']
         document=models.Document.objects.get(pk=document_pk)
+        document.min_block_order = min_block_order
         document.max_block_order = max_block_order
         document.save()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        data = {
+            min_block_order: min_block_order,
+            max_block_order: max_block_order
+        }
+
+        return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 class DocumentListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
