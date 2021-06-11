@@ -380,6 +380,9 @@
               this.block.order = response.data.order;
               next_block_pk = response.data.next_block_pk
               this.$emit('reorder_next_block', next_block_pk, block_a_order);
+            })
+            .catch(error => {
+              console.log("Can't move block up/down because it's the first/last one\n" + error)
             });
         },
       },
