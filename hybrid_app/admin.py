@@ -13,7 +13,11 @@ class StudentAdmin(admin.ModelAdmin):
 class StudentListAdmin(admin.ModelAdmin):
     list_display = ("name", "user", "created_at", )
 
+class TeacherAdmin(admin.ModelAdmin):
+    list_display = ("email", "user", "created_at", )
+
 admin.site.register(models.Document, DocumentAdmin)
 admin.site.register(models.Block, BlockAdmin)
 admin.site.register(models.Student, StudentAdmin)
 admin.site.register(models.StudentList, StudentListAdmin)
+admin.site.register(models.Teacher, TeacherAdmin)

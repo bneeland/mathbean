@@ -9,7 +9,7 @@
   <a href="{% url 'hybrid_app:create_student_view' %}">New student</a>
 </div>
 <hr />
-<div id="student-lists">
+<div id="students">
   {% for student in students %}
     <p><a href="{% url 'hybrid_app:update_student_view' pk=student.pk %}">{{ student.email }}</a> &middot; {{ student.created_at }}</p>
   {% endfor %}

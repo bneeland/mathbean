@@ -218,6 +218,36 @@ class UpdateStudentView(LoginRequiredMixin, UpdateView):
     template_name = "hybrid_app/update_student_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_view")
 
+class TeacherListView(LoginRequiredMixin, ListView):
+    login_url = 'account_login'
+
+    model = models.Teacher
+    template_name = "hybrid_app/teacher_list_view.html"
+    context_object_name = "teachers"
+
+    def get_queryset(self):
+        return models.Teacher.objects.filter(user=self.request.user.id)
+
+class CreateTeacherView(LoginRequiredMixin, CreateView):
+    login_url = 'account_login'
+
+    model = models.Teacher
+    fields = ['email', ]
+    template_name = "hybrid_app/create_teacher_view.html"
+    success_url = reverse_lazy("hybrid_app:teacher_list_view")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class UpdateTeacherView(LoginRequiredMixin, UpdateView):
+    login_url = 'account_login'
+
+    model = models.Teacher
+    fields = ['email', ]
+    template_name = "hybrid_app/update_teacher_view.html"
+    success_url = reverse_lazy("hybrid_app:teacher_list_view")
+
 
 
 

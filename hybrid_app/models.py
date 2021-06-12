@@ -41,3 +41,12 @@ class StudentList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_lists', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     modified_at = models.DateTimeField(auto_now=True, null=True)
+
+class Teacher(models.Model):
+    email = models.EmailField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teachers', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.email
