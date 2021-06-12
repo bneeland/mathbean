@@ -6,6 +6,7 @@ from rest_framework import status
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.base import RedirectView
+from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.db.models import Min, Max
 
@@ -158,7 +159,41 @@ class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context['document'] = models.Document.objects.get(pk=self.kwargs['pk'])
         return context
 
-from django.views.generic.edit import CreateView
+class StudentListListView(LoginRequiredMixin, ListView):
+    login_url = 'account_login'
+
+    model = models.StudentList
+    template_name = "hybrid_app/student_list_list_view.html"
+    context_object_name = "student_lists"
+
+    def get_queryset(self):
+        return models.StudentList.objects.filter(user=self.request.user.id)
+
+class CreateStudentListView(LoginRequiredMixin, CreateView):
+    login_url = 'account_login'
+
+    model = models.StudentList
+    fields = ['name', 'students', ]
+    template_name = "hybrid_app/create_student_list_view.html"
+    success_url = reverse_lazy("hybrid_app:student_list_list_view")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class UpdateStudentListView(LoginRequiredMixin, UpdateView):
+    login_url = 'account_login'
+
+    model = models.StudentList
+    fields = ['name', 'students', ]
+    template_name = "hybrid_app/update_student_list_view.html"
+    success_url = reverse_lazy("hybrid_app:student_list_list_view")
+
+
+
+
+
+
 
 class BlockCreateView(CreateView):
     model = models.Block

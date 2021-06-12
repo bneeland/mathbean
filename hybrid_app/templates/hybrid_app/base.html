@@ -28,6 +28,13 @@
     <title></title>
   </head>
   <body>
+    <nav>
+      <p>
+        <a href="{% url 'hybrid_app:document_list_view' %}">Documents</a>
+        <a href="{% url 'hybrid_app:student_list_list_view' %}">Student lists</a>
+      </p>
+      <hr>
+    </nav>
     {% block content %}{% endblock %}
 
   </body>

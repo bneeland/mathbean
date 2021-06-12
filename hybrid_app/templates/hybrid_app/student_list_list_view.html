@@ -1,0 +1,15 @@
+{% extends "hybrid_app/base.html" %}
+
+{% block content %}
+
+<div id="tools">
+  <a href="{% url 'hybrid_app:create_student_list_view' %}">New student list</a>
+</div>
+<hr />
+<div id="student-lists">
+  {% for student_list in student_lists %}
+    <p><a href="{% url 'hybrid_app:update_student_list_view' pk=student_list.pk %}">{{ student_list.name }}</a> &middot; {{ student_list.created_at }}</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

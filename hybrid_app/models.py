@@ -25,3 +25,16 @@ class Block(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blocks', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     modified_at = models.DateTimeField(auto_now=True, null=True)
+
+class Student(models.Model):
+    email = models.EmailField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='students', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True)
+
+class StudentList(models.Model):
+    name = models.CharField(max_length=100)
+    students = models.ManyToManyField(Student, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_lists', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True)
