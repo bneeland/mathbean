@@ -22,8 +22,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
         return self.request.user.documents.all()
 
     def perform_create(self, serializer):
-        kwargs = {'user': self.request.user}
-        serializer.save(**kwargs)
+        serializer.save(user=self.request.user)
 
 class BlockViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BlockSerializer
@@ -43,11 +42,15 @@ class BlockEditAPI(APIView):
     def post(self, request, pk, format=None):
         serializer = serializers.BlockSerializer(data=request.data)
         if serializer.is_valid():
-            max_block_order = models.Block.objects.filter(document__id=self.kwargs['pk']).aggregate(Max('order'))['order__max'] + 1
+            try:
+                max_block_order = models.Block.objects.filter(document__id=self.kwargs['pk']).aggregate(Max('order'))['order__max']
+                order = max_block_order + 1
+            except:
+                order = 0
             serializer.save(
                 document=models.Document.objects.get(pk=self.kwargs['pk']),
                 user=self.request.user,
-                order=max_block_order,
+                order=order,
                 max_block_order=max_block_order,
             )
 
@@ -142,7 +145,7 @@ class CreateDocumentView(LoginRequiredMixin, RedirectView):
     login_url = 'account_login'
 
     def get_redirect_url(self, *args, **kwargs):
-        document = models.Document.objects.create(name="Untitled document", user=self.request.user)
+        document = models.Document.objects.create(name="Untitled document", user=self.request.user, min_block_order=0, max_block_order=0)
         return reverse_lazy("hybrid_app:document_edit_view", args=[document.pk])
 
 class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
