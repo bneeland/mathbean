@@ -70,42 +70,41 @@ class MoveBlockAPI(UpdateAPIView):
         min_block_order = models.Block.objects.filter(document__id=self.kwargs['document_pk']).aggregate(Min('order'))['order__min']
         max_block_order = models.Block.objects.filter(document__id=self.kwargs['document_pk']).aggregate(Max('order'))['order__max']
 
-        if (direction == "up" and order_a_old != min_block_order) or (direction == "down" and order_a_old != max_block_order):
-            if direction == "up":
-                order_b_old = models.Block.objects.filter(
-                    document__id=self.kwargs['document_pk']
-                ).filter(
-                    order__lt=order_a_old
-                ).order_by('order').last().order
-            elif direction == "down":
-                order_b_old = models.Block.objects.filter(
-                    document__id=self.kwargs['document_pk']
-                ).filter(
-                    order__gt=order_a_old
-                ).order_by('order').first().order
+        # if (direction == "up" and order_a_old != min_block_order) or (direction == "down" and order_a_old != max_block_order):
+        if direction == "up":
+            order_b_old = models.Block.objects.filter(
+                document__id=self.kwargs['document_pk']
+            ).filter(
+                order__lt=order_a_old
+            ).order_by('order').last().order
+        elif direction == "down":
+            order_b_old = models.Block.objects.filter(
+                document__id=self.kwargs['document_pk']
+            ).filter(
+                order__gt=order_a_old
+            ).order_by('order').first().order
 
-            block_b = models.Block.objects.get(order=order_b_old)
-            order_a_new = order_b_old
-            order_b_new = order_a_old
+        block_b = models.Block.objects.get(order=order_b_old)
+        order_a_new = order_b_old
+        order_b_new = order_a_old
 
-            serializer_a = serializers.BlockSerializer(block_a, data={}, partial=True)
-            serializer_b = serializers.BlockSerializer(block_b, data={}, partial=True)
+        serializer_a = serializers.BlockSerializer(block_a, data={}, partial=True)
+        serializer_b = serializers.BlockSerializer(block_b, data={}, partial=True)
 
-            if serializer_a.is_valid() and serializer_b.is_valid():
-                serializer_a.save(
-                    order=order_a_new,
-                    # Add pk of block_b, which has changed order too, for frontend to manage
-                    next_block_pk=block_b.pk,
-                )
-                serializer_b.save(
-                    order=order_b_new,
-                )
-                return Response(serializer_a.data)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        if serializer_a.is_valid() and serializer_b.is_valid():
+            serializer_a.save(
+                order=order_a_new,
+                # Add pk of block_b, which has changed order too, for frontend to manage
+                next_block_pk=block_b.pk,
+            )
+            serializer_b.save(
+                order=order_b_new,
+            )
+            return Response(serializer_a.data)
         else:
-            return Response(None)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        #     return Response(None)
 
 class DeleteBlockAPI(DestroyAPIView):
     def get_object(self):
