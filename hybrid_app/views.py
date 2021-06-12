@@ -189,7 +189,35 @@ class UpdateStudentListView(LoginRequiredMixin, UpdateView):
     template_name = "hybrid_app/update_student_list_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_list_view")
 
+class StudentListView(LoginRequiredMixin, ListView):
+    login_url = 'account_login'
 
+    model = models.Student
+    template_name = "hybrid_app/student_list_view.html"
+    context_object_name = "students"
+
+    def get_queryset(self):
+        return models.Student.objects.filter(user=self.request.user.id)
+
+class CreateStudentView(LoginRequiredMixin, CreateView):
+    login_url = 'account_login'
+
+    model = models.Student
+    fields = ['email', ]
+    template_name = "hybrid_app/create_student_view.html"
+    success_url = reverse_lazy("hybrid_app:student_list_view")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class UpdateStudentView(LoginRequiredMixin, UpdateView):
+    login_url = 'account_login'
+
+    model = models.Student
+    fields = ['email', ]
+    template_name = "hybrid_app/update_student_view.html"
+    success_url = reverse_lazy("hybrid_app:student_list_view")
 
 
 

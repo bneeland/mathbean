@@ -5,11 +5,13 @@
 <div id="tools">
   <a href="{% url 'hybrid_app:create_student_list_view' %}">New student list</a>
   <a href="{% url 'hybrid_app:student_list_view' %}">Students</a>
+  <hr />
+  <a href="{% url 'hybrid_app:create_student_view' %}">New student</a>
 </div>
 <hr />
 <div id="student-lists">
-  {% for student_list in student_lists %}
-    <p><a href="{% url 'hybrid_app:update_student_list_view' pk=student_list.pk %}">{{ student_list.name }}</a> &middot; {{ student_list.created_at }}</p>
+  {% for student in students %}
+    <p><a href="{% url 'hybrid_app:update_student_view' pk=student.pk %}">{{ student.email }}</a> &middot; {{ student.created_at }}</p>
   {% endfor %}
 </div>
 

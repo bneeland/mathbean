@@ -32,6 +32,9 @@ class Student(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     modified_at = models.DateTimeField(auto_now=True, null=True)
 
+    def __str__(self):
+        return self.email
+
 class StudentList(models.Model):
     name = models.CharField(max_length=100)
     students = models.ManyToManyField(Student, blank=True, null=True)
