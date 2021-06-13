@@ -9,6 +9,7 @@ from django.views.generic.base import RedirectView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.db.models import Min, Max
+from django.contrib.auth import get_user_model
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -200,6 +201,41 @@ class StudentListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return models.Student.objects.filter(user=self.request.user.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context)
+        User = get_user_model()
+        users = User.objects.all()
+        context["matched"] = {}
+        # i = 0
+        for teacher_student in context['students']:
+            matched = False
+            print("------------")
+            print("TEACHER STUDENT")
+            print(teacher_student.email)
+            print("------------")
+            print("USERS")
+            for student_user in users:
+                print(student_user.email)
+                if teacher_student.email == student_user.email:
+                    print("Match on teacher's end: Teacher's student email matches student user email")
+                    student_teachers = models.Teacher.objects.filter(user=student_user)
+                    print(student_teachers)
+                    for student_teacher in student_teachers:
+                        if str(self.request.user.email) == str(student_teacher):
+                            print("Match on student's end: Student's teacher email matches the user's teacher email")
+                            matched = True
+            print("matched?", matched)
+            context["matched"][teacher_student.pk] = matched
+
+            # i += 1
+            # context["matched"][teacher_student.email] = matched
+
+            # logs = [{'email': msg['sent_to'], 'log_id': msg['unique_arguments']}
+
+        print(context)
+        return context
 
 class CreateStudentView(LoginRequiredMixin, CreateView):
     login_url = 'account_login'
