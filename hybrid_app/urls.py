@@ -16,7 +16,7 @@ urlpatterns = [
     path('api/block-edit/<int:pk>', views.BlockEditAPI.as_view()),
     path('api/move-block/<direction>/<int:document_pk>/<int:pk>', views.MoveBlockAPI.as_view()),
     path('api/delete-block/<int:document_pk>/<int:pk>', views.DeleteBlockAPI.as_view()),
-    path('', views.DocumentListView.as_view(), name='document_list_view'),
+    path('documents/', views.DocumentListView.as_view(), name='document_list_view'),
     path('student-lists', views.StudentListListView.as_view(), name='student_list_list_view'),
     path('student-lists/create', views.CreateStudentListView.as_view(), name='create_student_list_view'),
     path('student-lists/<int:pk>/update', views.UpdateStudentListView.as_view(), name='update_student_list_view'),
@@ -27,7 +27,7 @@ urlpatterns = [
     path('teachers/create', views.CreateTeacherView.as_view(), name='create_teacher_view'),
     path('teachers/<int:pk>/update', views.UpdateTeacherView.as_view(), name='update_teacher_view'),
     path('create-document', views.CreateDocumentView.as_view(), name='create_document_view'),
-    path('<int:pk>', views.DocumentEditView.as_view(), name='document_edit_view'),
+    path('documents/<int:pk>', views.DocumentEditView.as_view(), name='document_edit_view'),
     path('block-create-view', views.BlockCreateView.as_view(), name='block_create_view'),
     path('test-view', views.TestView.as_view(), name="test_view"),
 ]

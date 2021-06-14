@@ -3,7 +3,6 @@
 {% block content %}
   <div id="app">
     <div id="tools">
-      <p><a href="{% url 'hybrid_app:document_list_view' %}">&larr; Documents</a></p>
       <div
         v-if="editingMode"
       >
@@ -22,6 +21,11 @@
           [[ document.name ]]
         </h1>
       </div>
+      <p>
+        {% for student_list in student_lists %}
+          {{ student_list }}
+        {% endfor %}
+      </p>
       <block-form @block-added="onAddBlock"></block-form>
     </div>
     <hr />
