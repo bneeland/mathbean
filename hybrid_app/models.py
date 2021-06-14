@@ -37,6 +37,7 @@ class Document(models.Model):
     min_block_order = models.IntegerField(blank=True, null=True)
     max_block_order = models.IntegerField(blank=True, null=True)
     shared_with = models.ManyToManyField(StudentList)
+    copy_of = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 

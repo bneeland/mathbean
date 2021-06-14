@@ -175,11 +175,65 @@ class DocumentShareView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("hybrid_app:document_edit_view", kwargs={'pk': self.kwargs['pk']})
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['document'] = models.Document.objects.get(pk=self.kwargs['pk'])
-    #     context['student_lists'] = models.StudentList.objects.filter(user=self.request.user)
-    #     return context
+    def form_valid(self, form):
+        shared_with = form.instance.shared_with.all()
+        for student_list in shared_with:
+            print(student_list.name)
+            students = student_list.students.all()
+            for student in students:
+                print(student.email)
+                User = get_user_model()
+                try:
+                    # Find student in users; if not found, raise error
+                    student_user = User.objects.filter(email=student.email).get()
+                    print(student_user)
+
+                    original_document = self.get_object()
+
+                    object, created = models.Document.objects.get_or_create(
+                        name=original_document.name,
+                        user=student_user,
+                        min_block_order=original_document.min_block_order,
+                        max_block_order=original_document.max_block_order,
+                        copy_of=original_document,
+                    )
+
+                    # try:
+                    #     # Find document with user=student and copy_of=document; if not found, raise error
+                    #     document = models.Document.objects.get(
+                    #         user=student_user,
+                    #         copy_of=self.kwargs['pk'],
+                    #     )
+                    #     print("Document found:")
+                    #     print(document)
+                    # except:
+                    #     original_document = self.get_object()
+                    #     new_document = original_document
+                    #     print("Document created:")
+                    #     print(new_document)
+                    #
+                    #     original_blocks = original_document.blocks.all()
+                    #     print(original_blocks)
+                    #
+                    #     new_document.pk = None
+                    #     print(new_document.pk)
+                    #     new_document.copy_of = original_document
+                    #     print(new_document.copy_of)
+                    #     new_document.user = user
+                    #     print(new_document.user)
+                    #     new_document.blocks = original_blocks
+                    #     print(new_document.blocks)
+                    #     new_document.save()
+                except:
+                    print("User matching email doesn't exits")
+                # try:
+                #     document = models.Document.objects.get(
+                #         user = User.objects.get(email=student.email),
+                #
+                #     )
+                # except:
+                #     print("error")
+        return super().form_valid(form)
 
 class StudentListListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
