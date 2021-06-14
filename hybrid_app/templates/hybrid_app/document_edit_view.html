@@ -21,11 +21,7 @@
           [[ document.name ]]
         </h1>
       </div>
-      <p>
-        {% for student_list in student_lists %}
-          {{ student_list }}
-        {% endfor %}
-      </p>
+      <p><a href="{% url 'hybrid_app:document_share_view' pk %}">Share document</a></p>
       <block-form @block-added="onAddBlock"></block-form>
     </div>
     <hr />

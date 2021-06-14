@@ -162,6 +162,25 @@ class DocumentEditView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context['document'] = models.Document.objects.get(pk=self.kwargs['pk'])
         return context
 
+class DocumentShareView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    login_url = 'account_login'
+
+    model = models.Document
+    fields = ['shared_with']
+    template_name = "hybrid_app/document_share_view.html"
+
+    def test_func(self):
+        return models.Document.objects.get(pk=self.kwargs['pk']).user == self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy("hybrid_app:document_edit_view", kwargs={'pk': self.kwargs['pk']})
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['document'] = models.Document.objects.get(pk=self.kwargs['pk'])
+    #     context['student_lists'] = models.StudentList.objects.filter(user=self.request.user)
+    #     return context
+
 class StudentListListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
 
