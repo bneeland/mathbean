@@ -18,6 +18,7 @@ class Block(models.Model):
 class Student(models.Model):
     email = models.EmailField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='students', null=True, blank=True)
+    matched = models.BooleanField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     modified_at = models.DateTimeField(auto_now=True, null=True)
 
@@ -50,6 +51,7 @@ class Document(models.Model):
 class Teacher(models.Model):
     email = models.EmailField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teachers', null=True, blank=True)
+    matched = models.BooleanField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     modified_at = models.DateTimeField(auto_now=True, null=True)
 
