@@ -216,9 +216,14 @@ class CreateStudentListView(LoginRequiredMixin, CreateView):
     login_url = 'account_login'
 
     model = models.StudentList
-    fields = ['name', 'students', ]
-    template_name = "hybrid_app/create_student_list_view.html"
+    form_class = forms.StudentListForm
+    template_name = "hybrid_app/update_student_list_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_list_view")
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateStudentListView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_valid(self, form):
         form.instance.user = self.request.user
