@@ -177,7 +177,9 @@ class DocumentShareView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse_lazy("hybrid_app:document_edit_view", kwargs={'pk': self.kwargs['pk']})
 
     def form_valid(self, form):
-        shared_with = form.instance.shared_with.all()
+        # shared_with = form.instance.shared_with.all()
+        shared_with = form.cleaned_data['shared_with']
+        print(shared_with)
         for student_list in shared_with:
             print(student_list.name)
             students = student_list.students.all()
