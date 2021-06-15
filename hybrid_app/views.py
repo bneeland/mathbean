@@ -15,6 +15,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from . import models
 from . import serializers
+from . import forms
 
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.DocumentSerializer
@@ -197,42 +198,8 @@ class DocumentShareView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                         max_block_order=original_document.max_block_order,
                         copy_of=original_document,
                     )
-
-                    # try:
-                    #     # Find document with user=student and copy_of=document; if not found, raise error
-                    #     document = models.Document.objects.get(
-                    #         user=student_user,
-                    #         copy_of=self.kwargs['pk'],
-                    #     )
-                    #     print("Document found:")
-                    #     print(document)
-                    # except:
-                    #     original_document = self.get_object()
-                    #     new_document = original_document
-                    #     print("Document created:")
-                    #     print(new_document)
-                    #
-                    #     original_blocks = original_document.blocks.all()
-                    #     print(original_blocks)
-                    #
-                    #     new_document.pk = None
-                    #     print(new_document.pk)
-                    #     new_document.copy_of = original_document
-                    #     print(new_document.copy_of)
-                    #     new_document.user = user
-                    #     print(new_document.user)
-                    #     new_document.blocks = original_blocks
-                    #     print(new_document.blocks)
-                    #     new_document.save()
                 except:
                     print("User matching email doesn't exits")
-                # try:
-                #     document = models.Document.objects.get(
-                #         user = User.objects.get(email=student.email),
-                #
-                #     )
-                # except:
-                #     print("error")
         return super().form_valid(form)
 
 class StudentListListView(LoginRequiredMixin, ListView):
@@ -261,9 +228,14 @@ class UpdateStudentListView(LoginRequiredMixin, UpdateView):
     login_url = 'account_login'
 
     model = models.StudentList
-    fields = ['name', 'students', ]
+    form_class = forms.StudentListForm
     template_name = "hybrid_app/update_student_list_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_list_view")
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateStudentListView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 class StudentListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
@@ -310,6 +282,9 @@ class UpdateStudentView(LoginRequiredMixin, UpdateView):
     fields = ['email', ]
     template_name = "hybrid_app/update_student_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_view")
+
+    def get_queryset(self):
+        return models.Student.objects.filter(user=self.request.user.id)
 
 class TeacherListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
