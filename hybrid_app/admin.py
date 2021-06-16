@@ -8,13 +8,13 @@ class BlockAdmin(admin.ModelAdmin):
     list_display = ("type", "document", "user", "created_at", "pk", )
 
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ("email", "user", "created_at", )
+    list_display = ("email", "user", "created_at", "pk", )
 
 class StudentListAdmin(admin.ModelAdmin):
-    list_display = ("name", "user", "created_at", )
+    list_display = ("name", "user", "created_at", "pk", )
 
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ("email", "user", "created_at", )
+    list_display = ("email", "user", "created_at", "pk", )
 
 admin.site.register(models.Document, DocumentAdmin)
 admin.site.register(models.Block, BlockAdmin)

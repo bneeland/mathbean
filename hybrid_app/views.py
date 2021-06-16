@@ -317,6 +317,15 @@ class UpdateStudentView(LoginRequiredMixin, UpdateView):
         # Assign currently logged-in user as user for this student instance
         form.instance.user = self.request.user
 
+        # If previously matched, unmatch previous matched user's teacher instance
+        if self.object.matched == True:
+            previous_student = models.Student.objects.get(pk=self.object.pk)
+            User = get_user_model()
+            previous_user = User.objects.get(email=previous_student.email)
+            previous_student_teacher = models.Teacher.objects.get(user=previous_user, email=self.request.user.email)
+            previous_student_teacher.matched = False
+            previous_student_teacher.save()
+
         # Check if matched with a student user
         this_teacher_student = form.cleaned_data['email']
 
@@ -403,6 +412,15 @@ class UpdateTeacherView(LoginRequiredMixin, UpdateView):
         # Assign currently logged-in user as user for this student instance
         form.instance.user = self.request.user
 
+        # If previously matched, unmatch previous matched user's student instance
+        if self.object.matched == True:
+            previous_teacher = models.Teacher.objects.get(pk=self.object.pk)
+            User = get_user_model()
+            previous_user = User.objects.get(email=previous_teacher.email)
+            previous_teacher_student = models.Student.objects.get(user=previous_user, email=self.request.user.email)
+            previous_teacher_student.matched = False
+            previous_teacher_student.save()
+
         # Check if matched with a student user
         this_student_teacher = form.cleaned_data['email']
 
@@ -421,8 +439,6 @@ class UpdateTeacherView(LoginRequiredMixin, UpdateView):
                         teacher_student.save()
 
         return super().form_valid(form)
-
-
 
 class BlockCreateView(CreateView):
     model = models.Block
