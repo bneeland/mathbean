@@ -256,9 +256,9 @@ class StudentListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["matched"] = {}
         User = get_user_model()
         users = User.objects.all()
-        context["matched"] = {}
         for teacher_student in context['students']:
             matched = False
             for student_user in users:
@@ -313,6 +313,29 @@ class UpdateStudentView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return models.Student.objects.filter(user=self.request.user.id)
 
+    def form_valid(self, form):
+        # Assign currently logged-in user as user for this student instance
+        form.instance.user = self.request.user
+
+        # Check if matched with a student user
+        this_teacher_student = form.cleaned_data['email']
+
+        User = get_user_model()
+        student_users = User.objects.all()
+
+        form.instance.matched = False
+
+        for student_user in student_users:
+            if student_user.email == this_teacher_student:
+                student_teachers = models.Teacher.objects.filter(user=student_user)
+                for student_teacher in student_teachers:
+                    if str(self.request.user.email) == str(student_teacher):
+                        form.instance.matched = True
+                        student_teacher.matched = True
+                        student_teacher.save()
+
+        return super().form_valid(form)
+
 class TeacherListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
 
@@ -357,39 +380,14 @@ class CreateTeacherView(LoginRequiredMixin, CreateView):
         User = get_user_model()
         teacher_users = User.objects.all()
 
-        # Does the teacher I'm trying to create match any users' email?
-        for teacher_user in teacher_users: # Go through all users
-            if teacher_user.email == this_student_teacher: # Check if users' emails match the teacher email I'm adding
-                teacher_students = models.Student.objects.filter(user=teacher_user) # Found a user matching the teacher email I'm adding... Get this user's list of students he's created
-                for teacher_student in teacher_students: # Go through all students that this "teacher" user has created
-                    if str(self.request.user.email) == str(teacher_student): # Check if the "teacher" user's student email matches my own "student" email that I use as a user.
-                        # If true, then the teacher email that I'm creating has a user out there with the same email, and he's created a student that has my email; we're matched.
+        for teacher_user in teacher_users:
+            if teacher_user.email == this_student_teacher:
+                teacher_students = models.Student.objects.filter(user=teacher_user)
+                for teacher_student in teacher_students:
+                    if str(self.request.user.email) == str(teacher_student):
                         form.instance.matched = True
-
                         teacher_student.matched = True
                         teacher_student.save()
-
-
-
-        # Check if matched with a student user
-        this_teacher_student = form.cleaned_data['email']
-
-        User = get_user_model()
-        student_users = User.objects.all()
-
-        # Does the student I'm trying to create match any users' email?
-        for student_user in student_users: # Go through all users
-            if student_user.email == this_teacher_student: # Check if users' emails match the student email I'm adding
-                student_teachers = models.Teacher.objects.filter(user=student_user) # Found a user matching the student email I'm adding... Get this user's list of teachers he's created
-                for student_teacher in student_teachers: # Go through all teachers that this "student" user has created
-                    if str(self.request.user.email) == str(student_teacher): # Check if the "student" user's teacher email matches my own "teacher" email that I use as a user.
-                        # If true, then the student email that I'm creating has a user out there with the same email, and he's created a teacher that has my email; we're matched.
-                        form.instance.matched = True
-
-                        student_teacher.matched = True
-                        student_teacher.save()
-
-
 
         return super().form_valid(form)
 
@@ -401,7 +399,28 @@ class UpdateTeacherView(LoginRequiredMixin, UpdateView):
     template_name = "hybrid_app/update_teacher_view.html"
     success_url = reverse_lazy("hybrid_app:teacher_list_view")
 
+    def form_valid(self, form):
+        # Assign currently logged-in user as user for this student instance
+        form.instance.user = self.request.user
 
+        # Check if matched with a student user
+        this_student_teacher = form.cleaned_data['email']
+
+        User = get_user_model()
+        teacher_users = User.objects.all()
+
+        form.instance.matched = False
+
+        for teacher_user in teacher_users:
+            if teacher_user.email == this_student_teacher:
+                teacher_students = models.Student.objects.filter(user=teacher_user)
+                for teacher_student in teacher_students:
+                    if str(self.request.user.email) == str(teacher_student):
+                        form.instance.matched = True
+                        teacher_student.matched = True
+                        teacher_student.save()
+
+        return super().form_valid(form)
 
 
 
