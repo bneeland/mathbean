@@ -10,7 +10,7 @@
 <hr />
 <div id="teachers">
   {% for teacher in teachers %}
-    <p><a href="{% url 'hybrid_app:update_teacher_view' pk=teacher.pk %}">{{ teacher.email }}</a> &middot; {{ teacher.created_at }} &middot; Matched: {{ matched|get_match_value:teacher.pk }}</p>
+    <p><a href="{% url 'hybrid_app:update_teacher_view' pk=teacher.pk %}">{{ teacher.email }}</a> &middot; {{ teacher.created_at }} &middot; Matched: {{ teacher.matched }}</p>
   {% endfor %}
 </div>
 

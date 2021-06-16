@@ -13,7 +13,7 @@
 <hr />
 <div id="students">
   {% for student in students %}
-    <p><a href="{% url 'hybrid_app:update_student_view' pk=student.pk %}">{{ student.email }}</a> &middot; {{ student.created_at }} &middot; Matched: {{ matched|get_match_value:student.pk }}</p>
+    <p><a href="{% url 'hybrid_app:update_student_view' pk=student.pk %}">{{ student.email }}</a> &middot; {{ student.created_at }} &middot; Matched: {{ student.matched }}</p>
   {% endfor %}
 </div>
 
