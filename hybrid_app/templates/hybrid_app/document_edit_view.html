@@ -258,6 +258,9 @@
           this.$refs.textarea.focus();
         },
         updateContent: function (id, content) {
+          if (!content.replace(/\s/g, '').length) {
+            content = 'This is placeholder text. Click to edit it.'
+          }
           axios
             .patch('../api/blocks/' + id,
               {
@@ -266,7 +269,11 @@
               {
                 headers: {'X-CSRFToken' : getCookie('csrftoken')}
               }
-            );
+            )
+            .then(response => {
+              this.block.content = response.data.content
+              this.block.content = content
+            });
         },
         updateContentGraph: function (id) {
           var canvas = document.getElementById("graph-" + id).fabric;
