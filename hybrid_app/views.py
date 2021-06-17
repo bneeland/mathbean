@@ -176,6 +176,11 @@ class DocumentShareView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("hybrid_app:document_edit_view", kwargs={'pk': self.kwargs['pk']})
 
+    def get_form(self, form_class=None):
+        form = super(DocumentShareView, self).get_form(form_class)
+        form.fields['shared_with'].queryset = models.StudentList.objects.filter(user=self.request.user)
+        return form
+
     def form_valid(self, form):
         shared_with = form.instance.shared_with.all()
         shared_with = form.cleaned_data['shared_with']
