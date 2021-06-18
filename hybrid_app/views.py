@@ -71,9 +71,15 @@ class MoveBlockAPI(UpdateAPIView):
     def patch(self, request, direction, document_pk, pk, format=None):
         block_a = self.get_object(pk)
         order_a_old = block_a.order
+        print("order_a_old")
+        print(order_a_old)
 
         min_block_order = models.Block.objects.filter(document__id=self.kwargs['document_pk']).aggregate(Min('order'))['order__min']
+        print("min_block_order")
+        print(min_block_order)
         max_block_order = models.Block.objects.filter(document__id=self.kwargs['document_pk']).aggregate(Max('order'))['order__max']
+        print("max_block_order")
+        print(max_block_order)
 
         # if (direction == "up" and order_a_old != min_block_order) or (direction == "down" and order_a_old != max_block_order):
         if direction == "up":
@@ -89,7 +95,14 @@ class MoveBlockAPI(UpdateAPIView):
                 order__gt=order_a_old
             ).order_by('order').first().order
 
-        block_b = models.Block.objects.get(order=order_b_old)
+        print("order_b_old")
+        print(order_b_old)
+
+        block_b = models.Block.objects.get(document=document_pk, order=order_b_old)
+
+        print("block_b")
+        print(block_b)
+
         order_a_new = order_b_old
         order_b_new = order_a_old
 
