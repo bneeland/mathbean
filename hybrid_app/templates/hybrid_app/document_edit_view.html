@@ -178,7 +178,7 @@
           <h4>[[ block.type ]]</h4>
           <code>ID [[ block.id ]] &middot; Order [[ block.order ]]</code>
           <p>
-            <button
+            <button type="button" class="btn btn-secondary"
               v-model="block"
               @click="moveBlock('up')"
             >
@@ -186,14 +186,20 @@
             </button>
           </p>
           <p>
-            <button
+            <button type="button" class="btn btn-secondary"
               v-model="block.order"
               @click="moveBlock('down')"
             >
               Move down &darr;
             </button>
           </p>
-          <div><button @click="$emit('delete-block')">Delete block</button></div>
+          <div>
+            <button type="button" class="btn btn-danger"
+              @click="$emit('delete-block')"
+            >
+              Delete block
+            </button>
+          </div>
           <template v-if="block.type=='Text'">
             <textarea
               ref="textarea"
