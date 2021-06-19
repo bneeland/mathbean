@@ -154,24 +154,27 @@
               }
             });
         },
-        reorder_next_block: function(next_block_pk, block_a_order) {
+        reorder_next_block: function(next_block_pk, block_a_order, block_a_id) {
           next_block = this.blocks.find(e => e.id === next_block_pk)
           next_block.order = block_a_order
-          this.sortBy('order')
+          this.sortBy('order', block_a_id)
         },
-        sortBy(parameter) {
-          this.blocks.sort((a, b) => a[parameter] < b[parameter] ? -1 : 1);
+        sortBy(order, idToScrollTo) {
+          this.blocks.sort((a, b) => a[order] < b[order] ? -1 : 1);
           // Test
           this.$nextTick(() => {
-            this.scrollToBlock();
+            this.scrollToBlock(idToScrollTo);
           })
-
         },
-        scrollToBlock() {
-          var block_cheating = document.getElementById("block-id-"+1);
+        scrollToBlock(idToScrollTo) {
+          var block_cheating = document.getElementById("block-id-"+idToScrollTo);
           var block_top = block_cheating.getBoundingClientRect().y + window.scrollY;
-          console.log(block_top);
-          window.scrollTo(0, block_top);
+          window.scrollTo({
+            top: block_top,
+            left: 0,
+            behavior: 'auto'
+          });
+
           // Test
         }
       }
@@ -399,21 +402,12 @@
             .then(response => {
               this.block.order = response.data.order;
               next_block_pk = response.data.next_block_pk
-              this.$emit('reorder_next_block', next_block_pk, block_a_order);
+              this.$emit('reorder_next_block', next_block_pk, block_a_order, this.block.id);
               // this.scrollToBlock(this.block);
             })
             .catch(error => {
               console.log("Can't move block up/down because it's the first/last one\n" + error)
             })
-        },
-        scrollToBlock: function (block) {
-          console.log(block);
-          console.log(typeof block);
-          var block_cheating = document.getElementById("block-id-"+block.id)
-          console.log(block_cheating)
-          var block_top = block_cheating.getBoundingClientRect().top;
-          console.log(block_top);
-          window.scrollTo(0, block_top);
         }
       },
       mounted() {
