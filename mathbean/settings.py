@@ -26,9 +26,9 @@ SECRET_KEY = ')^evrl$6_b7$3-+_0i7p_(6!x&ftk^80^*y1nujn&twxg1kq!5'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'http://localhost:8000/'
-    'https://mathbean.herokuapp.com/',
-    'https://www.mathbean.com/',
+    'localhost',
+    'mathbean.herokuapp.com/',
+    'www.mathbean.com/',
 ]
 
 
