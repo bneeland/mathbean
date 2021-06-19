@@ -25,7 +25,11 @@ SECRET_KEY = ')^evrl$6_b7$3-+_0i7p_(6!x&ftk^80^*y1nujn&twxg1kq!5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'http://localhost:8000/'
+    'https://mathbean.herokuapp.com/',
+    'https://www.mathbean.com/',
+]
 
 
 # Application definition
@@ -126,6 +130,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
