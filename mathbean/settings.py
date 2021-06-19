@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ')^evrl$6_b7$3-+_0i7p_(6!x&ftk^80^*y1nujn&twxg1kq!5'
+SECRET_KEY = os.environ.get('SECRET_KEY_MATHBEAN')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -162,3 +163,5 @@ ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+django_heroku.setting(locals())
