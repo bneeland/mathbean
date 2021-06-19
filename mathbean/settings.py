@@ -164,4 +164,4 @@ ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-django_heroku.setting(locals())
+django_heroku.settings(locals())
