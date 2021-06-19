@@ -82,6 +82,9 @@
               .then(response => {
                 this.blocks.push(response.data)
                 this.document.max_block_order = response.data.max_block_order
+                this.$nextTick(() => {
+                  this.scrollToBlock(response.data.id);
+                })
               });
           } else if (block.type == 'Equation'){
             equation = 'y=ax+b';
@@ -161,7 +164,6 @@
         },
         sortBy(order, idToScrollTo) {
           this.blocks.sort((a, b) => a[order] < b[order] ? -1 : 1);
-          // Test
           this.$nextTick(() => {
             this.scrollToBlock(idToScrollTo);
           })
@@ -174,8 +176,6 @@
             left: 0,
             behavior: 'auto'
           });
-
-          // Test
         }
       }
     })
