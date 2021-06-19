@@ -31,7 +31,7 @@
         v-bind:block="block"
         :key="block.id"
         v-on:delete-block="deleteBlock(block.id)"
-        v-bind:id="'block-order-'+block.order"
+        v-bind:id="'block-id-'+block.id"
         :ref="block.id"
         @reorder_next_block="reorder_next_block"
       >
@@ -161,6 +161,18 @@
         },
         sortBy(parameter) {
           this.blocks.sort((a, b) => a[parameter] < b[parameter] ? -1 : 1);
+          // Test
+          this.$nextTick(() => {
+            this.scrollToBlock();
+          })
+
+        },
+        scrollToBlock() {
+          var block_cheating = document.getElementById("block-id-"+1);
+          var block_top = block_cheating.getBoundingClientRect().y + window.scrollY;
+          console.log(block_top);
+          window.scrollTo(0, block_top);
+          // Test
         }
       }
     })
@@ -388,11 +400,21 @@
               this.block.order = response.data.order;
               next_block_pk = response.data.next_block_pk
               this.$emit('reorder_next_block', next_block_pk, block_a_order);
+              // this.scrollToBlock(this.block);
             })
-            // .catch(error => {
-            //   console.log("Can't move block up/down because it's the first/last one\n" + error)
-            // });
+            .catch(error => {
+              console.log("Can't move block up/down because it's the first/last one\n" + error)
+            })
         },
+        scrollToBlock: function (block) {
+          console.log(block);
+          console.log(typeof block);
+          var block_cheating = document.getElementById("block-id-"+block.id)
+          console.log(block_cheating)
+          var block_top = block_cheating.getBoundingClientRect().top;
+          console.log(block_top);
+          window.scrollTo(0, block_top);
+        }
       },
       mounted() {
         if (this.block.type=='Graph') {
