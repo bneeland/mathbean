@@ -169,12 +169,12 @@
           })
         },
         scrollToBlock(idToScrollTo) {
-          var block_cheating = document.getElementById("block-id-"+idToScrollTo);
-          var block_top = block_cheating.getBoundingClientRect().y + window.scrollY;
+          var blockToScrollTo = document.getElementById("block-id-"+idToScrollTo);
+          var block_top = blockToScrollTo.getBoundingClientRect().y + window.scrollY - window.innerHeight*0.1;
           window.scrollTo({
             top: block_top,
             left: 0,
-            behavior: 'auto'
+            behavior: 'smooth'
           });
         }
       }
