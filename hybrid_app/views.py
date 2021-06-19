@@ -134,6 +134,13 @@ class DeleteBlockAPI(DestroyAPIView):
 
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
+
+
+class HomeView(TemplateView):
+    template_name = "hybrid_app/home_view.html"
+
+
+
 class DocumentListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
 

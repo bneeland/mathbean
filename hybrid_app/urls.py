@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/block-edit/<int:pk>', views.BlockEditAPI.as_view()),
     path('api/move-block/<direction>/<int:document_pk>/<int:pk>', views.MoveBlockAPI.as_view()),
     path('api/delete-block/<int:document_pk>/<int:pk>', views.DeleteBlockAPI.as_view()),
+    path('', views.HomeView.as_view(), name='home_view'),
     path('documents/', views.DocumentListView.as_view(), name='document_list_view'),
     path('documents/<int:pk>', views.DocumentEditView.as_view(), name='document_edit_view'),
     path('documents/<int:pk>/share', views.DocumentShareView.as_view(), name='document_share_view'),
