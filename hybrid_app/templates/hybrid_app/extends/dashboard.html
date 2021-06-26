@@ -1,0 +1,26 @@
+{% extends "hybrid_app/extends/base.html" %}
+
+{% block layout %}
+
+  <nav>
+    <p>
+      <a href="{% url 'hybrid_app:document_list_view' %}">Documents</a>
+      <a href="{% url 'hybrid_app:student_list_list_view' %}">Student lists</a>
+      <a href="{% url 'hybrid_app:teacher_list_view' %}">Teachers</a>
+    </p>
+    <hr>
+  </nav>
+
+  <div>
+
+    {% block content %}{% endblock %}
+
+  </div>
+
+  <div>
+
+    {% include "hybrid_app/includes/account.html" %}
+
+  </div>
+
+{% endblock %}

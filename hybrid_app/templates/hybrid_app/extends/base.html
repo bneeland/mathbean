@@ -29,17 +29,8 @@
     <title></title>
   </head>
   <body>
-    <nav>
-      <p>
-        <a href="{% url 'hybrid_app:document_list_view' %}">Documents</a>
-        <a href="{% url 'hybrid_app:student_list_list_view' %}">Student lists</a>
-        <a href="{% url 'hybrid_app:teacher_list_view' %}">Teachers</a>
-        &middot; {{ user }}
-        &middot; <a href="{% url 'account_logout' %}">Log out</a>
-      </p>
-      <hr>
-    </nav>
-    {% block content %}{% endblock %}
+
+    {% block layout %}{% endblock %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 
