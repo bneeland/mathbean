@@ -43,7 +43,7 @@
 
           <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             <div class="btn-group" role="group">
-              <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 File
               </button>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -52,7 +52,14 @@
                 <li><a class="dropdown-item" href="{% url 'hybrid_app:teacher_list_view' %}">Teachers</a></li>
               </ul>
             </div>
-            <a href="{% url 'hybrid_app:document_share_view' pk %}" class="btn btn-primary">Share</a>
+            <div class="btn-group" role="group">
+              <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Share
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a class="dropdown-item" href="{% url 'hybrid_app:document_share_view' pk %}">Share document</a></li>
+              </ul>
+            </div>
           </div>
 
           <div class="btn-group" role="group">
@@ -209,7 +216,7 @@
         },
         scrollToBlock(idToScrollTo) {
           var blockToScrollTo = document.getElementById("block-id-"+idToScrollTo);
-          var block_top = blockToScrollTo.getBoundingClientRect().y + window.scrollY - window.innerHeight*0.15;
+          var block_top = blockToScrollTo.getBoundingClientRect().y + window.scrollY - window.innerHeight*0.25;
           window.scrollTo({
             top: block_top,
             left: 0,
@@ -509,7 +516,7 @@
       delimiters: ["[[", "]]"],
       emits: ['block-added'],
       template: `
-        <select id="type" class="form-select" v-model="type" @change="onAddBlock">
+        <select id="type" class="form-select border-0" v-model="type" @change="onAddBlock" style="cursor: pointer;">
           <option disabled value="default">Add block</option>
           <option>Graph</option>
           <option>Equation</option>
