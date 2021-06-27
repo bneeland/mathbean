@@ -3,31 +3,67 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+
   <div id="app">
-    <div id="tools">
-      <div
-        v-if="editingMode"
-      >
-        <input
-          ref="input"
-          v-model="document.name"
-          @blur="editingMode=false; updateContent(document.id, document.name);"
-          @keyup.enter="editingMode=false; updateContent(document.id, document.name);"
-        />
+
+    <div id="tools" class="container-fluid fixed-top bg-white border-bottom shadow-sm">
+      <div class="row">
+        <div class="col">
+
+          <div
+            v-if="editingMode"
+          >
+            <input
+              ref="input"
+              v-model="document.name"
+              @blur="editingMode=false; updateContent(document.id, document.name);"
+              @keyup.enter="editingMode=false; updateContent(document.id, document.name);"
+            />
+          </div>
+          <div v-else>
+            <p
+              @click="switchToEditingMode();" style="cursor: pointer"
+              :key="document.id"
+            >
+              [[ document.name ]]
+            </p>
+          </div>
+
+        </div>
+        <div class="col">
+
+          <div class="float-end">
+            {% include "hybrid_app/includes/account.html" %}
+          </div>
+
+        </div>
       </div>
-      <div v-else>
-        <h1
-          @click="switchToEditingMode();" style="cursor: pointer"
-          :key="document.id"
-        >
-          [[ document.name ]]
-        </h1>
+      <div class="row">
+        <div class="col">
+
+          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <div class="btn-group" role="group">
+              <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                File
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a class="dropdown-item" href="{% url 'hybrid_app:document_list_view' %}">Documents</a></li>
+                <li><a class="dropdown-item" href="{% url 'hybrid_app:student_list_view' %}">Students</a></li>
+                <li><a class="dropdown-item" href="{% url 'hybrid_app:teacher_list_view' %}">Teachers</a></li>
+              </ul>
+            </div>
+            <a href="{% url 'hybrid_app:document_share_view' pk %}" class="btn btn-primary">Share</a>
+          </div>
+
+          <div class="btn-group" role="group">
+            <block-form @block-added="onAddBlock"></block-form>
+          </div>
+
+        </div>
       </div>
-      <p><a href="{% url 'hybrid_app:document_share_view' pk %}">Share document</a></p>
-      <block-form @block-added="onAddBlock"></block-form>
     </div>
-    <hr />
-    <div id="blocks">
+
+    <div id="blocks" class="container-fluid">
       <block-item
         v-for="block in blocks"
         v-bind:block="block"
@@ -39,8 +75,7 @@
       >
       </block-item>
     </div>
-    <hr />
-    <div style="margin-bottom: 300px;" />
+
   </div>
 
   <script>
@@ -191,9 +226,7 @@
       props: ['block', 'graph'],
       emits: ['reorder_next_block'],
       template: `
-        <div class="block" style="border: 1px solid lightgrey; margin-bottom: 20px;">
-          <h4>[[ block.type ]]</h4>
-          <code>ID [[ block.id ]] &middot; Order [[ block.order ]]</code>
+        <div class="block" class="border-bottom py-3">
           <p>
             <button type="button" class="btn btn-secondary"
               v-model="block"
@@ -463,10 +496,8 @@
       delimiters: ["[[", "]]"],
       emits: ['block-added'],
       template: `
-        <h3>Add block</h3>
-        <label for="type">Type</label>
-        <select id="type" v-model="type" @change="onAddBlock">
-          <option></option>
+        <select id="type" class="form-select" v-model="type" @change="onAddBlock">
+          <option disabled value="default">Add block</option>
           <option>Graph</option>
           <option>Equation</option>
           <option>Text</option>
@@ -475,7 +506,7 @@
       `,
       data() {
         return {
-          type: ''
+          type: 'default'
         }
       },
       methods: {

@@ -149,7 +149,7 @@ class DocumentListView(LoginRequiredMixin, ListView):
     context_object_name = "documents"
 
     def get_queryset(self):
-        return models.Document.objects.filter(user=self.request.user.id)
+        return models.Document.objects.filter(user=self.request.user.id).order_by('name')
 
 class CreateDocumentView(LoginRequiredMixin, RedirectView):
     login_url = 'account_login'
