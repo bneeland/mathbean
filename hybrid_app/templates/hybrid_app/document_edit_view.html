@@ -76,6 +76,8 @@
       </block-item>
     </div>
 
+    <div class="spacer" />
+
   </div>
 
   <script>
@@ -207,7 +209,7 @@
         },
         scrollToBlock(idToScrollTo) {
           var blockToScrollTo = document.getElementById("block-id-"+idToScrollTo);
-          var block_top = blockToScrollTo.getBoundingClientRect().y + window.scrollY - window.innerHeight*0.1;
+          var block_top = blockToScrollTo.getBoundingClientRect().y + window.scrollY - window.innerHeight*0.15;
           window.scrollTo({
             top: block_top,
             left: 0,
@@ -227,72 +229,83 @@
       emits: ['reorder_next_block'],
       template: `
         <div class="block" class="border-bottom py-3">
-          <p>
-            <button type="button" class="btn btn-secondary"
-              v-model="block"
-              @click="moveBlock('up')"
-            >
-              Move up &uarr;
-            </button>
-          </p>
-          <p>
-            <button type="button" class="btn btn-secondary"
-              v-model="block.order"
-              @click="moveBlock('down')"
-            >
-              Move down &darr;
-            </button>
-          </p>
-          <div>
-            <button type="button" class="btn btn-danger"
-              @click="$emit('delete-block')"
-            >
-              Delete block
-            </button>
+          <div class="row align-items-center">
+            <div class="col">
+
+                <button type="button" class="btn btn-white"
+                  v-model="block"
+                  @click="moveBlock('up')"
+                >
+                  <i class="fas fa-angle-up"></i>
+                </button>
+                <br>
+                <button type="button" class="btn btn-white"
+                  v-model="block.order"
+                  @click="moveBlock('down')"
+                >
+                  <i class="fas fa-angle-down"></i>
+                </button>
+
+            </div>
+            <div class="col">
+
+              <template v-if="block.type=='Text'">
+                <textarea
+                  ref="textarea"
+                  v-if="editingMode"
+                  v-model="block.content"
+                  @blur="editingMode=false; updateContent(block.id, block.content);"
+                >
+                </textarea>
+                <div v-else>
+                  <p @click="switchToEditingMode();" style="cursor: pointer">
+                    [[ block.content ]]
+                  </p>
+                </div>
+              </template>
+              <template v-if="block.type=='Graph'">
+                <div @mouseout="updateContent(block.id, updateContentGraph(block.id));">
+                  <button @click="toggleDrawing(block.id)">Draw: [[ drawingMode ]]</button>
+                  <button @click="deleteSelected(block.id)">Delete</button>
+                  <button @click="toggleLine(block.id)">Line: [[ lineMode ]]</button>
+                  <canvas :id="'graph-'+block.id" ref="graph" style="border: 1px solid grey"></canvas>
+                </div>
+              </template>
+              <template v-if="block.type=='Image'">
+                <div>
+                  <img :src="block.image" style="display: inline-block; max-width:500px;">
+                </div>
+                <div>
+                  <input type="file" @change="onFileSelected">
+                  <button @click="onUpload(block.id);">Upload</button>
+                </div>
+              </template>
+              <template v-if="block.type=='Equation'">
+                <br>
+                <math-field
+                  :id="'equation-'+block.id"
+                  virtual-keyboard-mode="onfocus"
+                  style="width: 500px;"
+                  v-model="block.equation"
+                  @blur="updateContentEquation(block.id);"
+                >
+                  [[ block.equation ]]
+                </math-field>
+              </template>
+
+            </div>
+            <div class="col">
+
+              <div class="float-end">
+                <button type="button" class="btn btn-white"
+                  @click="$emit('delete-block')"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+
+            </div>
           </div>
-          <template v-if="block.type=='Text'">
-            <textarea
-              ref="textarea"
-              v-if="editingMode"
-              v-model="block.content"
-              @blur="editingMode=false; updateContent(block.id, block.content);"
-            >
-            </textarea>
-            <div v-else>
-              <p @click="switchToEditingMode();" style="cursor: pointer">
-                [[ block.content ]]
-              </p>
-            </div>
-          </template>
-          <template v-if="block.type=='Graph'">
-            <div @mouseout="updateContent(block.id, updateContentGraph(block.id));">
-              <button @click="toggleDrawing(block.id)">Draw: [[ drawingMode ]]</button>
-              <button @click="deleteSelected(block.id)">Delete</button>
-              <button @click="toggleLine(block.id)">Line: [[ lineMode ]]</button>
-              <canvas :id="'graph-'+block.id" ref="graph" style="border: 1px solid grey"></canvas>
-            </div>
-          </template>
-          <template v-if="block.type=='Image'">
-            <div>
-              <img :src="block.image" style="display: inline-block; max-width:500px;">
-            </div>
-            <div>
-              <input type="file" @change="onFileSelected">
-              <button @click="onUpload(block.id);">Upload</button>
-            </div>
-          </template>
-          <template v-if="block.type=='Equation'">
-            <br>
-            <math-field
-              :id="'equation-'+block.id"
-              virtual-keyboard-mode="onfocus"
-              style="width: 500px;"
-              v-model="block.equation"
-              @blur="updateContentEquation(block.id);"
-            >
-              [[ block.equation ]]
-            </math-field>
-          </template>
         </div>
       `,
       data() {
