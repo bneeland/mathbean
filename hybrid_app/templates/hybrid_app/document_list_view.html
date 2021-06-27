@@ -2,14 +2,29 @@
 
 {% block content %}
 
-<div id="tools">
-  <a href="{% url 'hybrid_app:create_document_view' %}">New document</a>
-</div>
-<hr />
-<div id="documents">
-  {% for document in documents %}
-    <p><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}">{{ document.name }}</a> &middot; {{ document.created_at }}</p>
-  {% endfor %}
-</div>
+  <div class="mb-4">
+    <a class="btn btn-primary" href="{% url 'hybrid_app:create_document_view' %}" role="button"><i class="fas fa-plus"></i> New document</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" class="fw-normal">Name</th>
+        <th scope="col" class="fw-normal">Created</th>
+        <th scope="col" class="fw-normal">Last udpated</th>
+        <th scope="col" class="fw-normal"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for document in documents %}
+        <tr>
+          <td><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}">{{ document.name }}</a></th>
+          <td>{{ document.created_at }}</td>
+          <td>{{ document.modified_at }}</td>
+          <td><small><a href="#"><i class="fas fa-trash"></i></a></small></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}

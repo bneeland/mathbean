@@ -232,7 +232,7 @@ class CreateStudentListView(LoginRequiredMixin, CreateView):
 
     model = models.StudentList
     form_class = forms.StudentListForm
-    template_name = "hybrid_app/update_student_list_view.html"
+    template_name = "hybrid_app/create_student_list_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_list_view")
 
     def get_form_kwargs(self):
