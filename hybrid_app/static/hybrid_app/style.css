@@ -39,11 +39,11 @@ a:hover {
 }
 
 #tools {
-  height: 80px;
+  height: 85px;
 }
 
 #blocks {
-  margin-top: 80px;
+  margin-top: 85px;
 }
 
 .spacer {
@@ -66,4 +66,8 @@ a:hover {
 
 .document-name input:focus {
   border: 1px solid blue;
+}
+
+.col-block-tools {
+  flex: 0 0 100px;
 }

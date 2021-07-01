@@ -7,7 +7,7 @@
   <div id="app">
 
     <div id="tools" class="container-fluid fixed-top bg-white shadow-sm">
-      <div class="row align-items-center">
+      <div class="row align-items-center mt-1">
         <div class="col">
 
           <div
@@ -64,11 +64,12 @@
                 <li><a class="dropdown-item" href="{% url 'hybrid_app:document_share_view' pk %}">Share document</a></li>
               </ul>
             </div>
+            <div class="btn-group" role="group">
+              <block-form @block-added="onAddBlock"></block-form>
+            </div>
           </div>
 
-          <div class="btn-group" role="group">
-            <block-form @block-added="onAddBlock"></block-form>
-          </div>
+
 
         </div>
       </div>
@@ -241,7 +242,7 @@
       template: `
         <div class="block" class="border-bottom py-3">
           <div class="row align-items-center">
-            <div class="col">
+            <div class="col col-block-tools">
 
                 <button type="button" class="btn btn-white"
                   v-model="block"
@@ -305,7 +306,7 @@
               </template>
 
             </div>
-            <div class="col">
+            <div class="col col-block-tools">
 
               <div class="float-end">
                 <button type="button" class="btn btn-white"
