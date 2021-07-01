@@ -6,12 +6,13 @@
 
   <div id="app">
 
-    <div id="tools" class="container-fluid fixed-top bg-white border-bottom shadow-sm">
-      <div class="row">
+    <div id="tools" class="container-fluid fixed-top bg-white shadow-sm">
+      <div class="row align-items-center">
         <div class="col">
 
           <div
             v-if="editingMode"
+            class="document-name"
           >
             <input
               ref="input"
@@ -20,13 +21,16 @@
               @keyup.enter="editingMode=false; updateContent(document.id, document.name);"
             />
           </div>
-          <div v-else>
-            <p
-              @click="switchToEditingMode();" style="cursor: pointer"
+          <div
+            v-else
+            class="document-name mt-auto"
+          >
+            <div
+              @click="switchToEditingMode();"
               :key="document.id"
             >
               [[ document.name ]]
-            </p>
+            </div>
           </div>
 
         </div>
@@ -38,7 +42,7 @@
 
         </div>
       </div>
-      <div class="row">
+      <div class="row align-items-center">
         <div class="col">
 
           <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
