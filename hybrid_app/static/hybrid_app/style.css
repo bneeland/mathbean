@@ -88,3 +88,7 @@ a:hover {
 .block:hover {
   border: 1px solid lightgrey;
 }
+
+.block-text {
+  width: 100%;
+}

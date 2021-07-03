@@ -242,19 +242,19 @@
           <div class="row align-items-center">
             <div class="col col-block-tools">
 
-                <button type="button" class="btn btn-white btn-block-tools"
-                  v-model="block"
-                  @click="moveBlock('up')"
-                >
-                  <i class="fas fa-angle-up"></i>
-                </button>
-                <br>
-                <button type="button" class="btn btn-white btn-block-tools"
-                  v-model="block.order"
-                  @click="moveBlock('down')"
-                >
-                  <i class="fas fa-angle-down"></i>
-                </button>
+              <button type="button" class="btn btn-white btn-block-tools"
+                v-model="block"
+                @click="moveBlock('up')"
+              >
+                <i class="fas fa-angle-up"></i>
+              </button>
+              <br>
+              <button type="button" class="btn btn-white btn-block-tools"
+                v-model="block.order"
+                @click="moveBlock('down')"
+              >
+                <i class="fas fa-angle-down"></i>
+              </button>
 
             </div>
             <div class="col">
@@ -265,6 +265,7 @@
                   v-if="editingMode"
                   v-model="block.content"
                   @blur="editingMode=false; updateContent(block.id, block.content);"
+                  class="block-text"
                 >
                 </textarea>
                 <div v-else>
