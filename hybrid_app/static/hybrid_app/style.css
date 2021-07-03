@@ -70,4 +70,21 @@ a:hover {
 
 .col-block-tools {
   flex: 0 0 100px;
+  color: blue;
+}
+
+.btn-block-tools {
+  color: lightgrey;
+}
+
+.btn-block-tools:hover {
+  color: grey;
+}
+
+.block {
+  border: 1px solid white;
+}
+
+.block:hover {
+  border: 1px solid lightgrey;
 }

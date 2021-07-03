@@ -4,7 +4,7 @@
 
 {% block content %}
 
-  <div id="app">
+  <div id="app" class="bg-light">
 
     <div id="tools" class="container-fluid fixed-top bg-white shadow-sm">
       <div class="row align-items-center mt-1">
@@ -69,13 +69,11 @@
             </div>
           </div>
 
-
-
         </div>
       </div>
     </div>
 
-    <div id="blocks" class="container-fluid">
+    <div id="blocks" class="container shadow-sm py-3 bg-white">
       <block-item
         v-for="block in blocks"
         v-bind:block="block"
@@ -240,18 +238,18 @@
       props: ['block', 'graph'],
       emits: ['reorder_next_block'],
       template: `
-        <div class="block" class="border-bottom py-3">
+        <div class="block" class="py-3">
           <div class="row align-items-center">
             <div class="col col-block-tools">
 
-                <button type="button" class="btn btn-white"
+                <button type="button" class="btn btn-white btn-block-tools"
                   v-model="block"
                   @click="moveBlock('up')"
                 >
                   <i class="fas fa-angle-up"></i>
                 </button>
                 <br>
-                <button type="button" class="btn btn-white"
+                <button type="button" class="btn btn-white btn-block-tools"
                   v-model="block.order"
                   @click="moveBlock('down')"
                 >
@@ -309,7 +307,7 @@
             <div class="col col-block-tools">
 
               <div class="float-end">
-                <button type="button" class="btn btn-white"
+                <button type="button" class="btn btn-white btn-block-tools"
                   @click="$emit('delete-block')"
                 >
                   <i class="fas fa-trash"></i>
