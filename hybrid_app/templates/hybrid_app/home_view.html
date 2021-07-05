@@ -1,14 +1,12 @@
-{% extends "hybrid_app/extends/base.html" %}
+{% extends "hybrid_app/extends/front.html" %}
+
+{% block title %}Home{% endblock %}
 
 {% block content %}
 
 <div>
   <p><a href="{% url 'account_login' %}">Log in</a></p>
   <p><a href="{% url 'account_signup' %}">Sign up</a></p>
-</div>
-
-<div>
-  <h1>MathBean</h1>
 </div>
 
 {% endblock %}

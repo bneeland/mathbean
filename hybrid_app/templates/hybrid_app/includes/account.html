@@ -1,8 +1,13 @@
 <div class="btn-group">
-  <button type="button" class="btn btn-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    {{ user }}
-  </button>
-  <ul class="dropdown-menu dropdown-menu-end">
-    <li><a class="dropdown-item" href="{% url 'account_logout' %}">Log out</a></li>
-  </ul>
+  {% if is_authenticated %}
+    <button type="button" class="btn btn-white dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      {{ user }}
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li><a class="dropdown-item" href="{% url 'account_logout' %}">Log out</a></li>
+    </ul>
+  {% else %}
+    <a href="{% url 'account_login' %}">Log in</a>&nbsp;&middot;&nbsp;
+    <a href="{% url 'account_signup' %}">Sign up</a>
+  {% endif %}
 </div>
