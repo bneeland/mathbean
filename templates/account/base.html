@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'hybrid_app/style.css' %}">
+    <script src="https://kit.fontawesome.com/e47c63ce68.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    {% block body %}
+
+      <div class="container">
+
+        <div class="row my-5">
+          <div class="col-md-6 offset-md-3 text-center">
+            <a class="navbar-brand" href="{% url 'hybrid_app:home_view' %}">MathBean</a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 offset-md-3">
+
+            {% comment %}{% if messages %}
+            <div>
+              <strong>Messages:</strong>
+              <ul>
+                {% for message in messages %}
+                <li>{{message}}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}{% endcomment %}
+
+            {% comment %}<div>
+              <ul class="nav">
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'account_email' %}">Change E-mail</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Log Out</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Log In</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">Sign Up</a></li>
+                {% endif %}
+              </ul>
+            </div>{% endcomment %}
+
+            {% block content %}
+            {% endblock %}
+
+          </div>
+        </div>
+
+        <div class="row my-5"></div>
+
+      </div>
+
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+  </body>
+</html>

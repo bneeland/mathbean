@@ -160,7 +160,7 @@ ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE=False
 ACCOUNT_EMAIL_VERIFICATION='none'
 
 LOGIN_REDIRECT_URL = 'hybrid_app:document_list_view'
-ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'hybrid_app:home_view'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
