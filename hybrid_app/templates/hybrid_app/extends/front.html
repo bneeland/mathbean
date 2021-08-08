@@ -2,10 +2,10 @@
 
 {% block layout %}
 
-<div class="container-fluid p-5">
+<div class="container my-5">
 
   <nav class="navbar navbar-expand navbar-light bg-white">
-    <div class="container-fluid">
+    <!-- <div class="container-fluid"> -->
       <a class="navbar-brand" href="{% url 'hybrid_app:home_view' %}">MathBean</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -26,17 +26,11 @@
           {% include "hybrid_app/includes/account.html" %}
         </span>
       </div>
-    </div>
+    <!-- </div> -->
   </nav>
 
 </div>
 
-<div class="container-fluid p-5">
-  <div class="row">
-    <div class="col">
-      {% block content %}{% endblock %}
-    </div>
-  </div>
-</div>
+{% block content %}{% endblock %}
 
 {% endblock %}

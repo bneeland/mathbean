@@ -7,8 +7,14 @@
   {% if user.is_authenticated %}
     <a href="{% url 'hybrid_app:document_list_view' %}">Go to dashboard</a>
   {% else %}
-    <p>Welcome to MathBean.</p>
-    <p><a href="{% url 'account_login' %}">Log in</a> or <a href="{% url 'account_signup' %}">Sign up</a> to continue.</p>
+    <div class="container my-5">
+      <div class="row">
+        <div class="col">
+          <p>Welcome to MathBean.</p>
+          <p><a href="{% url 'account_login' %}">Log in</a> or <a href="{% url 'account_signup' %}">Sign up</a> to continue.</p>
+        </div>
+      </div>
+    </div>
   {% endif %}
 
 {% endblock %}
