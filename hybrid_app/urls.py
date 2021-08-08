@@ -31,7 +31,6 @@ urlpatterns = [
     path('teachers/<int:pk>/update', views.UpdateTeacherView.as_view(), name='update_teacher_view'),
     path('create-document', views.CreateDocumentView.as_view(), name='create_document_view'),
     path('block-create-view', views.BlockCreateView.as_view(), name='block_create_view'),
-    path('test-view', views.TestView.as_view(), name="test_view"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
