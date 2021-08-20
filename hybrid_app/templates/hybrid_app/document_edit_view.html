@@ -270,10 +270,12 @@
                   class="block-text"
                 >
                 </textarea>
-                <div v-else>
-                  <p @click="switchToEditingMode();" style="cursor: pointer">
-                    [[ block.content ]]
-                  </p>
+                <div
+                  v-else
+                  @click="switchToEditingMode();"
+                  class="block-text"
+                >
+                  [[ block.content ]]
                 </div>
               </template>
               <template v-if="block.type=='Graph'">
@@ -469,7 +471,7 @@
             .catch(error => {
               console.log("Can't move block up/down because it's the first/last one\n" + error)
             })
-        }
+        },
       },
       mounted() {
         if (this.block.type=='Graph') {

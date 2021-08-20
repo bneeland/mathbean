@@ -16,6 +16,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
+  color: black;
 }
 
 a {
@@ -23,6 +24,10 @@ a {
 }
 
 a:hover {
+  color: black;
+}
+
+.table {
   color: black;
 }
 
@@ -89,6 +94,16 @@ a:hover {
   border: 1px solid lightgrey;
 }
 
-.block-text {
+div.block-text, textarea.block-text {
   width: 100%;
+  padding: 2px;
+  border: 1px solid white;
+}
+
+div.block-text:hover {
+  cursor: pointer;
+}
+
+textarea.block-text:focus {
+  height: 200px;
 }
