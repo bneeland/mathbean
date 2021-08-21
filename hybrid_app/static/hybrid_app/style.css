@@ -100,6 +100,10 @@ div.block-text, textarea.block-text {
   border: 1px solid white;
 }
 
+div.block-text {
+  white-space: pre-wrap;
+}
+
 div.block-text:hover {
   cursor: pointer;
 }
