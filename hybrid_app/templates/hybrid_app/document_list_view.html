@@ -23,10 +23,15 @@
           <td><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}">{{ document.name }}</a></td>
           <td>{{ document.created_at }}</td>
           <td>{{ document.modified_at }}</td>
-          <td><small><a href="#"><i class="fas fa-trash"></i></a></small></td>
+          <td><small><a href="{% url 'hybrid_app:document_delete_view' document.pk %}" type="button" class="btn btn-white btn-block-tools"><i class="fas fa-trash"></i></a></small></td>
         </tr>
+
       {% endfor %}
     </tbody>
   </table>
+
+
+
+
 
 {% endblock %}

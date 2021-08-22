@@ -20,6 +20,7 @@ urlpatterns = [
     path('documents/', views.DocumentListView.as_view(), name='document_list_view'),
     path('documents/<int:pk>', views.DocumentEditView.as_view(), name='document_edit_view'),
     path('documents/<int:pk>/share', views.DocumentShareView.as_view(), name='document_share_view'),
+    path('documents/<int:pk>/delete', views.DocumentDeleteView.as_view(), name='document_delete_view'),
     path('student-lists', views.StudentListListView.as_view(), name='student_list_list_view'),
     path('student-lists/create', views.CreateStudentListView.as_view(), name='create_student_list_view'),
     path('student-lists/<int:pk>/update', views.UpdateStudentListView.as_view(), name='update_student_list_view'),

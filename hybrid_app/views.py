@@ -6,7 +6,7 @@ from rest_framework import status
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.base import RedirectView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.db.models import Min, Max
 from django.contrib.auth import get_user_model
@@ -216,6 +216,13 @@ class DocumentShareView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 except:
                     print("User matching email doesn't exits")
         return super().form_valid(form)
+
+class DocumentDeleteView(LoginRequiredMixin, DeleteView):
+    login_url = 'account_login'
+
+    model = models.Document
+    template_name = "hybrid_app/document_delete_view.html"
+    success_url = reverse_lazy("hybrid_app:document_list_view")
 
 class StudentListListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
