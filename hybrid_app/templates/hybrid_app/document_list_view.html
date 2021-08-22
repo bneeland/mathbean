@@ -20,7 +20,7 @@
     <tbody>
       {% for document in documents %}
         <tr>
-          <td><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}">{{ document.name }}</a></th>
+          <td><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}">{{ document.name }}</a></td>
           <td>{{ document.created_at }}</td>
           <td>{{ document.modified_at }}</td>
           <td><small><a href="#"><i class="fas fa-trash"></i></a></small></td>
