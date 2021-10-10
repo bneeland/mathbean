@@ -375,22 +375,6 @@ class TeacherListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.Teacher.objects.filter(user=self.request.user.id)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     User = get_user_model()
-    #     users = User.objects.all()
-    #     context["matched"] = {}
-    #     for student_teacher in context['teachers']:
-    #         matched = False
-    #         for teacher_user in users:
-    #             if student_teacher.email == teacher_user.email:
-    #                 teacher_students = models.Student.objects.filter(user=teacher_user)
-    #                 for teacher_student in teacher_students:
-    #                     if str(self.request.user.email) == str(teacher_student):
-    #                         matched = True
-    #         context["matched"][student_teacher.pk] = matched
-    #     return context
-
 class CreateTeacherView(LoginRequiredMixin, CreateView):
     login_url = 'account_login'
 
