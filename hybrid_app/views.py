@@ -202,7 +202,6 @@ class DocumentShareView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 try:
                     # Find student in users; if not found, raise error
                     student_user = User.objects.filter(email=student.email).get()
-                    # print(student_user)
 
                     original_document = self.get_object()
 
@@ -273,22 +272,6 @@ class StudentListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return models.Student.objects.filter(user=self.request.user.id)
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["matched"] = {}
-    #     User = get_user_model()
-    #     users = User.objects.all()
-    #     for teacher_student in context['students']:
-    #         matched = False
-    #         for student_user in users:
-    #             if teacher_student.email == student_user.email:
-    #                 student_teachers = models.Teacher.objects.filter(user=student_user)
-    #                 for student_teacher in student_teachers:
-    #                     if str(self.request.user.email) == str(student_teacher):
-    #                         matched = True
-    #         context["matched"][teacher_student.pk] = matched
-    #     return context
 
 class CreateStudentView(LoginRequiredMixin, CreateView):
     login_url = 'account_login'
@@ -364,6 +347,44 @@ class UpdateStudentView(LoginRequiredMixin, UpdateView):
                         student_teacher.save()
 
         return super().form_valid(form)
+
+class DeleteStudentView(LoginRequiredMixin, DeleteView):
+    login_url = 'account_login'
+
+    model = models.Student
+    template_name = "hybrid_app/delete_student_view.html"
+    success_url = reverse_lazy("hybrid_app:student_list_view")
+
+    def delete(self, *args, **kwargs):
+        self.object = self.get_object()
+
+        # If previously matched, unmatch previous matched user's teacher instance
+        if self.object.matched == True:
+            previous_student = models.Student.objects.get(pk=self.object.pk)
+            User = get_user_model()
+            previous_user = User.objects.get(email=previous_student.email)
+            previous_student_teacher = models.Teacher.objects.get(user=previous_user, email=self.request.user.email)
+            previous_student_teacher.matched = False
+            previous_student_teacher.save()
+
+        # # Check if matched with a student user
+        # this_teacher_student = form.cleaned_data['email']
+        #
+        # User = get_user_model()
+        # student_users = User.objects.all()
+        #
+        # form.instance.matched = False
+        #
+        # for student_user in student_users:
+        #     if student_user.email == this_teacher_student:
+        #         student_teachers = models.Teacher.objects.filter(user=student_user)
+        #         for student_teacher in student_teachers:
+        #             if str(self.request.user.email) == str(student_teacher):
+        #                 form.instance.matched = True
+        #                 student_teacher.matched = True
+        #                 student_teacher.save()
+
+        return super(DeleteStudentView, self).delete(*args, **kwargs)
 
 class TeacherListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'

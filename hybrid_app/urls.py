@@ -27,6 +27,7 @@ urlpatterns = [
     path('students', views.StudentListView.as_view(), name='student_list_view'),
     path('students/create', views.CreateStudentView.as_view(), name='create_student_view'),
     path('students/<int:pk>/update', views.UpdateStudentView.as_view(), name='update_student_view'),
+    path('students/<int:pk>/delete', views.DeleteStudentView.as_view(), name='delete_student_view'),
     path('teachers', views.TeacherListView.as_view(), name='teacher_list_view'),
     path('teachers/create', views.CreateTeacherView.as_view(), name='create_teacher_view'),
     path('teachers/<int:pk>/update', views.UpdateTeacherView.as_view(), name='update_teacher_view'),
