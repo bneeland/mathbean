@@ -5,15 +5,15 @@
 {% block content %}
 
 <div id="tools">
-  <a href="{% url 'hybrid_app:create_student_list_view' %}">New student list</a>
+  <a href="{% url 'hybrid_app:student_list_list_view' %}">Student lists</a>
   <a href="{% url 'hybrid_app:student_list_view' %}">Students</a>
   <hr />
-  <a href="{% url 'hybrid_app:create_student_view' %}">New student</a>
+  <a href="{% url 'hybrid_app:student_create_view' %}">New student</a>
 </div>
 <hr />
 <div id="students">
   {% for student in students %}
-    <p><a href="{% url 'hybrid_app:update_student_view' pk=student.pk %}">{{ student.email }}</a> &middot; {{ student.created_at }} &middot; Matched: {{ student.matched }} &middot; <a href="{% url 'hybrid_app:delete_student_view' student.pk %}">Delete</a></p>
+    <p><a href="{% url 'hybrid_app:student_update_view' pk=student.pk %}">{{ student.email }}</a> &middot; {{ student.created_at }} &middot; Matched: {{ student.matched }} &middot; <a href="{% url 'hybrid_app:student_delete_view' student.pk %}">Delete</a></p>
   {% endfor %}
 </div>
 

@@ -151,7 +151,7 @@ class DocumentListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.Document.objects.filter(user=self.request.user.id).order_by('name')
 
-class CreateDocumentView(LoginRequiredMixin, RedirectView):
+class DocumentCreateView(LoginRequiredMixin, RedirectView):
     login_url = 'account_login'
 
     def get_redirect_url(self, *args, **kwargs):
@@ -233,16 +233,16 @@ class StudentListListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.StudentList.objects.filter(user=self.request.user.id)
 
-class CreateStudentListView(LoginRequiredMixin, CreateView):
+class StudentListCreateView(LoginRequiredMixin, CreateView):
     login_url = 'account_login'
 
     model = models.StudentList
     form_class = forms.StudentListForm
-    template_name = "hybrid_app/create_student_list_view.html"
+    template_name = "hybrid_app/student_list_create_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_list_view")
 
     def get_form_kwargs(self):
-        kwargs = super(CreateStudentListView, self).get_form_kwargs()
+        kwargs = super(StudentListCreateView, self).get_form_kwargs()
         kwargs.update({'user': self.request.user})
         return kwargs
 
@@ -250,16 +250,16 @@ class CreateStudentListView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class UpdateStudentListView(LoginRequiredMixin, UpdateView):
+class StudentListUpdateView(LoginRequiredMixin, UpdateView):
     login_url = 'account_login'
 
     model = models.StudentList
     form_class = forms.StudentListForm
-    template_name = "hybrid_app/update_student_list_view.html"
+    template_name = "hybrid_app/student_list_update_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_list_view")
 
     def get_form_kwargs(self):
-        kwargs = super(UpdateStudentListView, self).get_form_kwargs()
+        kwargs = super(StudentListUpdateView, self).get_form_kwargs()
         kwargs.update({'user': self.request.user})
         return kwargs
 
@@ -273,12 +273,12 @@ class StudentListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.Student.objects.filter(user=self.request.user.id)
 
-class CreateStudentView(LoginRequiredMixin, CreateView):
+class StudentCreateView(LoginRequiredMixin, CreateView):
     login_url = 'account_login'
 
     model = models.Student
     fields = ['email', ]
-    template_name = "hybrid_app/create_student_view.html"
+    template_name = "hybrid_app/student_create_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_view")
 
     def form_valid(self, form):
@@ -305,12 +305,12 @@ class CreateStudentView(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
-class UpdateStudentView(LoginRequiredMixin, UpdateView):
+class StudentUpdateView(LoginRequiredMixin, UpdateView):
     login_url = 'account_login'
 
     model = models.Student
     fields = ['email', ]
-    template_name = "hybrid_app/update_student_view.html"
+    template_name = "hybrid_app/student_update_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_view")
 
     def get_queryset(self):
@@ -348,11 +348,11 @@ class UpdateStudentView(LoginRequiredMixin, UpdateView):
 
         return super().form_valid(form)
 
-class DeleteStudentView(LoginRequiredMixin, DeleteView):
+class StudentDeleteView(LoginRequiredMixin, DeleteView):
     login_url = 'account_login'
 
     model = models.Student
-    template_name = "hybrid_app/delete_student_view.html"
+    template_name = "hybrid_app/student_delete_view.html"
     success_url = reverse_lazy("hybrid_app:student_list_view")
 
     def delete(self, *args, **kwargs):
@@ -367,7 +367,7 @@ class DeleteStudentView(LoginRequiredMixin, DeleteView):
             previous_student_teacher.matched = False
             previous_student_teacher.save()
 
-        return super(DeleteStudentView, self).delete(*args, **kwargs)
+        return super(StudentDeleteView, self).delete(*args, **kwargs)
 
 class TeacherListView(LoginRequiredMixin, ListView):
     login_url = 'account_login'
@@ -379,12 +379,12 @@ class TeacherListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.Teacher.objects.filter(user=self.request.user.id)
 
-class CreateTeacherView(LoginRequiredMixin, CreateView):
+class TeacherCreateView(LoginRequiredMixin, CreateView):
     login_url = 'account_login'
 
     model = models.Teacher
     fields = ['email', ]
-    template_name = "hybrid_app/create_teacher_view.html"
+    template_name = "hybrid_app/teacher_create_view.html"
     success_url = reverse_lazy("hybrid_app:teacher_list_view")
 
     def form_valid(self, form):
@@ -408,12 +408,12 @@ class CreateTeacherView(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
-class UpdateTeacherView(LoginRequiredMixin, UpdateView):
+class TeacherUpdateView(LoginRequiredMixin, UpdateView):
     login_url = 'account_login'
 
     model = models.Teacher
     fields = ['email', ]
-    template_name = "hybrid_app/update_teacher_view.html"
+    template_name = "hybrid_app/teacher_update_view.html"
     success_url = reverse_lazy("hybrid_app:teacher_list_view")
 
     def form_valid(self, form):
