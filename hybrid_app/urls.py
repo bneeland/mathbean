@@ -31,6 +31,7 @@ urlpatterns = [
     path('teachers', views.TeacherListView.as_view(), name='teacher_list_view'),
     path('teachers/create', views.CreateTeacherView.as_view(), name='create_teacher_view'),
     path('teachers/<int:pk>/update', views.UpdateTeacherView.as_view(), name='update_teacher_view'),
+    path('teachers/<int:pk>/delete', views.DeleteTeacherView.as_view(), name='delete_teacher_view'),
     path('create-document', views.CreateDocumentView.as_view(), name='create_document_view'),
     path('block-create-view', views.BlockCreateView.as_view(), name='block_create_view'),
 ]

@@ -367,23 +367,6 @@ class DeleteStudentView(LoginRequiredMixin, DeleteView):
             previous_student_teacher.matched = False
             previous_student_teacher.save()
 
-        # # Check if matched with a student user
-        # this_teacher_student = form.cleaned_data['email']
-        #
-        # User = get_user_model()
-        # student_users = User.objects.all()
-        #
-        # form.instance.matched = False
-        #
-        # for student_user in student_users:
-        #     if student_user.email == this_teacher_student:
-        #         student_teachers = models.Teacher.objects.filter(user=student_user)
-        #         for student_teacher in student_teachers:
-        #             if str(self.request.user.email) == str(student_teacher):
-        #                 form.instance.matched = True
-        #                 student_teacher.matched = True
-        #                 student_teacher.save()
-
         return super(DeleteStudentView, self).delete(*args, **kwargs)
 
 class TeacherListView(LoginRequiredMixin, ListView):
@@ -464,6 +447,27 @@ class UpdateTeacherView(LoginRequiredMixin, UpdateView):
                         teacher_student.save()
 
         return super().form_valid(form)
+
+class DeleteTeacherView(LoginRequiredMixin, DeleteView):
+    login_url = 'account_login'
+
+    model = models.Teacher
+    template_name = "hybrid_app/delete_teacher_view.html"
+    success_url = reverse_lazy("hybrid_app:teacher_list_view")
+
+    def delete(self, *args, **kwargs):
+        self.object = self.get_object()
+
+        # If previously matched, unmatch previous matched user's teacher instance
+        if self.object.matched == True:
+            previous_teacher = models.Teacher.objects.get(pk=self.object.pk)
+            User = get_user_model()
+            previous_user = User.objects.get(email=previous_teacher.email)
+            previous_teacher_student = models.Student.objects.get(user=previous_user, email=self.request.user.email)
+            previous_teacher_student.matched = False
+            previous_teacher_student.save()
+
+        return super(DeleteTeacherView, self).delete(*args, **kwargs)
 
 class BlockCreateView(CreateView):
     model = models.Block

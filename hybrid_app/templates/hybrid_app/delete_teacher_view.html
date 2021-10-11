@@ -1,0 +1,19 @@
+{% extends "hybrid_app/extends/front.html" %}
+
+{% block title %}Confirm delete{% endblock %}
+
+{% block content %}
+
+  <div class="container my-5">
+    <div class="row">
+      <div class="col">
+        <form method="post">{% csrf_token %}
+          <p>Are you sure you want to delete "{{ object }}"?</p>
+          <a href="{% url 'hybrid_app:teacher_list_view' %}" type="button" class="btn btn-white">Cancel</a>
+          <input type="submit" value="Confirm" class="btn btn-danger">
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
