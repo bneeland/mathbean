@@ -1,0 +1,18 @@
+{% extends "hybrid_app/extends/editor.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load templatetags %}
+
+{% block content %}
+
+<h2>Share document &quot;{{ document.name }}&quot;</h2>
+
+<p><a href="{% url 'hybrid_app:document_edit_view' document.pk %}">Cancel</a></p>
+
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
+</form>
+
+{% endblock %}

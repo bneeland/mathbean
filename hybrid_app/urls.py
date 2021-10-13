@@ -21,6 +21,7 @@ urlpatterns = [
     path('documents/<int:pk>', views.DocumentEditView.as_view(), name='document_edit_view'),
     path('documents/<int:pk>/share/student-list', views.DocumentShareWithStudentListView.as_view(), name='document_share_with_student_list_view'),
     path('documents/<int:pk>/share/students', views.DocumentShareWithStudentsView.as_view(), name='document_share_with_students_view'),
+    path('documents/<int:pk>/share/teachers', views.DocumentShareWithTeachersView.as_view(), name='document_share_with_teachers_view'),
     path('documents/<int:pk>/delete', views.DocumentDeleteView.as_view(), name='document_delete_view'),
     path('student-lists', views.StudentListListView.as_view(), name='student_list_list_view'),
     path('student-lists/create', views.StudentListCreateView.as_view(), name='student_list_create_view'),

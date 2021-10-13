@@ -38,20 +38,6 @@ class StudentList(models.Model):
     def __str__(self):
         return str(self.name)
 
-class Document(models.Model):
-    name = models.CharField(max_length=100)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='documents', null=True, blank=True)
-    min_block_order = models.IntegerField(blank=True, null=True)
-    max_block_order = models.IntegerField(blank=True, null=True)
-    shared_with_student_lists = models.ManyToManyField(StudentList, blank=True, null=True)
-    shared_with_students = models.ManyToManyField(Student, blank=True, null=True)
-    copy_of = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return str(self.name)
-
 class Teacher(models.Model):
     email = models.EmailField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teachers', null=True, blank=True)
@@ -61,3 +47,18 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.email
+
+class Document(models.Model):
+    name = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='documents', null=True, blank=True)
+    min_block_order = models.IntegerField(blank=True, null=True)
+    max_block_order = models.IntegerField(blank=True, null=True)
+    shared_with_student_lists = models.ManyToManyField(StudentList, blank=True, null=True)
+    shared_with_students = models.ManyToManyField(Student, blank=True, null=True)
+    shared_with_teachers = models.ManyToManyField(Teacher, blank=True, null=True)
+    copy_of = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.name)

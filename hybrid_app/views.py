@@ -287,28 +287,64 @@ class DocumentShareWithStudentsView(LoginRequiredMixin, UserPassesTestMixin, Upd
                     )
             except:
                 print("User matching email doesn't exits")
+        return super().form_valid(form)
 
-        # for student_list in shared_with_student_lists:
-        #     # print(student_list.name)
-        #     students = student_list.students.filter(matched=True)
-        #     for student in students:
-        #         # print(student.email)
-        #         User = get_user_model()
-        #         try:
-        #             # Find student in users; if not found, raise error
-        #             student_user = User.objects.filter(email=student.email).get()
-        #
-        #             original_document = self.get_object()
-        #
-        #             object, created = models.Document.objects.get_or_create(
-        #                 name=original_document.name,
-        #                 user=student_user,
-        #                 min_block_order=original_document.min_block_order,
-        #                 max_block_order=original_document.max_block_order,
-        #                 copy_of=original_document,
-        #             )
-        #         except:
-        #             print("User matching email doesn't exits")
+class DocumentShareWithTeachersView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    login_url = 'account_login'
+
+    model = models.Document
+    fields = ['shared_with_teachers']
+    template_name = "hybrid_app/document_share_with_teachers_view.html"
+
+    def test_func(self):
+        return models.Document.objects.get(pk=self.kwargs['pk']).user == self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy("hybrid_app:document_edit_view", kwargs={'pk': self.kwargs['pk']})
+
+    def get_form(self, form_class=None):
+        form = super(DocumentShareWithTeachersView, self).get_form(form_class)
+        form.fields['shared_with_teachers'].queryset = models.Teacher.objects.filter(user=self.request.user)
+        return form
+
+    def form_valid(self, form):
+        shared_with_teachers = form.instance.shared_with_teachers.all()
+        shared_with_teachers = form.cleaned_data['shared_with_teachers']
+        # print(shared_with_student_lists)
+        teachers = shared_with_teachers.filter(matched=True)
+        for teacher in teachers:
+            # print(student.email)
+            User = get_user_model()
+            try:
+                # Find student in users; if not found, raise error
+                teacher_user = User.objects.filter(email=teacher.email).get()
+
+                original_document = self.get_object()
+
+                new_document, created = models.Document.objects.get_or_create(
+                    name=original_document.name,
+                    user=teacher_user,
+                    min_block_order=original_document.min_block_order,
+                    max_block_order=original_document.max_block_order,
+                    copy_of=original_document,
+                )
+
+                # Copy blocks to new document
+                original_blocks = models.Block.objects.filter(document=original_document)
+
+                for original_block in original_blocks:
+                    new_block, created = models.Block.objects.get_or_create(
+                        document=new_document,
+                        type=original_block.type,
+                        order=original_block.order,
+                        next_block_pk=original_block.next_block_pk,
+                        content=original_block.content,
+                        equation=original_block.equation,
+                        image=original_block.image,
+                        user=teacher_user,
+                    )
+            except:
+                print("User matching email doesn't exits")
         return super().form_valid(form)
 
 class DocumentDeleteView(LoginRequiredMixin, DeleteView):

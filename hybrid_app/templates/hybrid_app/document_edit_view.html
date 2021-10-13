@@ -63,8 +63,9 @@
                 Share
               </button>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <li><a class="dropdown-item" href="{% url 'hybrid_app:document_share_with_student_list_view' pk %}">Share with student list</a></li>
+                <li><a class="dropdown-item" href="{% url 'hybrid_app:document_share_with_student_list_view' pk %}">Share with student lists</a></li>
                 <li><a class="dropdown-item" href="{% url 'hybrid_app:document_share_with_students_view' pk %}">Share with students</a></li>
+                <li><a class="dropdown-item" href="{% url 'hybrid_app:document_share_with_teachers_view' pk %}">Share with teachers</a></li>
               </ul>
             </div>
             <div class="btn-group" role="group">
