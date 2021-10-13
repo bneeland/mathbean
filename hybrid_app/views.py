@@ -205,13 +205,28 @@ class DocumentShareWithStudentListView(LoginRequiredMixin, UserPassesTestMixin, 
 
                     original_document = self.get_object()
 
-                    object, created = models.Document.objects.get_or_create(
+                    new_document, created = models.Document.objects.get_or_create(
                         name=original_document.name,
                         user=student_user,
                         min_block_order=original_document.min_block_order,
                         max_block_order=original_document.max_block_order,
                         copy_of=original_document,
                     )
+
+                    # Copy blocks to new document
+                    original_blocks = models.Block.objects.filter(document=original_document)
+
+                    for original_block in original_blocks:
+                        new_block, created = models.Block.objects.get_or_create(
+                            document=new_document,
+                            type=original_block.type,
+                            order=original_block.order,
+                            next_block_pk=original_block.next_block_pk,
+                            content=original_block.content,
+                            equation=original_block.equation,
+                            image=original_block.image,
+                            user=student_user,
+                        )
                 except:
                     print("User matching email doesn't exits")
         return super().form_valid(form)
