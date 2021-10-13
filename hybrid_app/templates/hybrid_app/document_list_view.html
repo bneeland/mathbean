@@ -20,7 +20,7 @@
     <tbody>
       {% for document in documents %}
         <tr>
-          <td><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}" target="_blank">{{ document.name }}</a></td>
+          <td><a href="{% url 'hybrid_app:document_edit_view' pk=document.pk %}" target="_blank">{{ document.name }}</a> <small>{% if document.copy_of %}Copy{% endif %}</small></td>
           <td>{{ document.created_at }}</td>
           <td>{{ document.modified_at }}</td>
           <td><small><a href="{% url 'hybrid_app:document_delete_view' document.pk %}" class="btn-block-tools"><i class="fas fa-trash"></i></a></small></td>
