@@ -496,7 +496,7 @@
 
           var width = 600;
           var height = 400;
-          var bleed = 100000;
+          var bleed = 1000000;
 
           var canvas = new fabric.Canvas(String('graph-' + this.block.id));
           canvas.setDimensions({width:width, height:height});
@@ -520,15 +520,24 @@
 
           canvas.on('mouse:wheel', function(opt) {
             var evt = opt.e;
+
+            var minZoom = 0.8;
+            var maxZoom = 2;
+
             if (evt.altKey === true) {
               var delta = opt.e.deltaY;
               var zoom = canvas.getZoom();
               zoom *= 0.999 ** delta;
-              if (zoom > 20) zoom = 20;
-              if (zoom < 0.01) zoom = 0.01;
+              if (zoom > maxZoom) zoom = maxZoom;
+              if (zoom < minZoom) zoom = minZoom;
               canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
               opt.e.preventDefault();
               opt.e.stopPropagation();
+
+              var objects = canvas.getObjects();
+              for (let i=0; i<objects.length; i++) {
+                objects[i].strokeWidth = 1 / zoom;
+              }
             }
           });
 
