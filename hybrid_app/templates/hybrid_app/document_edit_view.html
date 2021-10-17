@@ -374,7 +374,7 @@
         },
         updateContentGraph: function (id) {
           var canvas = document.getElementById("graph-" + id).fabric;
-          canvasJSON = JSON.stringify(canvas);
+          canvasJSON = JSON.stringify(canvas.toObject(['viewportTransform']));
           return canvasJSON;
         },
         toggleDrawing: function (id) {
@@ -496,7 +496,7 @@
 
           var width = 600;
           var height = 400;
-          var bleed = 1000000;
+          var bleed = 200;
 
           var canvas = new fabric.Canvas(String('graph-' + this.block.id));
           canvas.setDimensions({width:width, height:height});
@@ -504,7 +504,7 @@
             left: -bleed,
             top: 200,
             stroke: 'black',
-            selectable: false,
+            evented: false,
           }));
           canvas.add(new fabric.Line([width/2, 0, width/2, height+bleed*2], {
             left: 300,
@@ -512,6 +512,43 @@
             stroke: 'black',
             selectable: false,
           }));
+
+          canvas.add(new fabric.Rect({
+            left: -bleed,
+            top: -bleed,
+            width: width + bleed*2,
+            height: height + bleed*2,
+            fill: 'green',
+            opacity: 0.5,
+          }));
+
+          var gridSize = 25;
+
+          // Vertical gridlines
+          for(var i=0; i<((width + bleed*2)/gridSize); i++) {
+            canvas.add(new fabric.Line(
+              [-bleed + i*gridSize, -bleed, -bleed + i*gridSize, height + bleed*2],
+              {
+                stroke: 'grey'
+              }
+            ));
+          }
+
+          // canvas.add(new fabric.Line(
+          //   [0, 0, 100, 300],
+          //   {
+          //     stroke: 'blue'
+          //   }
+          // ));
+
+
+          // var gridsize = 5;
+          //
+          // for(var x=1;x<(width/gridsize);x++)
+          // {
+          //   canvas.add(new fabric.Line([100*x, 0, 100*x, 600],{ stroke: "#000000", strokeWidth: 1, selectable:false, strokeDashArray: [5, 5]}));
+          //   canvas.add(new fabric.Line([0, 100*x, 600, 100*x],{ stroke: "#000000", strokeWidth: 1, selectable:false, strokeDashArray: [5, 5]}));
+          // };
 
           document.getElementById("graph-" + this.block.id).fabric = canvas;
           if (this.block.content != "Empty") {
@@ -521,8 +558,9 @@
           canvas.on('mouse:wheel', function(opt) {
             var evt = opt.e;
 
-            var minZoom = 0.8;
-            var maxZoom = 2;
+            zoomLimitFactor = 100
+            var minZoom = 1/zoomLimitFactor;
+            var maxZoom = zoomLimitFactor;
 
             if (evt.altKey === true) {
               var delta = opt.e.deltaY;
