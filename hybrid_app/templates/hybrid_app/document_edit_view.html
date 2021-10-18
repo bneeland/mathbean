@@ -496,7 +496,7 @@
 
           var width = 600;
           var height = 400;
-          var bleed = 1000;
+          var bleed = 500;
 
           var canvas = new fabric.Canvas(String('graph-' + this.block.id));
 
@@ -530,7 +530,7 @@
 
           var gridGroups = [grid0Group, grid1Group];
 
-          var gridSizes = [25, 50];
+          var gridSizes = [50, 100];
 
           for (let i=0; i<gridGroups.length; i++) {
             gridGroups[i].addWithUpdate(new fabric.Rect({
@@ -661,7 +661,6 @@
                     objectsInGroup[j].strokeWidth = 1 / zoom;
                   }
                 }
-
               }
 
               if (zoom > 0.8) {
