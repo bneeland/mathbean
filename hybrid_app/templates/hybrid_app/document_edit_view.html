@@ -496,22 +496,11 @@
 
           var width = 600;
           var height = 400;
-          var bleed = 10000;
+          var bleed = 500;
 
           var canvas = new fabric.Canvas(String('graph-' + this.block.id));
 
           canvas.setDimensions({width:width, height:height});
-
-          // Blank screen
-          canvas.add(new fabric.Rect({
-            left: -bleed,
-            top: -bleed,
-            width: width + bleed*2,
-            height: height + bleed*2,
-            fill: 'white',
-            opacity: 0.75,
-            selectable: false,
-          }));
 
           // Axes
 
@@ -644,7 +633,7 @@
           canvas.on('mouse:wheel', function(opt) {
             var evt = opt.e;
 
-            zoomLimitFactor = 100
+            zoomLimitFactor = 3
             var minZoom = 1/zoomLimitFactor;
             var maxZoom = zoomLimitFactor;
 
@@ -662,8 +651,6 @@
               for (let i=0; i<objects.length; i++) {
                 objects[i].strokeWidth = 1 / zoom;
               }
-
-              console.log(zoom);
 
               if (zoom > 1.5) {
                 grid0Group.sendBackwards();
