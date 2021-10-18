@@ -643,7 +643,6 @@
             if (evt.altKey === true) {
               var delta = opt.e.deltaY;
               var zoom = canvas.getZoom();
-              console.log(zoom);
               zoom *= 0.999 ** delta;
               if (zoom > maxZoom) zoom = maxZoom;
               if (zoom < minZoom) zoom = minZoom;
@@ -651,23 +650,30 @@
               opt.e.preventDefault();
               opt.e.stopPropagation();
 
-              var objects = canvas.getObjects();
-              for (let i=0; i<objects.length; i++) {
-                objects[i].strokeWidth = 1 / zoom;
+              var objectsInCanvas = canvas.getObjects();
+              for (i in objectsInCanvas) {
+
+                objectsInCanvas[i].strokeWidth = 1 / zoom;
+
+                if (objectsInCanvas[i].get('type')==='group') {
+                  var objectsInGroup = objectsInCanvas[i].getObjects();
+                  for (j in objectsInGroup) {
+                    objectsInGroup[j].strokeWidth = 1 / zoom;
+                  }
+                }
+
               }
 
               if (zoom > 0.8) {
-                grid0Group.sendBackwards();
-                grid0Group.sendBackwards();
+                grid1Group.sendBackwards();
+
                 grid0Group.sendBackwards();
                 grid0Group.bringForward();
-                grid1Group.sendBackwards();
               } else {
-                grid1Group.sendBackwards();
-                grid1Group.sendBackwards();
+                grid0Group.sendBackwards();
+
                 grid1Group.sendBackwards();
                 grid1Group.bringForward();
-                grid0Group.sendBackwards();
               }
             }
           });
