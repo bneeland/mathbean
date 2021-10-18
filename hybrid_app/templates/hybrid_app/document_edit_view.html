@@ -499,55 +499,126 @@
           var bleed = 150;
 
           var canvas = new fabric.Canvas(String('graph-' + this.block.id));
+
           canvas.setDimensions({width:width, height:height});
-          // Horizontal
+
+          // Blank screen
+          canvas.add(new fabric.Rect({
+            left: -bleed,
+            top: -bleed,
+            width: width + bleed*2,
+            height: height + bleed*2,
+            fill: 'white',
+            opacity: 0.75,
+            selectable: false,
+          }));
+
+          // Axes
+
+          // Horizontal axis
           canvas.add(new fabric.Line([-bleed, height/2, width+bleed, height/2], {
             stroke: 'black',
             selectable: false,
           }));
-          // Vertical
+          // Vertical axis
           canvas.add(new fabric.Line([width/2, -bleed, width/2, height+bleed], {
             stroke: 'black',
             selectable: false,
           }));
 
+          // Grid layers
+
           var grid0Group = new fabric.Group();
-          grid0Group.set('selectable', false);
+          // grid0Group.set('selectable', false);
 
-          grid0Group.addWithUpdate(new fabric.Rect({
-            left: -bleed,
-            top: -bleed,
-            width: width + bleed*2,
-            height: height + bleed*2,
-            fill: 'green',
-            opacity: 0.5,
-            selectable: false,
-          }));
+          var grid1Group = new fabric.Group();
+          // grid1Group.set('selectable', false);
 
-          var gridSize = 25;
+          var gridGroups = [grid0Group, grid1Group];
 
-          // Vertical gridlines
-          for(var i=0; i<((width + bleed*2)/gridSize); i++) {
-            grid0Group.addWithUpdate(new fabric.Line(
-              [-bleed + i*gridSize, -bleed, -bleed + i*gridSize, height + bleed],
-              {
-                stroke: 'grey',
-                selectable: false,
-              }
-            ));
+          var gridSizes = [25, 50];
+
+          for (let i=0; i<gridGroups.length; i++) {
+            gridGroups[i].addWithUpdate(new fabric.Rect({
+              left: -bleed,
+              top: -bleed,
+              width: width + bleed*2,
+              height: height + bleed*2,
+              fill: 'white',
+              opacity: 1,
+              selectable: false,
+            }));
+
+            // Vertical gridlines
+            for (var j=0; j<((width + bleed*2)/gridSizes[i]); j++) {
+              gridGroups[i].addWithUpdate(new fabric.Line(
+                [-bleed + j*gridSizes[i], -bleed, -bleed + j*gridSizes[i], height + bleed],
+                {
+                  stroke: 'grey',
+                  selectable: false,
+                }
+              ));
+            }
+            // Horizontal gridlines
+            for (var k=0; k<((height + bleed*2)/gridSizes[i]); k++) {
+              gridGroups[i].addWithUpdate(new fabric.Line(
+                [-bleed, -bleed + k*gridSizes[i], width + bleed, -bleed + k*gridSizes[i]],
+                {
+                  stroke: 'grey',
+                  selectable: false,
+                }
+              ));
+            }
+
+            canvas.add(gridGroups[i]);
+
+            gridGroups[i].sendBackwards();
+            gridGroups[i].sendBackwards();
+            gridGroups[i].sendBackwards();
           }
-          // Horizontal gridlines
-          for(var i=0; i<((height + bleed*2)/gridSize); i++) {
-            grid0Group.addWithUpdate(new fabric.Line(
-              [-bleed, -bleed + i*gridSize, width + bleed, -bleed + i*gridSize],
-              {
-                stroke: 'grey',
-                selectable: false,
-              }
-            ));
-          }
 
-          canvas.add(grid0Group);
+
+
+          // for (let i=0; i<gridGroups.length, i++) {
+          //   gridGroups[i].addWithUpdate(new fabric.Rect({
+          //     left: -bleed,
+          //     top: -bleed,
+          //     width: width + bleed*2,
+          //     height: height + bleed*2,
+          //     fill: 'white',
+          //     opacity: 1,
+          //     selectable: false,
+          //   }));
+          //
+          //   // Vertical gridlines
+          //   for (var i=0; i<((width + bleed*2)/gridSizes[i]); i++) {
+          //     gridGroups[i].addWithUpdate(new fabric.Line(
+          //       [-bleed + i*gridSizes[i], -bleed, -bleed + i*gridSizes[i], height + bleed],
+          //       {
+          //         stroke: 'grey',
+          //         selectable: false,
+          //       }
+          //     ));
+          //   }
+          //   // Horizontal gridlines
+          //   for (var i=0; i<((height + bleed*2)/gridSizes[i]); i++) {
+          //     gridGroups[i].addWithUpdate(new fabric.Line(
+          //       [-bleed, -bleed + i*gridSizes[i], width + bleed, -bleed + i*gridSizes[i]],
+          //       {
+          //         stroke: 'grey',
+          //         selectable: false,
+          //       }
+          //     ));
+          //   }
+          //
+          //   canvas.add(gridGroups[i]);
+          //
+          //   gridGroups[i].sendBackwards();
+          //   gridGroups[i].sendBackwards();
+          //   gridGroups[i].sendBackwards();
+          // }
+
+
 
           // canvas.add(new fabric.Line(
           //   [0, 0, 100, 300],
