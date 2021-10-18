@@ -496,7 +496,7 @@
 
           var width = 600;
           var height = 400;
-          var bleed = 150;
+          var bleed = 10000;
 
           var canvas = new fabric.Canvas(String('graph-' + this.block.id));
 
@@ -529,10 +529,10 @@
           // Grid layers
 
           var grid0Group = new fabric.Group();
-          // grid0Group.set('selectable', false);
+          grid0Group.set('selectable', false);
 
           var grid1Group = new fabric.Group();
-          // grid1Group.set('selectable', false);
+          grid1Group.set('selectable', false);
 
           var gridGroups = [grid0Group, grid1Group];
 
@@ -661,6 +661,24 @@
               var objects = canvas.getObjects();
               for (let i=0; i<objects.length; i++) {
                 objects[i].strokeWidth = 1 / zoom;
+              }
+
+              console.log(zoom);
+
+              if (zoom > 1.5) {
+                grid0Group.sendBackwards();
+                grid0Group.sendBackwards();
+                grid0Group.sendBackwards();
+                grid0Group.bringForward();
+                grid0Group.bringForward();
+                grid1Group.sendBackwards();
+              } else {
+                grid1Group.sendBackwards();
+                grid1Group.sendBackwards();
+                grid1Group.sendBackwards();
+                grid1Group.bringForward();
+                grid1Group.bringForward();
+                grid0Group.sendBackwards();
               }
             }
           });
