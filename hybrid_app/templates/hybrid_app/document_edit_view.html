@@ -653,7 +653,7 @@
               var objectsInCanvas = canvas.getObjects();
               for (i in objectsInCanvas) {
 
-                objectsInCanvas[i].strokeWidth = 1 / zoom;
+                objectsInCanvas[i].strokeWidth = 2 / zoom;
 
                 if (objectsInCanvas[i].get('type')==='group') {
                   var objectsInGroup = objectsInCanvas[i].getObjects();
